@@ -30,11 +30,6 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd )
 {
-	//gameObjects[0] = ( Cube( 1.f ) );
-	//gameObjects[2] = ( Cube( .55f ) );
-	//gameObjects[1] = ( Cube( .35f ) );
-	//gameObjects[3] = ( Cube( .1f ) );
-
 	m_squares[0] = ( Square( 1.f, { -50.f, 0.f } ) );
 	m_squares[1] = ( Square( .55f, { 50.f, 0.f } ) );
 	m_squares[2] = ( Square( .35f, { 0.f, 50.f } ) );

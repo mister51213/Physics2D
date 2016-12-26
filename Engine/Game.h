@@ -46,8 +46,7 @@ private:
 	/*  User Variables              */
 	ScreenTransformer sTransformer;
 
-	static constexpr int nObjects = 1;	
-	//Cube gameObjects[ nObjects ];
+	static constexpr int nObjects = 4;	
 	Square m_squares[ nObjects ];
 
 	static constexpr float dTheta = PI;

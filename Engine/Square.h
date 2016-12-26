@@ -6,12 +6,11 @@
 class Square
 {
 public:
-	Square() = default;
+	Square() {}
 
 	Square( float size, Vec2 position)
 		:
-		m_position(position)/*,
-		m_bounds(position, {size,size})*/
+		m_position(position)
 	{
 		const float side = size / 2.0f;
 
@@ -21,7 +20,7 @@ public:
 		vertices.emplace_back( side,-side);
 	}
 
-	~Square() = default;
+	~Square() {}
 
 	IndexedLineList GetLines() const
 	{
