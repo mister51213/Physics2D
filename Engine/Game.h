@@ -21,8 +21,9 @@
 #pragma once
 
 #include "Graphics.h"
-#include "PubeScreenTransformer.h"
+#include "ScreenTransformer.h"
 #include "Cube.h"
+#include <vector>
 
 class Game
 {
@@ -42,11 +43,18 @@ private:
 	Graphics gfx;
 	/********************************/
 	/*  User Variables              */
-	PubeScreenTransformer pst;
-	Cube cube;
+	ScreenTransformer sTransformer;
+
+	int nObjects = 3;
+	
+	Cube gameObjects[3];
+	Cube cube1;
+	Cube cube2;
+	Cube cube3;
+
 	static constexpr float dTheta = PI;
-	float theta_x = 0.0f;
-	float theta_y = 0.0f;
-	float theta_z = 0.0f;
+	//float theta_x = 0.0f;
+	//float theta_y = 0.0f;
+	//float theta_z = 0.0f;
 	/********************************/
 };

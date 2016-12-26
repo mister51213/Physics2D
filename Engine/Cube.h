@@ -7,6 +7,8 @@
 class Cube
 {
 public:
+	Cube() = default;
+
 	Cube( float size )
 	{
 		const float side = size / 2.0f;
@@ -28,6 +30,11 @@ public:
 			4,5,  5,7,	7,6,  6,4 }
 		};
 	}
+
+public:
+	float theta_x = 0.0f;
+	float theta_y = 0.0f;
+	float theta_z = 0.0f;
 private:
 	std::vector<Vec3> vertices;
 };
