@@ -63,11 +63,19 @@ public:
 	void DrawLine( float x1,float y1,float x2,float y2,Color c );
 	void PutPixel( int x,int y,int r,int g,int b )
 	{
-		PutPixel( x,y,{ unsigned char( r ),unsigned char( g ),unsigned char( b ) } );
+		// CLAMP TO SCREEN
+		if ( x > 1 && x < ScreenWidth && y > 1 && y < ScreenHeight )
+		{
+			PutPixel( x, y, { unsigned char( r ), unsigned char( g ), unsigned char( b ) } );
+		}
 	}
 	void PutPixel( int x,int y,Color c )
 	{
-		sysBuffer.PutPixel( x,y,c );
+		// CLAMP TO SCREEN
+		if ( x > 1 && x < ScreenWidth && y > 1 && y < ScreenHeight )
+		{
+			sysBuffer.PutPixel( x, y, c );
+		}
 	}
 	~Graphics();
 private:

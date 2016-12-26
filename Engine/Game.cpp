@@ -30,10 +30,10 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd )
 {
-	m_squares[0] = ( Square( 1.f, { -50.f, 0.f } ) );
-	m_squares[1] = ( Square( .55f, { 50.f, 0.f } ) );
-	m_squares[2] = ( Square( .35f, { 0.f, 50.f } ) );
-	m_squares[3] = ( Square( .1f, { 0.f, -50.f } ) );
+	m_squares[0] = ( Square( 1.f, { -.5f, 0.f } ) );
+	m_squares[1] = ( Square( 6.f, { .5f, 0.f } ) );
+	m_squares[2] = ( Square( .4f, { 0.f, .5f } ) );
+	m_squares[3] = ( Square( .2f, { 0.f, -.5f } ) );
 }
 
 void Game::Go()
@@ -55,6 +55,7 @@ void Game::UpdateModel()
 		if ( i / 2 == 0 )
 			dThetL *= -1.f;
 
+		// SPIN
 		if ( wnd.kbd.KeyIsPressed( 'Q' ) )
 		{
 			m_squares[ i ].m_theta = wrap_angle( m_squares[ i ].m_theta + dThetL * dTime );
@@ -78,6 +79,24 @@ void Game::UpdateModel()
 		if ( wnd.kbd.KeyIsPressed( 'D' ) )
 		{
 			m_squares[ i ].m_theta = wrap_angle( m_squares[ i ].m_theta - dThetL * dTime );
+		}
+
+		// MOVE
+		if ( wnd.kbd.KeyIsPressed( VK_UP ) )
+		{
+			m_squares[ i ].m_position += {0.f, 0.01f};
+		}
+		if ( wnd.kbd.KeyIsPressed( VK_DOWN ) )
+		{
+			m_squares[ i ].m_position += {0.f, -0.01f};
+		}
+		if ( wnd.kbd.KeyIsPressed( VK_LEFT ) )
+		{
+			m_squares[ i ].m_position += {-0.01f, 0.f};
+		}
+		if ( wnd.kbd.KeyIsPressed( VK_RIGHT ) )
+		{
+			m_squares[ i ].m_position += {0.01f, 0.f};
 		}
 	}
 }
@@ -119,10 +138,10 @@ void Game::ComposeFrame()
 //		}
 //	}
 
-	vector<IndexedLineList> lines( nObjects );
+	vector<IndexedLineList> lineLists( nObjects );
 	for ( int i = 0; i < nObjects; i++)
 	{
-		lines[ i ] = m_squares[ i ].GetLines();
+		lineLists[ i ] = m_squares[ i ].GetLines();
 	}
 
 	// Rotate each Vertex
@@ -131,9 +150,15 @@ void Game::ComposeFrame()
 		const Mat2 rot =
 			Mat2::Rotation( m_squares[ i ].m_theta );
 
-		for ( Vec2& v : lines[ i ].vertices )
+		for ( Vec2& v : lineLists[ i ].vertices )
 		{
+			// Rotate
 			v *= rot;
+			// TODO: Translate to world space
+
+			v += m_squares[ i ].m_position;
+
+			// Translate to Screen space
 			sTransformer.Transform( v );
 		}
 	}
@@ -141,7 +166,7 @@ void Game::ComposeFrame()
 	// Connect the vertices with lines here to form cube
 	for ( int ind = 0; ind < nObjects; ind++ )
 	{
-		IndexedLineList linesLocal = lines[ ind ]; // TODO: shouldnt be copying them
+		IndexedLineList linesLocal = lineLists[ ind ]; // TODO: shouldnt be copying them
 		for ( auto i = linesLocal.indices.cbegin(),
 			  end = linesLocal.indices.cend();
 

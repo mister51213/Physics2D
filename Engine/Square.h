@@ -8,16 +8,27 @@ class Square
 public:
 	Square() {}
 
-	Square( float size, Vec2 position)
+	Square( float size, Vec2 position = { 0.f, 0.f } )
 		:
-		m_position(position)
+		m_position( position )
 	{
 		const float side = size / 2.0f;
 
-		vertices.emplace_back( -side,-side);
-		vertices.emplace_back( -side,side);
-		vertices.emplace_back( side,side);
-		vertices.emplace_back( side,-side);
+		//WRONG: Must translate the squares AFTER rotation!
+		//vertices.push_back( { position.x - side, position.y - side } );
+		//vertices.push_back( {position.x - side, position.y + side} );
+		//vertices.push_back( {position.x + side, position.y + side} );
+		//vertices.push_back( {position.x +side, position.y -side});
+
+		//vertices.push_back( { -side, -side } );
+		//vertices.push_back( { -side, side } );
+		//vertices.push_back( { side, side } );
+		//vertices.push_back( {side, -side} );
+
+		vertices.emplace_back( -side, -side);
+		vertices.emplace_back( -side, side );
+		vertices.emplace_back( side, side);
+		vertices.emplace_back( side, -side);
 	}
 
 	~Square() {}
@@ -31,10 +42,10 @@ public:
 
 public:
 	float m_theta;
+	Vec2 m_position;
 
 private:
 	//AABB m_bounds;
-	Vec2 m_position;
 	std::vector<Vec2> vertices;
 
 };
