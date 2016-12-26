@@ -36,9 +36,9 @@ Game::Game( MainWindow& wnd )
 	//gameObjects[3] = ( Cube( .1f ) );
 
 	m_squares[0] = ( Square( 1.f, { -50.f, 0.f } ) );
-	//m_squares[1] = ( Square( .55f, { 50.f, 0.f } ) );
-	//m_squares[2] = ( Square( .35f, { 0.f, 50.f } ) );
-	//m_squares[3] = ( Square( .1f, { 0.f, -50.f } ) );
+	m_squares[1] = ( Square( .55f, { 50.f, 0.f } ) );
+	m_squares[2] = ( Square( .35f, { 0.f, 50.f } ) );
+	m_squares[3] = ( Square( .1f, { 0.f, -50.f } ) );
 }
 
 void Game::Go()
@@ -59,33 +59,6 @@ void Game::UpdateModel()
 		float dThetL = dTheta;;
 		if ( i / 2 == 0 )
 			dThetL *= -1.f;
-
-		/*
-		if ( wnd.kbd.KeyIsPressed( 'Q' ) )
-		{
-			gameObjects[ i ].theta_x = wrap_angle( gameObjects[ i ].theta_x + dThetL * dTime );
-		}
-		if ( wnd.kbd.KeyIsPressed( 'W' ) )
-		{
-			gameObjects[ i ].theta_y = wrap_angle( gameObjects[ i ].theta_y + dThetL * dTime );
-		}
-		if ( wnd.kbd.KeyIsPressed( 'E' ) )
-		{
-			gameObjects[ i ].theta_z = wrap_angle( gameObjects[ i ].theta_z + dThetL * dTime );
-		}
-		if ( wnd.kbd.KeyIsPressed( 'A' ) )
-		{
-			gameObjects[ i ].theta_x = wrap_angle( gameObjects[ i ].theta_x - dThetL * dTime );
-		}
-		if ( wnd.kbd.KeyIsPressed( 'S' ) )
-		{
-			gameObjects[ i ].theta_y = wrap_angle( gameObjects[ i ].theta_y - dThetL * dTime );
-		}
-		if ( wnd.kbd.KeyIsPressed( 'D' ) )
-		{
-			gameObjects[ i ].theta_z = wrap_angle( gameObjects[ i ].theta_z - dThetL * dTime );
-		}
-		*/
 
 		if ( wnd.kbd.KeyIsPressed( 'Q' ) )
 		{
