@@ -21,6 +21,7 @@
 #include "MainWindow.h"
 #include "Game.h"
 #include "Mat3.h"
+#include "Mat2.h"
 
 using namespace std;
 
@@ -29,9 +30,15 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd )
 {
-	gameObjects[0] = ( Cube( 1.0f ) );
-	gameObjects[1] = ( Cube( .5f ) );
-	gameObjects[2] = ( Cube( .3f ) );
+	//gameObjects[0] = ( Cube( 1.f ) );
+	//gameObjects[2] = ( Cube( .55f ) );
+	//gameObjects[1] = ( Cube( .35f ) );
+	//gameObjects[3] = ( Cube( .1f ) );
+
+	m_squares[0] = ( Square( 1.f, { -50.f, 0.f } ) );
+	//m_squares[1] = ( Square( .55f, { 50.f, 0.f } ) );
+	//m_squares[2] = ( Square( .35f, { 0.f, 50.f } ) );
+	//m_squares[3] = ( Square( .1f, { 0.f, -50.f } ) );
 }
 
 void Game::Go()
@@ -44,115 +51,129 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	const float dTime = 1.0f / 60.0f;
+	const float dTime = 1.0f / 120.0f;
 
 	// 3D rotation
 	for ( int i = 0; i < nObjects; i++ )
 	{
+		float dThetL = dTheta;;
+		if ( i / 2 == 0 )
+			dThetL *= -1.f;
 
+		/*
 		if ( wnd.kbd.KeyIsPressed( 'Q' ) )
 		{
-			gameObjects[ i ].theta_x = wrap_angle( gameObjects[ i ].theta_x + dTheta * dTime );
+			gameObjects[ i ].theta_x = wrap_angle( gameObjects[ i ].theta_x + dThetL * dTime );
 		}
 		if ( wnd.kbd.KeyIsPressed( 'W' ) )
 		{
-			gameObjects[ i ].theta_y = wrap_angle( gameObjects[ i ].theta_y + dTheta * dTime );
+			gameObjects[ i ].theta_y = wrap_angle( gameObjects[ i ].theta_y + dThetL * dTime );
 		}
 		if ( wnd.kbd.KeyIsPressed( 'E' ) )
 		{
-			gameObjects[ i ].theta_z = wrap_angle( gameObjects[ i ].theta_z + dTheta * dTime );
+			gameObjects[ i ].theta_z = wrap_angle( gameObjects[ i ].theta_z + dThetL * dTime );
 		}
 		if ( wnd.kbd.KeyIsPressed( 'A' ) )
 		{
-			gameObjects[ i ].theta_x = wrap_angle( gameObjects[ i ].theta_x - dTheta * dTime );
+			gameObjects[ i ].theta_x = wrap_angle( gameObjects[ i ].theta_x - dThetL * dTime );
 		}
 		if ( wnd.kbd.KeyIsPressed( 'S' ) )
 		{
-			gameObjects[ i ].theta_y = wrap_angle( gameObjects[ i ].theta_y - dTheta * dTime );
+			gameObjects[ i ].theta_y = wrap_angle( gameObjects[ i ].theta_y - dThetL * dTime );
 		}
 		if ( wnd.kbd.KeyIsPressed( 'D' ) )
 		{
-			gameObjects[ i ].theta_z = wrap_angle( gameObjects[ i ].theta_z - dTheta * dTime );
+			gameObjects[ i ].theta_z = wrap_angle( gameObjects[ i ].theta_z - dThetL * dTime );
+		}
+		*/
+
+		if ( wnd.kbd.KeyIsPressed( 'Q' ) )
+		{
+			m_squares[ i ].m_theta = wrap_angle( m_squares[ i ].m_theta + dThetL * dTime );
+		}
+		if ( wnd.kbd.KeyIsPressed( 'W' ) )
+		{
+			m_squares[ i ].m_theta = wrap_angle( m_squares[ i ].m_theta + dThetL * dTime );
+		}
+		if ( wnd.kbd.KeyIsPressed( 'E' ) )
+		{
+			m_squares[ i ].m_theta = wrap_angle( m_squares[ i ].m_theta + dThetL * dTime );
+		}
+		if ( wnd.kbd.KeyIsPressed( 'A' ) )
+		{
+			m_squares[ i ].m_theta = wrap_angle( m_squares[ i ].m_theta - dThetL * dTime );
+		}
+		if ( wnd.kbd.KeyIsPressed( 'S' ) )
+		{
+			m_squares[ i ].m_theta = wrap_angle( m_squares[ i ].m_theta - dThetL * dTime );
+		}
+		if ( wnd.kbd.KeyIsPressed( 'D' ) )
+		{
+			m_squares[ i ].m_theta = wrap_angle( m_squares[ i ].m_theta - dThetL * dTime );
 		}
 	}
 }
 
 void Game::ComposeFrame()
 {
-	//auto lines1 = cube1.GetLines();
-	//auto lines2 = cube2.GetLines();
-	//auto lines3 = cube3.GetLines();
+
+//	vector<IndexedLineList> lines( nObjects );
+//	for ( int i = 0; i < nObjects; i++)
+//	{
+//		lines[ i ] = gameObjects[ i ].GetLines();
+//	}
+//
+//	// Rotate each Vertex
+//	for ( int i = 0; i < nObjects; i++ )
+//	{
+//		const Mat3 rot =
+//			Mat3::RotationX( gameObjects[ i ].theta_x ) *
+//			Mat3::RotationY( gameObjects[ i ].theta_y ) *
+//			Mat3::RotationZ( gameObjects[ i ].theta_z );
+//		for ( Vec3& v : lines[ i ].vertices )
+//		{
+//			v *= rot;
+//			v += { 0.0f, 0.0f, 1.0f };
+//			sTransformer.Transform( v );
+//		}
+//	}
+//
+//	// Connect the vertices with lines here to form cube
+//	for ( int ind = 0; ind < nObjects; ind++ )
+//	{
+//		IndexedLineList linesLocal = lines[ ind ]; // TODO: shouldnt be copying them
+//		for ( auto i = linesLocal.indices.cbegin(),
+//			  end = linesLocal.indices.cend();
+//
+//			  i != end; std::advance( i, 2 ) )
+//		{
+//			gfx.DrawLine( linesLocal.vertices[ *i ], linesLocal.vertices[ *std::next( i ) ], Colors::Blue );
+//		}
+//	}
 
 	vector<IndexedLineList> lines( nObjects );
 	for ( int i = 0; i < nObjects; i++)
 	{
-		lines[ i ] = gameObjects[ i ].GetLines();
+		lines[ i ] = m_squares[ i ].GetLines();
 	}
 
-	//const Mat3 rot =
-	//	Mat3::RotationX( theta_x ) *
-	//	Mat3::RotationY( theta_y ) *
-	//	Mat3::RotationZ( theta_z );
-	//for( auto& v : lines1.vertices )
-	//{
-	//	v *= rot;
-	//	v += { 0.0f,0.0f,1.0f };
-	//	sTransformer.Transform( v );
-	//}
-	//for( auto& v : lines2.vertices )
-	//{
-	//	v *= rot;
-	//	v += { 0.0f,0.0f,1.0f };
-	//	sTransformer.Transform( v );
-	//}
-
-	//for( auto& v : lines3.vertices )
-	//{
-	//	v *= rot;
-	//	v += { 0.0f,0.0f,1.0f };
-	//	sTransformer.Transform( v );
-	//}
-
+	// Rotate each Vertex
 	for ( int i = 0; i < nObjects; i++ )
 	{
-		const Mat3 rot =
-			Mat3::RotationX( gameObjects[ i ].theta_x ) *
-			Mat3::RotationY( gameObjects[ i ].theta_y ) *
-			Mat3::RotationZ( gameObjects[ i ].theta_z );
-		for ( auto& v : lines[ i ].vertices )
+		const Mat2 rot =
+			Mat2::Rotation( m_squares[ i ].m_theta );
+
+		for ( Vec2& v : lines[ i ].vertices )
 		{
 			v *= rot;
-			v += { 0.0f, 0.0f, 1.0f };
 			sTransformer.Transform( v );
 		}
 	}
 
 	// Connect the vertices with lines here to form cube
-
-	//for( auto i = lines1.indices.cbegin(),
-	//	end = lines1.indices.cend();
-	//	i != end; std::advance( i,2 ) )
-	//{
-	//	gfx.DrawLine( lines1.vertices[*i],lines1.vertices[*std::next( i )],Colors::White );
-	//}
-
-	//for( auto i = lines2.indices.cbegin(),
-	//	end = lines2.indices.cend();
-	//	i != end; std::advance( i,2 ) )
-	//{
-	//	gfx.DrawLine( lines2.vertices[*i],lines2.vertices[*std::next( i )],Colors::Red );
-	//}
-
-	//for( auto i = lines3.indices.cbegin(),
-	//	end = lines3.indices.cend();
-	//	i != end; std::advance( i,2 ) )
-	//{
-	//	gfx.DrawLine( lines3.vertices[*i],lines3.vertices[*std::next( i )],Colors::Blue );
-	//}
-
 	for ( int ind = 0; ind < nObjects; ind++ )
 	{
-		IndexedLineList linesLocal = lines[ ind ];
+		IndexedLineList linesLocal = lines[ ind ]; // TODO: shouldnt be copying them
 		for ( auto i = linesLocal.indices.cbegin(),
 			  end = linesLocal.indices.cend();
 

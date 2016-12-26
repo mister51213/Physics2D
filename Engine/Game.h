@@ -23,6 +23,7 @@
 #include "Graphics.h"
 #include "ScreenTransformer.h"
 #include "Cube.h"
+#include "Square.h"
 #include <vector>
 
 class Game
@@ -45,16 +46,10 @@ private:
 	/*  User Variables              */
 	ScreenTransformer sTransformer;
 
-	int nObjects = 3;
-	
-	Cube gameObjects[3];
-	Cube cube1;
-	Cube cube2;
-	Cube cube3;
+	static constexpr int nObjects = 1;	
+	//Cube gameObjects[ nObjects ];
+	Square m_squares[ nObjects ];
 
 	static constexpr float dTheta = PI;
-	//float theta_x = 0.0f;
-	//float theta_y = 0.0f;
-	//float theta_z = 0.0f;
 	/********************************/
 };
