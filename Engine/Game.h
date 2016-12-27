@@ -25,6 +25,7 @@
 #include "Cube.h"
 #include "Square.h"
 #include <vector>
+#include "Timer.h"
 
 class Game
 {
@@ -46,9 +47,11 @@ private:
 	/*  User Variables              */
 	ScreenTransformer sTransformer;
 
-	static constexpr int nObjects = 4;	
+	static constexpr int nObjects = 5;	
 	Square m_squares[ nObjects ];
 
 	static constexpr float dTheta = PI;
+
+	Timer m_timer;
 	/********************************/
 };

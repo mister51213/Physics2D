@@ -14,17 +14,6 @@ public:
 	{
 		const float side = size / 2.0f;
 
-		//WRONG: Must translate the squares AFTER rotation!
-		//vertices.push_back( { position.x - side, position.y - side } );
-		//vertices.push_back( {position.x - side, position.y + side} );
-		//vertices.push_back( {position.x + side, position.y + side} );
-		//vertices.push_back( {position.x +side, position.y -side});
-
-		//vertices.push_back( { -side, -side } );
-		//vertices.push_back( { -side, side } );
-		//vertices.push_back( { side, side } );
-		//vertices.push_back( {side, -side} );
-
 		vertices.emplace_back( -side, -side);
 		vertices.emplace_back( -side, side );
 		vertices.emplace_back( side, side);
@@ -40,13 +29,24 @@ public:
 		};
 	}
 
+	void Thrust( Vec2 force, float deltaT )
+	{
+		m_velocity += force * deltaT;
+	}
+
+	void UpdatePositon(float deltaT)
+	{
+		m_position += m_velocity*deltaT;
+	}
+
 public:
-	float m_theta;
+	float m_theta = 0.f;
 	Vec2 m_position;
 
 private:
 	//AABB m_bounds;
 	std::vector<Vec2> vertices;
 
+	Vec2 m_velocity = { 0.f, 0.f };
 };
 

@@ -30,10 +30,20 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd )
 {
-	m_squares[0] = ( Square( 1.f, { -.5f, 0.f } ) );
-	m_squares[1] = ( Square( 6.f, { .5f, 0.f } ) );
-	m_squares[2] = ( Square( .4f, { 0.f, .5f } ) );
-	m_squares[3] = ( Square( .2f, { 0.f, -.5f } ) );
+	// colliding squares
+	m_squares[0] = ( Square( .1f, { -.5f, 0.f } ) );
+	m_squares[1] = ( Square( .1f, { .5f, 0.f } ) );
+
+	// walls
+	m_squares[2] = ( Square( 1.5f, { -1.5f, 0.f } ) );
+	m_squares[3] = ( Square( 1.5f, { 1.5f, 0.f } ) );
+
+	// floor
+	m_squares[4] = ( Square( 1.5f, { 0.f, -1.5f } ) );
+
+	// add initial motion to the two squares
+	m_squares[ 0 ].Thrust( { 10.0f, 0.f }, 0.016f );
+	m_squares[ 1 ].Thrust( { -10.0f, 0.f }, 0.016f );
 }
 
 void Game::Go()
@@ -45,8 +55,18 @@ void Game::Go()
 }
 
 void Game::UpdateModel()
-{
-	const float dTime = 1.0f / 120.0f;
+{	
+	// TIMER 
+	#ifdef NDEBUG
+	float dTime = m_timer.SecondsPassed();
+	#else
+	float dTime = 0.016f; // avg time btwn frames (60 FPS)
+	#endif
+
+	for ( int i = 0; i < nObjects; i++ )
+	{
+		m_squares[ i ].UpdatePositon(dTime);
+	}
 
 	// 3D rotation
 	for ( int i = 0; i < nObjects; i++ )
@@ -103,7 +123,6 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
-
 //	vector<IndexedLineList> lines( nObjects );
 //	for ( int i = 0; i < nObjects; i++)
 //	{
