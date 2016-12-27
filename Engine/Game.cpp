@@ -42,8 +42,8 @@ Game::Game( MainWindow& wnd )
 	m_squares[4] = ( Square( 1.5f, { 0.f, -1.5f } ) );
 
 	// add initial motion to the two squares
-	m_squares[ 0 ].Thrust( { 10.0f, 0.f }, 0.016f );
-	m_squares[ 1 ].Thrust( { -10.0f, 0.f }, 0.016f );
+	//m_squares[ 0 ].Thrust( { 10.0f, 0.f }, 0.016f );
+	//m_squares[ 1 ].Thrust( { -10.0f, 0.f }, 0.016f );
 }
 
 void Game::Go()
@@ -56,26 +56,16 @@ void Game::Go()
 
 void Game::DoCollision()
 {
-	// Double loop used in main game
-	//for ( vector<Actor_Dynamic>::iterator iter1 = m_collidables.begin(); iter1 != m_collidables.end() - 1; ++iter1 )
-	//{
-	//	for ( vector<Actor_Dynamic>::iterator iter2 = iter1 + 1; iter2 != m_collidables.end(); ++iter2 )
-	//	{
-	//			if ( GetCollisionNormal( iter1, iter2, eDir) )	
-	//			{
-	//				iter1->ReboundWith( iter2, eDir );
-	//			}
-	//	}
-	//}
-
 	for ( int i = 0; i < nObjects - 1; ++i )
 {
 	for ( int j = i + 1; j < nObjects; ++j )
 	{
 			if ( m_squares[i].m_bounds.Overlaps( m_squares[j].m_bounds)	)
 			{
-				m_squares[ i ].Stop();
-				m_squares[ j ].Stop();
+				//m_squares[ i ].Stop();
+				//m_squares[ j ].Stop();
+				m_squares[ i ].Rebound(m_squares[ j ].m_position,m_squares[ j ].m_velocity);
+				m_squares[ j ].Rebound(m_squares[ i ].m_position, m_squares[ i ].m_velocity);
 			}
 	}
 }
@@ -92,64 +82,68 @@ void Game::UpdateModel()
 	float dTime = 0.016f; // avg time btwn frames (60 FPS)
 	#endif
 
+	DoCollision();
+
 	for ( int i = 0; i < nObjects; i++ )
 	{
 		m_squares[ i ].UpdatePositon(dTime);
 	}
 
-	// 3D rotation
-	for ( int i = 0; i < nObjects; i++ )
+	// ONLY iterate through first two squares
+	for ( int i = 0; i < 2; i++ )
 	{
-		float dThetL = dTheta;;
-		if ( i / 2 == 0 )
-			dThetL *= -1.f;
-
+		//float dThetL = dTheta;;
+		//if ( i / 2 == 0 )
+		//	dThetL *= -1.f;
 		// SPIN
-		if ( wnd.kbd.KeyIsPressed( 'Q' ) )
-		{
-			m_squares[ i ].m_theta = wrap_angle( m_squares[ i ].m_theta + dThetL * dTime );
-		}
-		if ( wnd.kbd.KeyIsPressed( 'W' ) )
-		{
-			m_squares[ i ].m_theta = wrap_angle( m_squares[ i ].m_theta + dThetL * dTime );
-		}
-		if ( wnd.kbd.KeyIsPressed( 'E' ) )
-		{
-			m_squares[ i ].m_theta = wrap_angle( m_squares[ i ].m_theta + dThetL * dTime );
-		}
-		if ( wnd.kbd.KeyIsPressed( 'A' ) )
-		{
-			m_squares[ i ].m_theta = wrap_angle( m_squares[ i ].m_theta - dThetL * dTime );
-		}
-		if ( wnd.kbd.KeyIsPressed( 'S' ) )
-		{
-			m_squares[ i ].m_theta = wrap_angle( m_squares[ i ].m_theta - dThetL * dTime );
-		}
-		if ( wnd.kbd.KeyIsPressed( 'D' ) )
-		{
-			m_squares[ i ].m_theta = wrap_angle( m_squares[ i ].m_theta - dThetL * dTime );
-		}
+		//if ( wnd.kbd.KeyIsPressed( 'Q' ) )
+		//{
+		//	m_squares[ i ].m_theta = wrap_angle( m_squares[ i ].m_theta + dTheta * dTime );
+		//}
+		//if ( wnd.kbd.KeyIsPressed( 'W' ) )
+		//{
+		//	m_squares[ i ].m_theta = wrap_angle( m_squares[ i ].m_theta + dTheta * dTime );
+		//}
+		//if ( wnd.kbd.KeyIsPressed( 'E' ) )
+		//{
+		//	m_squares[ i ].m_theta = wrap_angle( m_squares[ i ].m_theta + dTheta * dTime );
+		//}
+		//if ( wnd.kbd.KeyIsPressed( 'A' ) )
+		//{
+		//	m_squares[ i ].m_theta = wrap_angle( m_squares[ i ].m_theta - dTheta * dTime );
+		//}
+		//if ( wnd.kbd.KeyIsPressed( 'S' ) )
+		//{
+		//	m_squares[ i ].m_theta = wrap_angle( m_squares[ i ].m_theta - dTheta * dTime );
+		//}
+		//if ( wnd.kbd.KeyIsPressed( 'D' ) )
+		//{
+		//	m_squares[ i ].m_theta = wrap_angle( m_squares[ i ].m_theta - dTheta * dTime );
+		//}
+
+		Vec2 center = { 0.f, 0.f };
+		Vec2 thrustVec = center - m_squares[ i ].m_position;
+		thrustVec.Normalize();
+		thrustVec *= 0.4;
 
 		// MOVE
 		if ( wnd.kbd.KeyIsPressed( VK_UP ) )
 		{
-			m_squares[ i ].m_position += {0.f, 0.01f};
+			m_squares[ i ].Thrust( {0.f, 0.3f}, dTime );
 		}
 		if ( wnd.kbd.KeyIsPressed( VK_DOWN ) )
 		{
-			m_squares[ i ].m_position += {0.f, -0.01f};
+			m_squares[ i ].Thrust( {0.f, -0.3f}, dTime );
 		}
 		if ( wnd.kbd.KeyIsPressed( VK_LEFT ) )
 		{
-			m_squares[ i ].m_position += {-0.01f, 0.f};
+			m_squares[ i ].Thrust( {thrustVec}, dTime );
 		}
 		if ( wnd.kbd.KeyIsPressed( VK_RIGHT ) )
 		{
-			m_squares[ i ].m_position += {0.01f, 0.f};
+			m_squares[ i ].Thrust( {-thrustVec}, dTime );
 		}
 	}
-
-	DoCollision();
 }
 
 void Game::ComposeFrame()

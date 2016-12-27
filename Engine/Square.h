@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utilities.h"
+#include "Collision.h"
 #include "IndexedLineList.h"
 
 class Square
@@ -40,6 +40,11 @@ public:
 		m_velocity = { 0.f, 0.f };
 	}
 
+	void Rebound( Vec2 position, Vec2 velocity )
+	{
+		m_velocity = velocity;
+	}
+
 	void UpdatePositon(float deltaT)
 	{
 		m_position += m_velocity*deltaT;
@@ -50,10 +55,8 @@ public:
 	float m_theta = 0.f;
 	Vec2 m_position;
 	AABB m_bounds;
-
+	Vec2 m_velocity = { 0.f, 0.f };
 private:
 	std::vector<Vec2> vertices;
-
-	Vec2 m_velocity = { 0.f, 0.f };
 };
 
