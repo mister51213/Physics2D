@@ -34,6 +34,7 @@ public:
 	Game( const Game& ) = delete;
 	Game& operator=( const Game& ) = delete;
 	void Go();
+	void DoCollision();
 private:
 	void ComposeFrame();
 	void UpdateModel();

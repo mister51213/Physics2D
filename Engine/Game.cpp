@@ -54,6 +54,35 @@ void Game::Go()
 	gfx.EndFrame();
 }
 
+void Game::DoCollision()
+{
+	// Double loop used in main game
+	//for ( vector<Actor_Dynamic>::iterator iter1 = m_collidables.begin(); iter1 != m_collidables.end() - 1; ++iter1 )
+	//{
+	//	for ( vector<Actor_Dynamic>::iterator iter2 = iter1 + 1; iter2 != m_collidables.end(); ++iter2 )
+	//	{
+	//			if ( GetCollisionNormal( iter1, iter2, eDir) )	
+	//			{
+	//				iter1->ReboundWith( iter2, eDir );
+	//			}
+	//	}
+	//}
+
+	for ( int i = 0; i < nObjects - 1; ++i )
+{
+	for ( int j = i + 1; j < nObjects; ++j )
+	{
+			if ( m_squares[i].m_bounds.Overlaps( m_squares[j].m_bounds)	)
+			{
+				m_squares[ i ].Stop();
+				m_squares[ j ].Stop();
+			}
+	}
+}
+
+}
+
+
 void Game::UpdateModel()
 {	
 	// TIMER 
@@ -119,6 +148,8 @@ void Game::UpdateModel()
 			m_squares[ i ].m_position += {0.01f, 0.f};
 		}
 	}
+
+	DoCollision();
 }
 
 void Game::ComposeFrame()
