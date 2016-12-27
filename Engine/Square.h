@@ -8,10 +8,11 @@ class Square
 public:
 	Square() {}
 
-	Square( float size, Vec2 position = { 0.f, 0.f } )
+	Square( float size, Vec2 position = { 0.f, 0.f }, float mass = 1.0f)
 		:
 		m_position( position ),
-		m_bounds( position, { size, size } )
+		m_bounds( position, { size, size } ),
+		m_mass(mass)
 	{
 		const float side = size / 2.0f;
 
@@ -45,6 +46,17 @@ public:
 		m_velocity = velocity;
 	}
 
+	void ReboundAlt( Square& other )
+	{
+		float massRatio = m_mass / other.m_mass;
+
+		// swap velocities
+		Vec2 tempVeloc = m_velocity;
+
+		m_velocity = other.m_velocity * massRatio;
+		other.m_velocity = tempVeloc / massRatio;
+	}
+
 	void UpdatePositon(float deltaT)
 	{
 		m_position += m_velocity*deltaT;
@@ -56,6 +68,7 @@ public:
 	Vec2 m_position;
 	AABB m_bounds;
 	Vec2 m_velocity = { 0.f, 0.f };
+	float m_mass;
 private:
 	std::vector<Vec2> vertices;
 };
