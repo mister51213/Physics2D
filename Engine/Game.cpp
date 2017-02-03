@@ -35,14 +35,14 @@ Game::Game( MainWindow& wnd )
 	m_squares[ 1 ] = ( Square( .1f, { .5f, 0.f }, 1.f, 0.5f ) );
 
 	// walls
-	m_squares[ 2 ] = ( Square( 1.5f, { -1.5f, 0.f }, 100.f, false ) );
-	m_squares[ 3 ] = ( Square( 1.5f, { 1.5f, 0.f }, 100.f, false ) );
+	m_squares[ 2 ] = ( Square( 1.45f, { -1.5f, 0.f }, 0.f, false ) );
+	m_squares[ 3 ] = ( Square( 1.45f, { 1.5f, 0.f }, 0.f, false ) );
 
 	// floor
-	m_squares[ 4 ] = ( Square( 1.5f, { 0.f, -1.5f }, 100.f, false ) );
+	m_squares[ 4 ] = ( Square( 1.45f, { 0.f, -1.5f }, 0.f, false ) );
 
 	// ceiling
-	m_squares[ 5 ] = ( Square( 1.5f, { 0.f, 1.5f }, 100.f, false ) );
+	m_squares[ 5 ] = ( Square( 1.45f, { 0.f, 1.5f }, 0.f, false ) );
 }
 
 void Game::Go()
