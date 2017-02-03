@@ -8,12 +8,11 @@ class Square
 public:
 	Square() {}
 
-	Square( float size, Vec2 position = { 0.f, 0.f }, float mass = 1.0f, float bounciness = 1.0f, bool mobility = true)
+	Square( float size, Vec2 position = { 0.f, 0.f }, float mass = 1.0f, float bounciness = 1.0f)
 		:
 		m_position( position ),
 		m_bounds( position, { size, size } ),
 		m_mass(mass),
-		m_mobility(mobility),
 		m_restitution(bounciness)
 	{
 		if ( m_mass == 0.0f )
@@ -30,8 +29,6 @@ public:
 	}
 
 	~Square() {}
-
-	bool IsMobile()	{return m_mobility;}
 
 	IndexedLineList GetLines() const
 	{
@@ -63,7 +60,6 @@ public:
 	Vec2 m_velocity = { 0.f, 0.f };
 	float m_mass;
 	float m_inverseMass;
-	bool m_mobility;
 	float m_restitution;
 
 private:

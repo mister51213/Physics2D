@@ -46,14 +46,14 @@ Game::Game( MainWindow& wnd )
 	m_squares.push_back( Square( .1f, { .5f, 0.f }, 1.f, 0.5f ) );
 
 	// walls
-	m_squares.push_back( Square( 1.45f, { -1.5f, 0.f }, 0.f, 1.0f, false ) );
-	m_squares.push_back( Square( 1.45f, { 1.5f, 0.f }, 0.f, 1.0f, false ) );
+	m_squares.push_back( Square( 1.45f, { -1.5f, 0.f }, 0.f, 1.0f ) );
+	m_squares.push_back( Square( 1.45f, { 1.5f, 0.f }, 0.f, 1.0f ) );
 
 	// floor
-	m_squares.push_back( Square( 1.45f, { 0.f, -1.5f }, 0.f, 1.0f, false ) );
+	m_squares.push_back( Square( 1.45f, { 0.f, -1.5f }, 0.f, 1.0f ) );
 
 	// ceiling
-	m_squares.push_back( Square( 1.45f, { 0.f, 1.5f }, 0.f, 1.0f, false ) );
+	m_squares.push_back( Square( 1.45f, { 0.f, 1.5f }, 0.f, 1.0f ) );
 }
 
 void Game::Go()
