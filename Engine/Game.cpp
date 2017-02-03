@@ -41,6 +41,7 @@ Game::Game( MainWindow& wnd )
 	//// ceiling
 	//m_squares[ 5 ] = ( Square( 1.45f, { 0.f, 1.5f }, 0.f, false ) );
 
+	/*************SET MASS TO 0 FOR IMMOBILE OBJECT**************/
 	// colliding squares
 	m_squares.push_back( Square( .1f, { -.5f, 0.f }, 1.f, 0.5f ) );
 	m_squares.push_back( Square( .1f, { .5f, 0.f }, 1.f, 0.5f ) );
@@ -66,19 +67,17 @@ void Game::Go()
 
 void Game::DoCollision()
 {
-	// TODO: STOP RESOLVING TWICE! (Should use manifold correction instead to avoid double checking)
 	for ( int i = 0; i < m_squares.size() - 1; ++i )
-{
-	for ( int j = i + 1; j < m_squares.size(); ++j )
 	{
+		for ( int j = i + 1; j < m_squares.size(); ++j )
+		{
 			Vec2 normal;
-//			if ( Overlap_AABB( m_squares[ 0 ].m_bounds, m_squares[ 1 ].m_bounds, normal ) )
-			if ( Overlap_AABB(m_squares[ i ].m_bounds, m_squares[ j ].m_bounds, normal ) )		
+			if ( Overlap_AABB( m_squares[ i ].m_bounds, m_squares[ j ].m_bounds, normal ) )
 			{
 				ResolveCollision( m_squares[ i ], m_squares[ j ], normal );
 			}
+		}
 	}
-}
 }
 
 void Game::UpdateModel()
