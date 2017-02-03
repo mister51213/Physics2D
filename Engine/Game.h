@@ -31,19 +31,98 @@
 
 struct Manifold
 {
-  Object *A;
-  Object *B;
-  float penetration;
-  Vec2 normal;
+	Manifold( Square *a, Square *b )
+		:
+		A( a ),
+		B( b )
+	{}
+	Square *A;
+	Square *B;
+	float penetration;
+	Vec2 normal;
 };
 
-	static void ResolveCollision( Square& A, Square& B )
+static bool AABB_Overlap(const AABB& A, const AABB& B, Vec2& normal)
+{
+	if ( A.m_max.x < B.m_min.x || A.m_min.x > B.m_max.x ) return false;
+	if ( A.m_max.y < B.m_min.y || A.m_min.y > B.m_max.y ) return false;
+
+	// get slope of line
+	Vec2 AtoB = B.m_center - A.m_center;
+	float slope;
+
+	// catch infinite slope error
+	if ( AtoB.x == 0.0f )
+		slope = 2.0f; // anything above 1 will do!
+	else
+		slope = AtoB.y / AtoB.x;
+
+	// DETERMINE ORTHO NORMALS (BRUTE FORCE)
+	if ( abs( slope ) > 1.0 ) // STEEP SLOPE = EITHER ABOVE OR BELOW
+	{
+		if ( AtoB.y > 0.0f ) // A is BELOW
+		{
+			normal = { 0.0f, 1.0f };
+			return true;
+		}
+		else // A is ABOVE
+		{
+			normal = { 0.0f, -1.0f };
+			return true;
+		}
+	}
+	else if ( abs( slope ) < 1.0f )// SHALLOW SLOPE = EITHER LEFT OR RIGHT
+	{
+		if ( AtoB.x > 0.0f ) // RIGHT SIDE
+		{
+			normal = { 1.0f, 0.0f };
+			return true;
+		}
+		else // LEFT SIDE
+		{
+			normal = { -1.0f, 0.0f };
+			return true;
+		}
+	}
+	// DETERMINE DIAGONAL NORMALS (CORNER CASES)
+	else if ( slope == 1.0 ) // EITHER TOP RIGHT OR BOTTOM LEFT
+	{
+		if ( AtoB.x > 0.0f ) // RIGHT SIDE
+		{
+			normal = { 0.707107, 0.707107 };
+			return true;
+		}
+		else // LEFT SIDE
+		{
+			normal = { -0.707107, -0.707107 };
+			return true;
+		}
+	}
+	else if ( slope == -1.0 ) // EITHER TOP LEFT OR BOTTOM RIGHT
+	{
+		if ( AtoB.x > 0.0f ) // RIGHT SIDE
+		{
+			normal = { 0.707107, -0.707107 };
+			return true;
+		}
+		else // LEFT SIDE
+		{
+			normal = { -0.707107, 0.707107 };
+			return true;
+		}
+	}
+	else // No separating axis found, therefore there is at least one overlapping axis
+		return true;
+}
+
+	static void ResolveCollision( Square& A, Square& B, Vec2& normal )
 	{
 		// Velocity vector between the centers of the colliding objects
 		Vec2 relativeVelo = B.m_velocity - A.m_velocity;
 
 		// Project this velocity onto the normal
-		float velAlongNorm = relativeVelo*A.m_normal;
+		//float velAlongNorm = relativeVelo*A.m_normal;
+		float velAlongNorm = relativeVelo*normal;
 
 		// Do not resolve if velocities are separating
 		bool separating = velAlongNorm > 0;

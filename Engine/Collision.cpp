@@ -26,9 +26,6 @@ void AABB::ResetMinMax(Vec2 position)
 bool AABB::Overlaps( const AABB& boxB, Vec2& normal1 )
 {
 	// A SEPARATING AXIS WAS FOUND, so exit with no intersection
-	//if ( m_max.x < box2.m_min.x || m_min.x > box2.m_max.x ) return false;
-	//if ( m_max.y < box2.m_min.y || m_min.y > box2.m_max.y ) return false;
-
 	if ( m_max.x < boxB.m_min.x || m_min.x > boxB.m_max.x ) return false;
 	if ( m_max.y < boxB.m_min.y || m_min.y > boxB.m_max.y ) return false;
 

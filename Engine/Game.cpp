@@ -56,24 +56,31 @@ void Game::Go()
 void Game::DoCollision()
 {
 	// TODO: STOP RESOLVING TWICE! (Should use manifold correction instead to avoid double checking)
-	for ( int i = 0; i < nObjects - 1; ++i )
-	{
-		for ( int j = i + 1; j < nObjects; ++j )
-		{
-			Vec2 normal1;
+	//for ( int i = 0; i < nObjects - 1; ++i )
+	//{
+	//	for ( int j = i + 1; j < nObjects; ++j )
+	//	{
+			// Make a new manifold for every pair
+			//Manifold m( &m_squares[i], &m_squares[j] );
+
+			Vec2 normal;
+
 //			if ( m_squares[ 0 ].m_bounds.Overlaps( m_squares[ 1 ].m_bounds, normal1 ) )
-			if ( m_squares[ i ].m_bounds.Overlaps( m_squares[ j ].m_bounds, normal1 ) ) // TODO: error in normal generation
+//			if ( m_squares[ i ].m_bounds.Overlaps( m_squares[ j ].m_bounds, normal1 ) ) // TODO: error in normal generation
+//			{
+			if ( AABB_Overlap(  m_squares[ 0 ].m_bounds, m_squares[ 1 ].m_bounds, normal ) ) // TODO: error in normal generation
 			{
 				// set the normals of the 2 squares for collision resolution
 				//m_squares[ 0 ].m_normal = normal1;
 				//m_squares[ 1 ].m_normal = -normal1;
-				m_squares[ i ].m_normal = normal1;
+				//m_squares[ i ].m_normal = normal1;
 				//m_squares[ j ].m_normal = -normal1;
 				//ResolveCollision( m_squares[ 0 ], m_squares[ 1 ] );
-				ResolveCollision( m_squares[ i ], m_squares[ j ] );
+
+				ResolveCollision( m_squares[ 0 ], m_squares[ 1 ], normal );
 			}
-		}
-	}
+	//	}
+	//}
 }
 
 void Game::UpdateModel()
