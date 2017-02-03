@@ -8,11 +8,12 @@ class Square
 public:
 	Square() {}
 
-	Square( float size, Vec2 position = { 0.f, 0.f }, float mass = 1.0f)
+	Square( float size, Vec2 position = { 0.f, 0.f }, float mass = 1.0f, bool mobility = true)
 		:
 		m_position( position ),
 		m_bounds( position, { size, size } ),
-		m_mass(mass)
+		m_mass(mass),
+		m_mobility(mobility)
 	{
 		const float side = size / 2.0f;
 
@@ -23,6 +24,8 @@ public:
 	}
 
 	~Square() {}
+
+	bool IsMobile()	{return m_mobility;}
 
 	IndexedLineList GetLines() const
 	{
@@ -41,50 +44,22 @@ public:
 		m_velocity = { 0.f, 0.f };
 	}
 
-	void Rebound( Vec2 position, Vec2 velocity )
+	void ResolveCollision( Square& square, Square& otherSquare )
 	{
-		m_velocity = velocity;
-	}
-
-	void ReboundAlt( Square& other )
-	{
-		float massRatio = m_mass / other.m_mass;
-
-		// TODO: Use Minkowski difference
-		/*
-		http://www.wildbunny.co.uk/blog/2011/04/20/collision-detection-for-dummies/
-		*/
-
-		// TODO: GET CLOSEST FACE - 
-		/*
-		A supporting vertex is simply a vertex which is "most in the direction of" 
-		a given direction vector. Mathematically, this can be found as THE VERTEX 
-		WHICH HAS THE GREATEST DOT PRODUCT with a given direction vector.
-		*/
+		// OLD WAY (SWAP VELOCITIES)
+		//float massRatio = m_mass / other.m_mass;
+		//Vec2 tempVeloc = m_velocity;
+		//m_velocity = other.m_velocity * massRatio;
+		//other.m_velocity = tempVeloc / massRatio;
+		Vec2 velo1 = square.m_velocity;
+			Vec2 velo2 = otherSquare.m_velocity;
 		
-	//	if ( other.m_mass >= 200.f ) // Partner has INFINITE MASS
-	//  {	
-	//		// GET CLOSEST FACE 
-	//	Vec2 normal = { 0.f, 1.f};
-
-	//	XMFLOAT3 rbndComponent = normal * DotProduct( m_attributes.velocLin, normal );
-	//	forceOnThis = m_attributes.velocLin - rbndComponent * 3.2f;
-	//	forceOnPartner = { 0.f, 0.f, 0.f };
-	//}
-	//	else if ( m_attributes.mass >= 4000 ) // This object has INFINITE MASS
-	//	{
-	//		//XMFLOAT3 normal = m_AABBNorms[ eDir ];
-	//		XMFLOAT3 normal = { 0.f, 1.f, 0.f };
-
-	//		XMFLOAT3 rbndComponent = normal * DotProduct( partnerAttributes.velocLin, normal );
-	//		forceOnThis = { 0.f, 0.f, 0.f };
-	//		forceOnPartner = partnerAttributes.velocLin + rbndComponent;
-	//	}
-
-		// swap velocities
-		Vec2 tempVeloc = m_velocity;
-		m_velocity = other.m_velocity * massRatio;
-		other.m_velocity = tempVeloc / massRatio;
+		// Velocity vector between the centers of the colliding objects
+		Vec2 relativeVelo = velo1 - velo2;
+		// Project this velocity onto the normal
+		float velProjNorm = relativeVelo*normal();
+	
+	
 	}
 
 	void UpdatePositon(float deltaT)
@@ -95,10 +70,13 @@ public:
 
 public:
 	float m_theta = 0.f;
-	Vec2 m_position;
 	AABB m_bounds;
+	Vec2 m_position;
+	Vec2 m_normal;
 	Vec2 m_velocity = { 0.f, 0.f };
 	float m_mass;
+	bool m_mobility;
+
 private:
 	std::vector<Vec2> vertices;
 };

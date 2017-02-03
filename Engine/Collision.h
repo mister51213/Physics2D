@@ -17,7 +17,7 @@ struct AABB
 	AABB(Vec2 position, Vec2 scale);
 	void ResetMinMax(Vec2 position);
 
-	bool Overlaps( const AABB & box2 );
+	bool Overlaps( const AABB & box2, Vec2& normal1 );
 
 	Vec2 m_center;
     Vec2 m_extentHalf;

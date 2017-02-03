@@ -31,19 +31,19 @@ Game::Game( MainWindow& wnd )
 	gfx( wnd )
 {
 	// colliding squares
-	m_squares[0] = ( Square( .1f, { -.5f, 0.f }, 1.0f ));
-	m_squares[1] = ( Square( .1f, { .5f, 0.f }, 2.0f ));
+	m_squares[ 0 ] = ( Square( .1f, { -.5f, 0.f }, 1.0f ) );
+	m_squares[ 1 ] = ( Square( .1f, { .5f, 0.f }, 2.0f ) );
 
 	// walls
-	m_squares[2] = ( Square( 1.5f, { -1.5f, 0.f }, 10.f ) );
-	m_squares[3] = ( Square( 1.5f, { 1.5f, 0.f }, 10.f ) );
+	m_squares[ 2 ] = ( Square( 1.5f, { -1.5f, 0.f }, 100.f, false ) );
+	m_squares[ 3 ] = ( Square( 1.5f, { 1.5f, 0.f }, 100.f, false ) );
 
 	// floor
-	m_squares[4] = ( Square( 1.5f, { 0.f, -1.5f }, 10.f ) );
+	m_squares[ 4 ] = ( Square( 1.5f, { 0.f, -1.5f }, 100.f, false ) );
 
-	// add initial motion to the two squares
-	//m_squares[ 0 ].Thrust( { 10.0f, 0.f }, 0.016f );
-	//m_squares[ 1 ].Thrust( { -10.0f, 0.f }, 0.016f );
+	// ceiling
+	m_squares[ 5 ] = ( Square( 1.5f, { 0.f, 1.5f }, 100.f, false ) );
+
 }
 
 void Game::Go()
@@ -56,18 +56,21 @@ void Game::Go()
 
 void Game::DoCollision()
 {
+
 	for ( int i = 0; i < nObjects - 1; ++i )
 {
 	for ( int j = i + 1; j < nObjects; ++j )
 	{
-			if ( m_squares[i].m_bounds.Overlaps( m_squares[j].m_bounds)	)
+		if ( m_squares[ i ].IsMobile() )
+		{
+			Vec2 normal1;
+			if ( m_squares[ i ].m_bounds.Overlaps( m_squares[ j ].m_bounds, normal1 ) )
 			{
-				//m_squares[ i ].Stop();
-				//m_squares[ j ].Stop();
-				//m_squares[ i ].Rebound(m_squares[ j ].m_position,m_squares[ j ].m_velocity);
-				//m_squares[ j ].Rebound(m_squares[ i ].m_position, m_squares[ i ].m_velocity);
-				m_squares[ i ].ReboundAlt(m_squares[ j ]);
+				// after getting first normal from overlaps check, set partner normal to its negative
+				Vec2 normal2 = -normal1;
+				m_squares[ i ].ResolveCollision( m_squares[ i ], m_squares[ j ] );
 			}
+		}
 	}
 }
 
@@ -85,66 +88,54 @@ void Game::UpdateModel()
 
 	DoCollision();
 
-	for ( int i = 0; i < nObjects; i++ )
+	for ( int i = 0; i < /*nObjects*/2; i++ )
 	{
 		m_squares[ i ].UpdatePositon(dTime);
 	}
 
-	// ONLY iterate through first two squares
-	for ( int i = 0; i < 2; i++ )
-	{
-		//float dThetL = dTheta;;
-		//if ( i / 2 == 0 )
-		//	dThetL *= -1.f;
-		// SPIN
-		//if ( wnd.kbd.KeyIsPressed( 'Q' ) )
-		//{
-		//	m_squares[ i ].m_theta = wrap_angle( m_squares[ i ].m_theta + dTheta * dTime );
-		//}
-		//if ( wnd.kbd.KeyIsPressed( 'W' ) )
-		//{
-		//	m_squares[ i ].m_theta = wrap_angle( m_squares[ i ].m_theta + dTheta * dTime );
-		//}
-		//if ( wnd.kbd.KeyIsPressed( 'E' ) )
-		//{
-		//	m_squares[ i ].m_theta = wrap_angle( m_squares[ i ].m_theta + dTheta * dTime );
-		//}
-		//if ( wnd.kbd.KeyIsPressed( 'A' ) )
-		//{
-		//	m_squares[ i ].m_theta = wrap_angle( m_squares[ i ].m_theta - dTheta * dTime );
-		//}
-		//if ( wnd.kbd.KeyIsPressed( 'S' ) )
-		//{
-		//	m_squares[ i ].m_theta = wrap_angle( m_squares[ i ].m_theta - dTheta * dTime );
-		//}
-		//if ( wnd.kbd.KeyIsPressed( 'D' ) )
-		//{
-		//	m_squares[ i ].m_theta = wrap_angle( m_squares[ i ].m_theta - dTheta * dTime );
-		//}
+		// VECS TOWARD CENTER
+		//Vec2 center = { 0.f, 0.f };
+		//Vec2 thrustVecL = center - m_squares[ 0 ].m_position;
+		//thrustVecL.Normalize();
+		//thrustVecL *= 0.4;
+		//Vec2 thrustVecR = -thrustVecL;
 
-		Vec2 center = { 0.f, 0.f };
-		Vec2 thrustVec = center - m_squares[ i ].m_position;
-		thrustVec.Normalize();
-		thrustVec *= 0.4;
+		// MOVE LEFT SQUARE
+		if ( wnd.kbd.KeyIsPressed( 'W' ) )
+		{
+			m_squares[ 0 ].Thrust( {0.f, 0.3f}, dTime );
+		}
+		if ( wnd.kbd.KeyIsPressed( 'S' ) )
+		{
+			m_squares[ 0 ].Thrust( {0.f, -0.3f}, dTime );
+		}
+		if ( wnd.kbd.KeyIsPressed( 'A' ) )
+		{
+			m_squares[ 0 ].Thrust( {-0.4, 0.f}, dTime );
+		}
+		if ( wnd.kbd.KeyIsPressed( 'D' ) )
+		{
+			m_squares[ 0 ].Thrust( {0.4, 0.f}, dTime );
+		}
 
-		// MOVE
+		// MOVE RIGHT SQUARE TOWARD CENTER
+
 		if ( wnd.kbd.KeyIsPressed( VK_UP ) )
 		{
-			m_squares[ i ].Thrust( {0.f, 0.3f}, dTime );
+			m_squares[ 1 ].Thrust( { 0.f, 0.3f }, dTime );
 		}
 		if ( wnd.kbd.KeyIsPressed( VK_DOWN ) )
 		{
-			m_squares[ i ].Thrust( {0.f, -0.3f}, dTime );
+			m_squares[ 1 ].Thrust( { 0.f, -0.3f }, dTime );
 		}
 		if ( wnd.kbd.KeyIsPressed( VK_LEFT ) )
 		{
-			m_squares[ i ].Thrust( {thrustVec}, dTime );
+			m_squares[ 1 ].Thrust( {-0.4, 0.f}, dTime );
 		}
 		if ( wnd.kbd.KeyIsPressed( VK_RIGHT ) )
 		{
-			m_squares[ i ].Thrust( {-thrustVec}, dTime );
+			m_squares[ 1 ].Thrust( {0.4, 0.f}, dTime );
 		}
-	}
 }
 
 void Game::ComposeFrame()
@@ -211,14 +202,37 @@ void Game::ComposeFrame()
 	// Connect the vertices with lines here to form cube
 	for ( int ind = 0; ind < nObjects; ind++ )
 	{
+		// for filling
+		int left = gfx.ScreenWidth;
+		int right = 0;
+
+		// iterate all lines
 		IndexedLineList linesLocal = lineLists[ ind ]; // TODO: shouldnt be copying them
 		for ( auto i = linesLocal.indices.cbegin(),
 			  end = linesLocal.indices.cend();
 
-			  i != end; std::advance( i, 2 ) )
+	    i != end; std::advance( i, 2 ) )
 		{
+			// TODO: doesnt work and too slow
+			// get info for filling 
+			//if ( linesLocal.vertices[ *i ].x < left )
+			//	left = linesLocal.vertices[ *i ].x < left;
+			//if ( linesLocal.vertices[ *i ].x > right )
+			//	right = linesLocal.vertices[ *i ].x;
+			//if ( linesLocal.vertices[ *std::next( i ) ].x < left )
+			//	left = linesLocal.vertices[ *std::next( i ) ].x < left;
+			//if ( linesLocal.vertices[ *std::next( i ) ].x > right )
+			//	right = linesLocal.vertices[ *std::next( i ) ].x;
+
 			gfx.DrawLine( linesLocal.vertices[ *i ], linesLocal.vertices[ *std::next( i ) ], Colors::Blue );
 		}
+
+		// Fill in cube left to right
+		//for ( int x = left; x < right; x++ )
+		//{
+		//	for( int y = 0; y < 50; y++)
+		//	gfx.PutPixel( x, y, Colors::Red );
+		//}
 	}
 }
 
