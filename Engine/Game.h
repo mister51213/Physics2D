@@ -27,6 +27,8 @@
 #include <vector>
 #include "Timer.h"
 
+using namespace std;
+
 /// GLOBAL FUNCTIONS ///
 static bool Overlap_AABB( const AABB& boxA, const AABB& boxB, Vec2& normal )
 {
@@ -161,7 +163,9 @@ private:
 	ScreenTransformer sTransformer;
 
 	static constexpr int nObjects = 6;	
-	Square m_squares[ nObjects ];
+	//Square m_squares[ nObjects ];
+
+	std::vector<Square> m_squares;
 
 	static constexpr float dTheta = PI;
 
