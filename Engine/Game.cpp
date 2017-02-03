@@ -35,14 +35,14 @@ Game::Game( MainWindow& wnd )
 	m_squares[ 1 ] = ( Square( .1f, { .5f, 0.f }, 1.f, 0.5f ) );
 
 	// walls
-	m_squares[ 2 ] = ( Square( 1.5f, { -1.5f, 0.f }, 100.f, false ) );
-	m_squares[ 3 ] = ( Square( 1.5f, { 1.5f, 0.f }, 100.f, false ) );
+	m_squares[ 2 ] = ( Square( 1.45f, { -1.5f, 0.f }, 1.f, false ) );
+	m_squares[ 3 ] = ( Square( 1.45f, { 1.5f, 0.f }, 1.f, false ) );
 
 	// floor
-	m_squares[ 4 ] = ( Square( 1.5f, { 0.f, -1.5f }, 100.f, false ) );
+	m_squares[ 4 ] = ( Square( 1.45f, { 0.f, -1.5f }, 1.f, false ) );
 
 	// ceiling
-	m_squares[ 5 ] = ( Square( 1.5f, { 0.f, 1.5f }, 100.f, false ) );
+	m_squares[ 5 ] = ( Square( 1.45f, { 0.f, 1.5f }, 1.f, false ) );
 }
 
 void Game::Go()
@@ -56,24 +56,24 @@ void Game::Go()
 void Game::DoCollision()
 {
 	// TODO: STOP RESOLVING TWICE! (Should use manifold correction instead to avoid double checking)
-//	for ( int i = 0; i < nObjects - 1; ++i )
-//{
-//	for ( int j = i + 1; j < nObjects; ++j )
-//	{
-		//if ( m_squares[ i ].IsMobile() )
-		//{
+	for ( int i = 0; i < nObjects - 1; ++i )
+	{
+		for ( int j = i + 1; j < nObjects; ++j )
+		{
 			Vec2 normal1;
-//			if ( m_squares[ i ].m_bounds.Overlaps( m_squares[ j ].m_bounds, normal1 ) )
-			if ( m_squares[ 0 ].m_bounds.Overlaps( m_squares[ 1 ].m_bounds, normal1 ) )
+//			if ( m_squares[ 0 ].m_bounds.Overlaps( m_squares[ 1 ].m_bounds, normal1 ) )
+			if ( m_squares[ i ].m_bounds.Overlaps( m_squares[ j ].m_bounds, normal1 ) ) // TODO: error in normal generation
 			{
 				// set the normals of the 2 squares for collision resolution
-				m_squares[ 0 ].m_normal = normal1;
-				m_squares[ 1 ].m_normal = -normal1;
-				ResolveCollision( m_squares[ 0 ], m_squares[ 1 ] );
+				//m_squares[ 0 ].m_normal = normal1;
+				//m_squares[ 1 ].m_normal = -normal1;
+				m_squares[ i ].m_normal = normal1;
+				//m_squares[ j ].m_normal = -normal1;
+				//ResolveCollision( m_squares[ 0 ], m_squares[ 1 ] );
+				ResolveCollision( m_squares[ i ], m_squares[ j ] );
 			}
-//		}
-//	}
-//}
+		}
+	}
 }
 
 void Game::UpdateModel()

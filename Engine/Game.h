@@ -28,6 +28,15 @@
 #include "Timer.h"
 
 /// GLOBAL FUNCTIONS ///
+
+struct Manifold
+{
+  Object *A;
+  Object *B;
+  float penetration;
+  Vec2 normal;
+};
+
 	static void ResolveCollision( Square& A, Square& B )
 	{
 		// Velocity vector between the centers of the colliding objects
