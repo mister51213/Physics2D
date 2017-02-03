@@ -62,14 +62,14 @@ void Game::DoCollision()
 //	{
 		//if ( m_squares[ i ].IsMobile() )
 		//{
-			Vec2 normal1;
-//			if ( m_squares[ i ].m_bounds.Overlaps( m_squares[ j ].m_bounds, normal1 ) )
-			if ( m_squares[ 0 ].m_bounds.Overlaps( m_squares[ 1 ].m_bounds, normal1 ) )
+			Vec2 normal;
+//			if ( m_squares[ i ].m_bounds.Overlaps( m_squares[ j ].m_bounds, normal ) )
+			if ( m_squares[ 0 ].m_bounds.Overlaps( m_squares[ 1 ].m_bounds, normal ) )
 			{
 				// set the normals of the 2 squares for collision resolution
-				m_squares[ 0 ].m_normal = normal1;
-				m_squares[ 1 ].m_normal = -normal1;
-				ResolveCollision( m_squares[ 0 ], m_squares[ 1 ] );
+				//m_squares[ 0 ].m_normal = normal;
+				//m_squares[ 1 ].m_normal = -normal;
+				ResolveCollision( m_squares[ 0 ], m_squares[ 1 ], normal );
 			}
 //		}
 //	}

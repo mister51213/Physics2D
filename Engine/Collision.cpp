@@ -23,7 +23,7 @@ void AABB::ResetMinMax(Vec2 position)
 		m_center.y - m_extentHalf.y };
 }
 
-bool AABB::Overlaps( const AABB& boxB, Vec2& normal1 )
+bool AABB::Overlaps( const AABB& boxB, Vec2& normal )
 {
 	// A SEPARATING AXIS WAS FOUND, so exit with no intersection
 	if ( m_max.x < boxB.m_min.x || m_min.x > boxB.m_max.x ) return false;
@@ -44,12 +44,12 @@ bool AABB::Overlaps( const AABB& boxB, Vec2& normal1 )
 	{
 		if ( AtoB.y > 0.0f ) // A is BELOW
 		{
-			normal1 = { 0.0f, 1.0f };
+			normal = { 0.0f, 1.0f };
 			return true;
 		}
 		else // A is ABOVE
 		{
-			normal1 = { 0.0f, -1.0f };
+			normal = { 0.0f, -1.0f };
 			return true;
 		}
 	}
@@ -57,12 +57,12 @@ bool AABB::Overlaps( const AABB& boxB, Vec2& normal1 )
 	{
 		if ( AtoB.x > 0.0f ) // RIGHT SIDE
 		{
-			normal1 = { 1.0f, 0.0f };
+			normal = { 1.0f, 0.0f };
 			return true;
 		}
 		else // LEFT SIDE
 		{
-			normal1 = { -1.0f, 0.0f };
+			normal = { -1.0f, 0.0f };
 			return true;
 		}
 	}
@@ -71,12 +71,12 @@ bool AABB::Overlaps( const AABB& boxB, Vec2& normal1 )
 	{
 		if ( AtoB.x > 0.0f ) // RIGHT SIDE
 		{
-			normal1 = { 0.707107, 0.707107 };
+			normal = { 0.707107, 0.707107 };
 			return true;
 		}
 		else // LEFT SIDE
 		{
-			normal1 = { -0.707107, -0.707107 };
+			normal = { -0.707107, -0.707107 };
 			return true;
 		}
 	}
@@ -84,12 +84,12 @@ bool AABB::Overlaps( const AABB& boxB, Vec2& normal1 )
 	{
 		if ( AtoB.x > 0.0f ) // RIGHT SIDE
 		{
-			normal1 = { 0.707107, -0.707107 };
+			normal = { 0.707107, -0.707107 };
 			return true;
 		}
 		else // LEFT SIDE
 		{
-			normal1 = { -0.707107, 0.707107 };
+			normal = { -0.707107, 0.707107 };
 			return true;
 		}
 	}

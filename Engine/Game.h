@@ -28,13 +28,14 @@
 #include "Timer.h"
 
 /// GLOBAL FUNCTIONS ///
-	static void ResolveCollision( Square& A, Square& B )
+	static void ResolveCollision( Square& A, Square& B, Vec2 normal )
 	{
 		// Velocity vector between the centers of the colliding objects
 		Vec2 relativeVelo = B.m_velocity - A.m_velocity;
 
 		// Project this velocity onto the normal
-		float velAlongNorm = relativeVelo*A.m_normal;
+//		float velAlongNorm = relativeVelo*A.m_normal;
+		float velAlongNorm = relativeVelo*normal;
 
 		// Do not resolve if velocities are separating
 		bool separating = velAlongNorm > 0;
@@ -48,7 +49,8 @@
 		float j = -( 1.0f + coefRest ) * velAlongNorm; // NOTE: 2 INFINITE MASSES will cause a crash!
 		j /= (A.m_inverseMass + B.m_inverseMass);
 
-		Vec2 impulse = A.m_normal * j;
+		//Vec2 impulse = A.m_normal * j;
+		Vec2 impulse = normal * j;
 
 		// DISTRIBUTE THE IMPULSE AMONG BOTH OBJECTS ACCORDING TO THEIR RELATIVE MASSES
 		A.m_velocity -= impulse * A.m_inverseMass;

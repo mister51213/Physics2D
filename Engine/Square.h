@@ -60,7 +60,6 @@ public:
 	float m_theta = 0.f;
 	AABB m_bounds;
 	Vec2 m_position;
-	Vec2 m_normal;
 	Vec2 m_velocity = { 0.f, 0.f };
 	float m_mass;
 	float m_inverseMass;
