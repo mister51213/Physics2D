@@ -27,6 +27,42 @@
 #include <vector>
 #include "Timer.h"
 
+/// GLOBAL FUNCTIONS ///
+	static void ResolveCollision( Square& A, Square& B )
+	{
+		// Velocity vector between the centers of the colliding objects
+		Vec2 relativeVelo = B.m_velocity - A.m_velocity;
+
+		// Project this velocity onto the normal
+		float velAlongNorm = relativeVelo*A.m_normal;
+
+		// Do not resolve if velocities are separating
+		bool separating = velAlongNorm > 0;
+		if(separating)
+		return;
+
+		// Coefficient of resitution (min of two)
+		float coefRest = std::min(A.m_restitution, B.m_restitution); 
+
+		// Calculate impulse scalar
+		float j = -( 1.0f + coefRest ) * velAlongNorm; // NOTE: 2 INFINITE MASSES will cause a crash!
+		j /= (A.m_inverseMass + B.m_inverseMass);
+
+		Vec2 impulse = A.m_normal * j;
+
+		// DISTRIBUTE THE IMPULSE AMONG BOTH OBJECTS ACCORDING TO THEIR RELATIVE MASSES
+		A.m_velocity -= impulse * A.m_inverseMass;
+		B.m_velocity += impulse * B.m_inverseMass;
+
+		// NOTE: could also do it this (slower) way
+		//float mass_sum = A.m_mass + B.m_mass;
+		//float ratioA = A.m_mass / mass_sum;
+		//float ratioB = B.m_mass / mass_sum;
+		//A.m_velocity -= impulse * ratioA;
+		//B.m_velocity += impulse * ratioB;
+	}
+
+
 class Game
 {
 public:

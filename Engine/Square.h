@@ -8,13 +8,19 @@ class Square
 public:
 	Square() {}
 
-	Square( float size, Vec2 position = { 0.f, 0.f }, float mass = 1.0f, bool mobility = true)
+	Square( float size, Vec2 position = { 0.f, 0.f }, float mass = 1.0f, float bounciness = 1.0f, bool mobility = true)
 		:
 		m_position( position ),
 		m_bounds( position, { size, size } ),
 		m_mass(mass),
-		m_mobility(mobility)
+		m_mobility(mobility),
+		m_restitution(bounciness)
 	{
+		if ( m_mass == 0.0f )
+			m_inverseMass = 0.0f;
+		else
+			m_inverseMass = 1.0f / m_mass;
+
 		const float side = size / 2.0f;
 
 		vertices.emplace_back( -side, -side);
@@ -44,24 +50,6 @@ public:
 		m_velocity = { 0.f, 0.f };
 	}
 
-	void ResolveCollision( Square& square, Square& otherSquare )
-	{
-		// OLD WAY (SWAP VELOCITIES)
-		//float massRatio = m_mass / other.m_mass;
-		//Vec2 tempVeloc = m_velocity;
-		//m_velocity = other.m_velocity * massRatio;
-		//other.m_velocity = tempVeloc / massRatio;
-		Vec2 velo1 = square.m_velocity;
-			Vec2 velo2 = otherSquare.m_velocity;
-		
-		// Velocity vector between the centers of the colliding objects
-		Vec2 relativeVelo = velo1 - velo2;
-		// Project this velocity onto the normal
-		float velProjNorm = relativeVelo*normal();
-	
-	
-	}
-
 	void UpdatePositon(float deltaT)
 	{
 		m_position += m_velocity*deltaT;
@@ -75,7 +63,9 @@ public:
 	Vec2 m_normal;
 	Vec2 m_velocity = { 0.f, 0.f };
 	float m_mass;
+	float m_inverseMass;
 	bool m_mobility;
+	float m_restitution;
 
 private:
 	std::vector<Vec2> vertices;
