@@ -61,11 +61,12 @@ void Game::DoCollision()
 		for ( int j = i + 1; j < m_squares.size(); ++j )
 		{
 			Vec2 normal;
-			float penetration = 0.01f; // TODO: change this
-			if ( Overlap_AABB( m_squares[ i ].m_bounds, m_squares[ j ].m_bounds, normal ) )
+			float penetration;
+			//if ( Overlap_AABB( m_squares[ i ].m_bounds, m_squares[ j ].m_bounds, normal ) )
+			if ( Overlap_AABB_M( m_squares[ i ], m_squares[ j ], normal, penetration ) )
 			{
-				ResolveCollision( m_squares[ i ], m_squares[ j ], normal );
-				CorrectPosition( m_squares[ i ], m_squares[ j ] , normal, penetration);			
+				ResolveCollision( m_squares[ i ], m_squares[ j ], normal );			
+				//CorrectPosition( m_squares[ i ], m_squares[ j ] , normal, penetration);			
 			}
 		}
 	}

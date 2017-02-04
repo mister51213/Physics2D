@@ -104,6 +104,55 @@ static bool Overlap_AABB( const AABB& boxA, const AABB& boxB, Vec2& normal )
 		return true;
 }
 
+static bool Overlap_AABB_M( Square& A, const Square& B, Vec2& normal, float& penetration )
+{
+	// A SEPARATING AXIS WAS FOUND, so exit with no intersection
+	if ( A.m_bounds.m_max.x < B.m_bounds.m_min.x || A.m_bounds.m_min.x > B.m_bounds.m_max.x ) return false;
+	if ( A.m_bounds.m_max.y < B.m_bounds.m_min.y || A.m_bounds.m_min.y > B.m_bounds.m_max.y ) return false;
+
+	// Circles have collided, now create normals/penetration (MANIFOLD)
+
+	// Get Vector from A to B
+	Vec2 AtoB = B.m_position - A.m_position;
+
+	// Calculate overlap on x axis
+	// TODO: calculate extent here instead of getting it from AABB
+	// (we dont know if its getting updated every time in aabb)
+	float xOverlap = A.m_bounds.m_extentHalf.x + B.m_bounds.m_extentHalf.x - abs( AtoB.x );
+
+	// Separating axis theorem test for X AXIS
+	if ( xOverlap > 0.0f )
+	{
+		// Calculate overlap on y axis
+		float yOverlap = A.m_bounds.m_extentHalf.y + B.m_bounds.m_extentHalf.y - abs( AtoB.y );
+
+		// SAT test on y axis
+		if ( yOverlap > 0.0f )
+		{
+			if ( xOverlap > yOverlap ) // Axis of least penetration = X
+			{	// If AtoB vector is (-), so is collision normal
+				if ( AtoB.x < 0 ) 
+					normal = Vec2( -1.0f, 0.0f );
+				else
+					normal = Vec2( 1.0f, 0.0f );
+
+				penetration = xOverlap;
+				return true;
+			}
+			else // Axis of least penetration = Y
+			{	 // If AtoB vector is (-), so is collision normal
+				if ( AtoB.y < 0 )
+					normal = Vec2( 0.0f, -1.0f );
+				else
+					normal = Vec2( 0.0f, 1.0f );
+				penetration = yOverlap;
+				return true;
+			}
+		}
+	}
+	return true;
+}
+
 	static void ResolveCollision( Square& A, Square& B, Vec2& normal )
 	{
 		// Velocity vector between the centers of the colliding objects
