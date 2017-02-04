@@ -30,17 +30,6 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd )
 {
-	//// colliding squares
-	//m_squares[ 0 ] = ( Square( .1f, { -.5f, 0.f }, 0.f, 0.5f ) );
-	//m_squares[ 1 ] = ( Square( .1f, { .5f, 0.f }, 1.f, 0.5f ) );
-	//// walls
-	//m_squares[ 2 ] = ( Square( 1.45f, { -1.5f, 0.f }, 0.f, false ) );
-	//m_squares[ 3 ] = ( Square( 1.45f, { 1.5f, 0.f }, 0.f, false ) );
-	//// floor
-	//m_squares[ 4 ] = ( Square( 1.45f, { 0.f, -1.5f }, 0.f, false ) );
-	//// ceiling
-	//m_squares[ 5 ] = ( Square( 1.45f, { 0.f, 1.5f }, 0.f, false ) );
-
 	/*************SET MASS TO 0 FOR IMMOBILE OBJECT**************/
 	// colliding squares
 	m_squares.push_back( Square( .1f, { -.5f, 0.f }, 1.f, 0.5f ) );
@@ -72,9 +61,11 @@ void Game::DoCollision()
 		for ( int j = i + 1; j < m_squares.size(); ++j )
 		{
 			Vec2 normal;
+			float penetration = 0.01f; // TODO: change this
 			if ( Overlap_AABB( m_squares[ i ].m_bounds, m_squares[ j ].m_bounds, normal ) )
 			{
 				ResolveCollision( m_squares[ i ], m_squares[ j ], normal );
+				CorrectPosition( m_squares[ i ], m_squares[ j ] , normal, penetration);			
 			}
 		}
 	}
@@ -121,8 +112,7 @@ void Game::UpdateModel()
 			m_squares[ 0 ].Thrust( {0.4, 0.f}, dTime );
 		}
 
-		// MOVE RIGHT SQUARE TOWARD CENTER
-
+		// MOVE RIGHT SQUARE
 		if ( wnd.kbd.KeyIsPressed( VK_UP ) )
 		{
 			m_squares[ 1 ].Thrust( { 0.f, 0.3f }, dTime );

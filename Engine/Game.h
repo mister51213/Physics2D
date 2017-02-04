@@ -140,6 +140,21 @@ static bool Overlap_AABB( const AABB& boxA, const AABB& boxB, Vec2& normal )
 		//B.m_velocity += impulse * ratioB;
 	}
 
+	// prevent objects from sinking
+	static void CorrectPosition( Square& A, Square& B, const Vec2& normal, float penetration )
+	{
+		const float percent = 0.2; // usually 20% to 80%
+		const float threshold = 0.01; // usually 0.01 to 0.1
+		float correctionAmt = max( penetration - threshold, 0.0f );
+
+		correctionAmt /= A.m_inverseMass + B.m_inverseMass;
+
+		float totalCorrection = percent * correctionAmt;
+
+		Vec2 correctionVec = normal * totalCorrection;
+		A.m_position -= correctionVec * A.m_inverseMass;
+		B.m_position += correctionVec * B.m_inverseMass;
+	}
 
 class Game
 {
