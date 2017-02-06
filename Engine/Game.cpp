@@ -66,7 +66,7 @@ void Game::DoCollision()
 			if ( Overlap_AABB_M( m_squares[ i ], m_squares[ j ], normal, penetration ) )
 			{
 				ResolveCollision( m_squares[ i ], m_squares[ j ], normal );			
-				//CorrectPosition( m_squares[ i ], m_squares[ j ] , normal, penetration);			
+				CorrectPosition( m_squares[ i ], m_squares[ j ] , normal, penetration);			
 			}
 		}
 	}
