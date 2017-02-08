@@ -25,6 +25,7 @@
 #include <vector>
 #include "Timer.h"
 #include "Square.h"
+#include "Body.h"
 
 using namespace std;
 

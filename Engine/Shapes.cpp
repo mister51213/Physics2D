@@ -47,7 +47,7 @@
 		return thisShape;
 	}
 
-	
+
 IndexedLineList Shape::GetLines(Shape::eShape thisShape) const
 {
 	// TODO: customize for different shape types

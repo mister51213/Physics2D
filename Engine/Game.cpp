@@ -24,7 +24,6 @@
 #include "Mat2.h"
 #include "Collision.h"
 #include "Shapes.h"
-#include "Square.h"
 
 using namespace std;
 using namespace Collision;
@@ -51,18 +50,19 @@ Game::Game( MainWindow& wnd )
 
 	/*************SET MASS TO 0 FOR IMMOBILE OBJECT**************/
 	// colliding squares
-	m_bodies.push_back( Square( .1f, { -.5f, 0.f }, 2.f, 0.5f ) );
-	m_bodies.push_back( Square( .1f, { .5f, 0.f }, 1.f, 0.5f ) );
+	// TODO: specify shape enum in constructor of body
+	m_bodies.push_back( Body( .1f, { -.5f, 0.f }, 2.f, 0.5f ) );
+	m_bodies.push_back( Body( .1f, { .5f, 0.f }, 1.f, 0.5f ) );
 
 	// walls
-	m_bodies.push_back( Square( 1.45f, { -1.5f, 0.f }, 0.f, 1.0f ) );
-	m_bodies.push_back( Square( 1.45f, { 1.5f, 0.f }, 0.f, 1.0f ) );
+	m_bodies.push_back( Body( 1.45f, { -1.5f, 0.f }, 0.f, 1.0f ) );
+	m_bodies.push_back( Body( 1.45f, { 1.5f, 0.f }, 0.f, 1.0f ) );
 
 	// floor
-	m_bodies.push_back( Square( 1.45f, { 0.f, -1.5f }, 0.f, 1.0f ) );
+	m_bodies.push_back( Body( 1.45f, { 0.f, -1.5f }, 0.f, 1.0f ) );
 
 	// ceiling
-	m_bodies.push_back( Square( 1.45f, { 0.f, 1.5f }, 0.f, 1.0f ) );
+	m_bodies.push_back( Body( 1.45f, { 0.f, 1.5f }, 0.f, 1.0f ) );
 }
 
 void Game::Go()
@@ -95,10 +95,12 @@ void Game::DoCollision()
 			Vec2 normal;
 			float penetration;
 
-			if ( AABBvAABB( m_bodies[ i ], m_bodies[ j ], normal, penetration ) )
+			if ( AABBvAABB_temp( m_bodies[ i ], m_bodies[ j ], normal, penetration ) )
 			{
-				ResolveCollision( m_bodies[ i ], m_bodies[ j ], normal );			
-				CorrectPosition( m_bodies[ i ], m_bodies[ j ] , normal, penetration);			
+				//ResolveCollision( m_bodies[ i ], m_bodies[ j ], normal );			
+				//CorrectPosition( m_bodies[ i ], m_bodies[ j ] , normal, penetration);			
+				ResolveCollision_temp( m_bodies[ i ], m_bodies[ j ], normal );			
+				CorrectPosition_temp( m_bodies[ i ], m_bodies[ j ] , normal, penetration);			
 			}
 		}
 	}
@@ -125,14 +127,7 @@ void Game::UpdateModel()
 	{
 		m_squares[ i ].UpdatePosition(dTime);
 	}
-
-		// VECS TOWARD CENTER
-		//Vec2 center = { 0.f, 0.f };
-		//Vec2 thrustVecL = center - m_squares[ 0 ].m_position;
-		//thrustVecL.Normalize();
-		//thrustVecL *= 0.4;
-		//Vec2 thrustVecR = -thrustVecL;
-
+	
 		// MOVE LEFT SQUARE
 		if ( wnd.kbd.KeyIsPressed( 'W' ) )
 		{
@@ -206,10 +201,11 @@ void Game::ComposeFrame()
 //		}
 //	}
 
-	vector<IndexedLineList> lineLists( nObjects );
+	vector<IndexedLineList> lineLists( nObjects ); // TODO: m_bodies.Size()
 	for ( int i = 0; i < nObjects; i++)
 	{
-		lineLists[ i ] = m_squares[ i ].GetLines();
+		//lineLists[ i ] = m_squares[ i ].GetLines();
+		lineLists[ i ] = m_bodies[ i ].m_pShape->GetLines();
 	}
 
 	// Rotate each Vertex

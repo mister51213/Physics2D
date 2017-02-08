@@ -11,12 +11,14 @@
 #include <vector>
 #include "Shapes.h"
 #include "Square.h"
+#include "Body.h"
 #include "BoundingVolumes.h"
 #include "Vec2.h"
 
 namespace Collision
 {
 	bool AABBvAABB( Square& A, Square& B, Vec2& normal, float& penetration );
+	bool AABBvAABB_temp( Body& A, Body& B, Vec2& normal, float& penetration );
 
 	bool CirclevCircle( Square& A, Square& B, Vec2& normal, float& penetration );
 
@@ -26,8 +28,10 @@ namespace Collision
 	bool CirclevNgon( Square& A, Square& B, Vec2& normal, float& penetration );
 
 	void ResolveCollision( Square& A, Square& B, Vec2& normal );
+	void ResolveCollision_temp( Body& A, Body& B, Vec2& normal );
 
 	void CorrectPosition( Square& A, Square& B, const Vec2& normal, float penetration );
+	void CorrectPosition_temp( Body& A, Body& B, const Vec2& normal, float penetration );
 
 	//////////////////// 2D JUMP TABLE ///////////////////////////
 	// pointer to a function

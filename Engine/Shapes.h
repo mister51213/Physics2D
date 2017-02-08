@@ -53,7 +53,6 @@ eShape GetType();
 // TODO: customize this based on shape
 IndexedLineList GetLines(Shape::eShape shape = Shape::SQUARE) const;
 
-
 private:
 	std::vector<Vec2> vertices;
 };

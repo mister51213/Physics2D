@@ -2,13 +2,12 @@
 
 #include "BoundingVolumes.h"
 #include "Collision.h"
-//#include "Shapes.h"
 
 class Body
 {
 public:
 	Body();
-	Body( float size, Vec2 position, float mass, float bounciness);
+	Body( float size, Vec2 position, float mass, float bounciness, Shape::eShape type = Shape::SQUARE);
 	~Body();
 	
 	// NOTE - GetLines and drawing / vertex related functions now in SHAPE

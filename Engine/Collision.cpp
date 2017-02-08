@@ -1,5 +1,4 @@
 #include "Collision.h"
-#include "Square.h"
 
 namespace Collision
 {
@@ -14,6 +13,51 @@ namespace Collision
 	};
 
 	bool AABBvAABB( Square& A, Square& B, Vec2& normal, float& penetration )
+	{
+		// A SEPARATING AXIS WAS FOUND, so exit with no intersection
+		if ( A.m_bounds.m_max.x < B.m_bounds.m_min.x || A.m_bounds.m_min.x > B.m_bounds.m_max.x ) return false;
+		if ( A.m_bounds.m_max.y < B.m_bounds.m_min.y || A.m_bounds.m_min.y > B.m_bounds.m_max.y ) return false;
+		// IF we get to this step, then boxes have collided, now create normals/penetration (MANIFOLD)
+
+		// Get Vector from A to B
+		Vec2 AtoB = B.m_position - A.m_position;
+
+		// Calculate overlap on x axis
+		float xOverlap = A.m_bounds.m_extentHalf.x + B.m_bounds.m_extentHalf.x - abs( AtoB.x );
+
+		// Separating axis theorem test for X AXIS
+		if ( xOverlap > 0.0f )
+		{
+			// Calculate overlap on y axis
+			float yOverlap = A.m_bounds.m_extentHalf.y + B.m_bounds.m_extentHalf.y - abs( AtoB.y );
+
+			// SAT test on y axis
+			if ( yOverlap > 0.0f )
+			{
+				if ( xOverlap < yOverlap ) // Axis of least penetration = X
+				{	// If AtoB vector is (-), so is collision normal
+					if ( AtoB.x < 0 )
+						normal = Vec2( -1.0f, 0.0f );
+					else
+						normal = Vec2( 1.0f, 0.0f );
+
+					penetration = xOverlap;
+					return true;
+				}
+				else // Axis of least penetration = Y
+				{	 // If AtoB vector is (-), so is collision normal
+					if ( AtoB.y < 0 )
+						normal = Vec2( 0.0f, -1.0f );
+					else
+						normal = Vec2( 0.0f, 1.0f );
+					penetration = yOverlap;
+					return true;
+				}
+			}
+		}
+	}
+
+	bool AABBvAABB_temp( Body& A, Body& B, Vec2& normal, float& penetration )
 	{
 		// A SEPARATING AXIS WAS FOUND, so exit with no intersection
 		if ( A.m_bounds.m_max.x < B.m_bounds.m_min.x || A.m_bounds.m_min.x > B.m_bounds.m_max.x ) return false;
@@ -73,6 +117,35 @@ namespace Collision
 		return false;
 	}
 
+	void ResolveCollision_temp( Body& A, Body& B, Vec2& normal )
+	{
+		// Velocity vector between the centers of the colliding objects
+		Vec2 relativeVelo = B.m_velocity - A.m_velocity;
+
+		// Project this velocity onto the normal
+		// float velAlongNorm = relativeVelo*A.m_normal;
+		float velAlongNorm = relativeVelo*normal;
+
+		// Do not resolve if velocities are separating
+		bool separating = velAlongNorm > 0;
+		if ( separating )
+			return;
+
+		// Coefficient of resitution (min of two)
+		float coefRest = min( A.m_restitution, B.m_restitution );
+
+		// Calculate impulse scalar
+		float j = -( 1.0f + coefRest ) * velAlongNorm; // NOTE: 2 INFINITE MASSES will cause a crash!
+		j /= ( A.m_inverseMass + B.m_inverseMass );
+
+		//Vec2 impulse = A.m_normal * j;
+		Vec2 impulse = normal * j;
+
+		// DISTRIBUTE THE IMPULSE AMONG BOTH OBJECTS ACCORDING TO THEIR RELATIVE MASSES
+		A.m_velocity -= impulse * A.m_inverseMass;
+		B.m_velocity += impulse * B.m_inverseMass;
+	}
+
 	void ResolveCollision( Square& A, Square& B, Vec2& normal )
 	{
 		// Velocity vector between the centers of the colliding objects
@@ -125,6 +198,20 @@ namespace Collision
 		B.m_position += correctionVec * B.m_inverseMass;
 	}
 
+	void CorrectPosition_temp( Body& A, Body& B, const Vec2& normal, float penetration )
+	{
+		const float percent = 0.2; // usually 20% to 80%
+		const float threshold = 0.01; // usually 0.01 to 0.1
+		float correctionAmt = max( penetration - threshold, 0.0f );
+
+		correctionAmt /= A.m_inverseMass + B.m_inverseMass;
+
+		float totalCorrection = percent * correctionAmt;
+
+		Vec2 correctionVec = normal * totalCorrection;
+		A.m_position -= correctionVec * A.m_inverseMass;
+		B.m_position += correctionVec * B.m_inverseMass;
+	}
 }
 
 /// OLD IMPLEMENTATION ///
