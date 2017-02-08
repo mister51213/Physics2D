@@ -8,7 +8,7 @@ class Body
 {
 public:
 	Body() = default;
-
+	Body(Body &&){}
 	Body( float size, Vec2 position, float mass, float bounciness, Shape::eShape type = Shape::SQUARE);
 
 	~Body();

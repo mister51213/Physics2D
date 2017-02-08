@@ -90,15 +90,13 @@ void Game::DoCollision()
 	//}
 	for ( int i = 0; i < m_bodies.size() - 1; ++i )
 	{
-		for ( int j = i + 1; j < m_squares.size(); ++j )
+		for ( int j = i + 1; j < m_bodies.size(); ++j )
 		{
 			Vec2 normal;
 			float penetration;
 
 			if ( AABBvAABB_temp( m_bodies[ i ], m_bodies[ j ], normal, penetration ) )
 			{
-				//ResolveCollision( m_bodies[ i ], m_bodies[ j ], normal );			
-				//CorrectPosition( m_bodies[ i ], m_bodies[ j ] , normal, penetration);			
 				ResolveCollision_temp( m_bodies[ i ], m_bodies[ j ], normal );			
 				CorrectPosition_temp( m_bodies[ i ], m_bodies[ j ] , normal, penetration);			
 			}
@@ -125,43 +123,80 @@ void Game::UpdateModel()
 
 	for ( int i = 0; i < /*nObjects*/2; i++ )
 	{
-		m_squares[ i ].UpdatePosition(dTime);
+	//	m_squares[ i ].UpdatePosition(dTime);
+		m_bodies[ i ].UpdatePosition(dTime);
 	}
+	
+		//// MOVE LEFT SQUARE
+		//if ( wnd.kbd.KeyIsPressed( 'W' ) )
+		//{
+		//	m_squares[ 0 ].Thrust( {0.f, 0.3f}, dTime );
+		//}
+		//if ( wnd.kbd.KeyIsPressed( 'S' ) )
+		//{
+		//	m_squares[ 0 ].Thrust( {0.f, -0.3f}, dTime );
+		//}
+		//if ( wnd.kbd.KeyIsPressed( 'A' ) )
+		//{
+		//	m_squares[ 0 ].Thrust( {-0.4, 0.f}, dTime );
+		//}
+		//if ( wnd.kbd.KeyIsPressed( 'D' ) )
+		//{
+		//	m_squares[ 0 ].Thrust( {0.4, 0.f}, dTime );
+		//}
+
+		//// MOVE RIGHT SQUARE
+		//if ( wnd.kbd.KeyIsPressed( VK_UP ) )
+		//{
+		//	m_squares[ 1 ].Thrust( { 0.f, 0.3f }, dTime );
+		//}
+		//if ( wnd.kbd.KeyIsPressed( VK_DOWN ) )
+		//{
+		//	m_squares[ 1 ].Thrust( { 0.f, -0.3f }, dTime );
+		//}
+		//if ( wnd.kbd.KeyIsPressed( VK_LEFT ) )
+		//{
+		//	m_squares[ 1 ].Thrust( {-0.4, 0.f}, dTime );
+		//}
+		//if ( wnd.kbd.KeyIsPressed( VK_RIGHT ) )
+		//{
+		//	m_squares[ 1 ].Thrust( {0.4, 0.f}, dTime );
+		//}
 	
 		// MOVE LEFT SQUARE
 		if ( wnd.kbd.KeyIsPressed( 'W' ) )
 		{
-			m_squares[ 0 ].Thrust( {0.f, 0.3f}, dTime );
+			m_bodies[ 0 ].Thrust( {0.f, 0.3f}, dTime );
 		}
 		if ( wnd.kbd.KeyIsPressed( 'S' ) )
 		{
-			m_squares[ 0 ].Thrust( {0.f, -0.3f}, dTime );
+			m_bodies[ 0 ].Thrust( {0.f, -0.3f}, dTime );
 		}
 		if ( wnd.kbd.KeyIsPressed( 'A' ) )
 		{
-			m_squares[ 0 ].Thrust( {-0.4, 0.f}, dTime );
+			m_bodies[ 0 ].Thrust( {-0.4, 0.f}, dTime );
 		}
 		if ( wnd.kbd.KeyIsPressed( 'D' ) )
 		{
-			m_squares[ 0 ].Thrust( {0.4, 0.f}, dTime );
+			m_bodies[ 0 ].Thrust( {0.4, 0.f}, dTime );
 		}
 
 		// MOVE RIGHT SQUARE
 		if ( wnd.kbd.KeyIsPressed( VK_UP ) )
 		{
-			m_squares[ 1 ].Thrust( { 0.f, 0.3f }, dTime );
+			m_bodies[ 1 ].Thrust( { 0.f, 0.3f }, dTime );
 		}
 		if ( wnd.kbd.KeyIsPressed( VK_DOWN ) )
 		{
-			m_squares[ 1 ].Thrust( { 0.f, -0.3f }, dTime );
+			m_bodies[ 1 ].Thrust( { 0.f, -0.3f }, dTime );
 		}
 		if ( wnd.kbd.KeyIsPressed( VK_LEFT ) )
 		{
-			m_squares[ 1 ].Thrust( {-0.4, 0.f}, dTime );
+			m_bodies[ 1 ].Thrust( {-0.4, 0.f}, dTime );
 		}
 		if ( wnd.kbd.KeyIsPressed( VK_RIGHT ) )
 		{
-			m_squares[ 1 ].Thrust( {0.4, 0.f}, dTime );
+			m_bodies[ 1 ].Thrust( {0.4, 0.f}, dTime );
 		}
 }
 
@@ -211,8 +246,11 @@ void Game::ComposeFrame()
 	// Rotate each Vertex
 	for ( int i = 0; i < nObjects; i++ )
 	{
+		//const Mat2 rot =
+		//	Mat2::Rotation( m_squares[ i ].m_theta );
 		const Mat2 rot =
-			Mat2::Rotation( m_squares[ i ].m_theta );
+			Mat2::Rotation( m_bodies[ i ].m_theta );
+
 
 		for ( Vec2& v : lineLists[ i ].vertices )
 		{
@@ -220,7 +258,8 @@ void Game::ComposeFrame()
 			v *= rot;
 			// TODO: Translate to world space
 
-			v += m_squares[ i ].m_position;
+			//v += m_squares[ i ].m_position;
+			v += m_bodies[ i ].m_position;
 
 			// Translate to Screen space
 			sTransformer.Transform( v );
