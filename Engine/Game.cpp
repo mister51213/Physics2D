@@ -51,18 +51,18 @@ Game::Game( MainWindow& wnd )
 	/*************SET MASS TO 0 FOR IMMOBILE OBJECT**************/
 	// colliding squares
 	// TODO: specify shape enum in constructor of body
-	m_bodies.emplace_back( new Body( .1f, { -.5f, 0.f }, 2.f, 0.5f ) );
-	m_bodies.emplace_back( new Body( .1f, { .5f, 0.f }, 1.f, 0.5f ) );
+	m_bodies.emplace_back( new Body( .1f, { -.5f, 0.f }, 2.f, 0.5f, Shape::SQUARE ) );
+	m_bodies.emplace_back( new Body( .1f, { .5f, 0.f }, 1.f, 0.5f, Shape::SQUARE ) );
 
 	// walls
-	m_bodies.emplace_back( new Body( 1.45f, { -1.5f, 0.f }, 0.f, 1.0f ) );
-	m_bodies.emplace_back( new Body( 1.45f, { 1.5f, 0.f }, 0.f, 1.0f ) );
+	m_bodies.emplace_back( new Body( 1.45f, { -1.5f, 0.f }, 0.f, 1.0f, Shape::SQUARE ) );
+	m_bodies.emplace_back( new Body( 1.45f, { 1.5f, 0.f }, 0.f, 1.0f, Shape::SQUARE ) );
 
 	// floor
-	m_bodies.emplace_back( new Body( 1.45f, { 0.f, -1.5f }, 0.f, 1.0f ) );
+	m_bodies.emplace_back( new Body( 1.45f, { 0.f, -1.5f }, 0.f, 1.0f, Shape::SQUARE ) );
 
 	// ceiling
-	m_bodies.emplace_back( new Body( 1.45f, { 0.f, 1.5f }, 0.f, 1.0f ) );
+	m_bodies.emplace_back( new Body( 1.45f, { 0.f, 1.5f }, 0.f, 1.0f, Shape::SQUARE ) );
 }
 
 void Game::Go()

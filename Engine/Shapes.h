@@ -2,6 +2,8 @@
 
 #include <vector>
 #include "Vec2.h"
+#include "BoundingVolumes.h"
+#include <memory>
 
 struct IndexedLineList;
 
@@ -41,7 +43,7 @@ friend class Body;
 
 eShape thisShape;
 Shape();
-Shape( eShape type, float size );
+Shape( eShape type, float size, Vec2 position );
 ~Shape();
 
 // TODO: encapsulate GetLines into this
@@ -51,6 +53,8 @@ eShape GetType();
 
 // TODO: customize this based on shape
 IndexedLineList GetLines(Shape::eShape shape = Shape::SQUARE) const;
+
+std::shared_ptr<AABB> m_bounds;
 
 private:
 	std::vector<Vec2> vertices;

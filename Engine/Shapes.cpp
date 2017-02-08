@@ -36,17 +36,21 @@
 
 	Shape::Shape() {}
 
-	Shape::Shape( eShape type, float size )
+	Shape::Shape( eShape type, float size, Vec2 position )
 	{
 		thisShape = type;
 
 		// TODO: customize for type
-		const float side = size / 2.0f;
-		vertices.emplace_back( -side, -side );
-		vertices.emplace_back( -side, side );
-		vertices.emplace_back( side, side );
-		vertices.emplace_back( side, -side );
+		if ( type == Shape::SQUARE )
+		{
+			const float side = size / 2.0f;
+			vertices.emplace_back( -side, -side );
+			vertices.emplace_back( -side, side );
+			vertices.emplace_back( side, side );
+			vertices.emplace_back( side, -side );
 
+			m_bounds.reset( new AABB( position, { size, size } ) );
+		}
 	}
 
 	Shape::~Shape()
@@ -56,6 +60,7 @@
 
 	void Shape::Draw()
 	{
+	// TODO: encapsulate draw here
 	}
 
 	Shape::eShape Shape::GetType()

@@ -3,7 +3,7 @@
 Body::Body( float size, Vec2 position, float mass, float bounciness, Shape::eShape type )
 	:
 	m_position( position ),
-	m_bounds( position, { size, size } ),
+//	m_bounds( position, { size, size } ),
 	m_mass( mass ),
 	m_restitution( bounciness )
 {
@@ -14,15 +14,7 @@ Body::Body( float size, Vec2 position, float mass, float bounciness, Shape::eSha
 		m_inverseMass = 1.0f / m_mass;
 
 	// INIT SHAPE
-	//m_pShape.reset(new Shape( type, size ));
-	m_pShape = new Shape( type, size);
-
-	// TODO: encapsulate for different shapes
-	//const float side = size / 2.0f;
-	//m_pShape->vertices.emplace_back( -side, -side );
-	//m_pShape->vertices.emplace_back( -side, side );
-	//m_pShape->vertices.emplace_back( side, side );
-	//m_pShape->vertices.emplace_back( side, -side );
+	m_pShape.reset(new Shape( type, size, position ));
 }
 
 Body::~Body()
@@ -41,5 +33,5 @@ void Body::Stop()
 void Body::UpdatePosition( float deltaT )
 {
 	m_position += m_velocity*deltaT;
-	m_bounds.ResetMinMax(m_position);
+	m_pShape->m_bounds->ResetMinMax(m_position);
 }

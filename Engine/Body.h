@@ -23,7 +23,7 @@ public:
 public:
 	float m_theta = 0.f;
 
-	AABB m_bounds;
+	//AABB m_bounds;
 	Vec2 m_position;
 	Vec2 m_velocity = { 0.f, 0.f };
 	Vec2 m_force;
@@ -32,8 +32,7 @@ public:
 	float m_inverseMass;
 	float m_restitution;
 
-	Shape* m_pShape;
-
-//	std::shared_ptr<Shape> m_pShape;
+	//std::shared_ptr<AABB> m_bounds;
+	std::shared_ptr<Shape> m_pShape;
 };
 
