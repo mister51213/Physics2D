@@ -1,8 +1,5 @@
 #include "Body.h"
 
-Body::Body()
-{}
-
 Body::Body( float size, Vec2 position, float mass, float bounciness, Shape::eShape type )
 	:
 	m_position( position ),
@@ -16,8 +13,8 @@ Body::Body( float size, Vec2 position, float mass, float bounciness, Shape::eSha
 	else
 		m_inverseMass = 1.0f / m_mass;
 
-	// SET SHAPE TYPE
-	m_pShape->thisShape = type;
+	// INIT SHAPE
+	m_pShape.reset(new Shape( type ));
 
 	// TODO: encapsulate for different shapes
 	const float side = size / 2.0f;

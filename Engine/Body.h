@@ -2,12 +2,15 @@
 
 #include "BoundingVolumes.h"
 #include "Collision.h"
+#include <memory>
 
 class Body
 {
 public:
-	Body();
+	Body() = default;
+
 	Body( float size, Vec2 position, float mass, float bounciness, Shape::eShape type = Shape::SQUARE);
+
 	~Body();
 	
 	// NOTE - GetLines and drawing / vertex related functions now in SHAPE
@@ -29,6 +32,7 @@ public:
 	float m_inverseMass;
 	float m_restitution;
 
-	Shape* m_pShape;
+//	Shape* m_pShape;
+	std::unique_ptr<Shape> m_pShape;
 };
 
