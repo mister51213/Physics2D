@@ -95,8 +95,8 @@ void Game::DoCollision()
 			Vec2 normal;
 			float penetration;
 			// TODO: use pointer to function dispatch array
-//			if ( CollisionArray[ m_bodies[ i ]->m_pShape->GetType() ][ m_bodies[ j ]->m_pShape->GetType() ]( *m_bodies[ i ], *m_bodies[ j ], normal, penetration ) )
-			if ( AABBvAABB_temp( *m_bodies[ i ], *m_bodies[ j ], normal, penetration ) )
+//			if ( AABBvAABB_temp( *m_bodies[ i ], *m_bodies[ j ], normal, penetration ) )
+			if ( CollisionArray[ m_bodies[ i ]->m_pShape->GetType() ][ m_bodies[ j ]->m_pShape->GetType() ]( *m_bodies[ i ], *m_bodies[ j ], normal, penetration ) )
 			{
 				ResolveCollision_temp( *m_bodies[ i ], *m_bodies[ j ], normal );			
 				CorrectPosition_temp( *m_bodies[ i ], *m_bodies[ j ] , normal, penetration);			

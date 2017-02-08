@@ -18,15 +18,15 @@
 
 namespace Collision
 {
-	bool AABBvAABB( Square& A, Square& B, Vec2& normal, float& penetration );
+	bool AABBvAABB( Body& A, Body& B, Vec2& normal, float& penetration );
 	bool AABBvAABB_temp( Body& A, Body& B, Vec2& normal, float& penetration );
 
-	bool CirclevCircle( Square& A, Square& B, Vec2& normal, float& penetration );
+	bool CirclevCircle( Body& A, Body& B, Vec2& normal, float& penetration );
 
-	bool AABBvCircle( Square& A, Square& B, Vec2& normal, float& penetration );
+	bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration );
 
 	//static bool Overlap_CircleNgon(Vec2& normal, float& penetration){}
-	bool CirclevNgon( Square& A, Square& B, Vec2& normal, float& penetration );
+	bool CirclevNgon( Body& A, Body& B, Vec2& normal, float& penetration );
 
 	//void ResolveCollision( Square& A, Square& B, Vec2& normal );
 	void ResolveCollision_temp( Body& A, Body& B, Vec2& normal );
@@ -36,8 +36,8 @@ namespace Collision
 
 	//////////////////// 2D JUMP TABLE ///////////////////////////
 	// pointer to a function
-	typedef bool( *CollisionAddress )( Square& A, Square& B, Vec2& normal, float& penetration );
-	//typedef bool( *CollisionAddress )( Body& A, Body& B, Vec2& normal, float& penetration );
+	//typedef bool( *CollisionAddress )( Square& A, Square& B, Vec2& normal, float& penetration );
+	typedef bool( *CollisionAddress )( Body& A, Body& B, Vec2& normal, float& penetration );
 
 	// this should return the address of the proper collision function
 	// TODO: make implement Body class so it can be passed to the overlap functions
