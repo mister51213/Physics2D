@@ -9,20 +9,29 @@
 #include <DirectXMath.h>
 #include <wrl.h>
 #include <vector>
+#include "Shapes.h"
+#include "Square.h"
+#include "BoundingVolumes.h"
 #include "Vec2.h"
 
-struct AABB
-{
-	AABB() = default;
-	AABB(Vec2 position, Vec2 scale);
-	void ResetMinMax(Vec2 position);
+bool AABBvAABB( Square& A, Square& B, Vec2& normal, float& penetration );
 
-	Vec2 m_center;
-    Vec2 m_extentHalf;
-	Vec2 m_min;
-    Vec2 m_max;
-	std::vector<Vec2> m_Normals;
-};
+bool CirclevCircle( Square& A, Square& B, Vec2& normal, float& penetration );
 
-//Vec2 operator*= ( Vec2 thisVec, float scalar );
-//Vec2 operator* ( Vec2 thisVec, float scalar );
+bool AABBvCircle( Square& A, Square& B, Vec2& normal, float& penetration );
+
+//static bool Overlap_CircleNgon(Vec2& normal, float& penetration){}
+bool CirclevNgon( Square& A, Square& B, Vec2& normal, float& penetration );
+
+void ResolveCollision( Square& A, Square& B, Vec2& normal );
+
+void CorrectPosition( Square& A, Square& B, const Vec2& normal, float penetration );
+
+//////////////////// 2D JUMP TABLE ///////////////////////////
+// pointer to a function
+typedef bool (*CollisionAddress)(Square& A, Square& B, Vec2& normal, float& penetration );
+
+// this should return the address of the proper collision function
+// TODO: make implement Body class so it can be passed to the overlap functions
+// NOTE - we implicitly cast NGON enum value to an int to tell size of the array
+extern CollisionAddress CollisionArray[ Shape::NGON ][ Shape::NGON ];

@@ -22,6 +22,9 @@
 #include "Game.h"
 #include "Mat3.h"
 #include "Mat2.h"
+#include "Collision.h"
+#include "Shapes.h"
+#include "Square.h"
 
 using namespace std;
 
@@ -32,7 +35,7 @@ Game::Game( MainWindow& wnd )
 {
 	/*************SET MASS TO 0 FOR IMMOBILE OBJECT**************/
 	// colliding squares
-	m_squares.push_back( Square( .1f, { -.5f, 0.f }, 1.f, 0.5f ) );
+	m_squares.push_back( Square( .1f, { -.5f, 0.f }, 2.f, 0.5f ) );
 	m_squares.push_back( Square( .1f, { .5f, 0.f }, 1.f, 0.5f ) );
 
 	// walls
@@ -62,8 +65,7 @@ void Game::DoCollision()
 		{
 			Vec2 normal;
 			float penetration;
-			//if ( Overlap_AABB( m_squares[ i ].m_bounds, m_squares[ j ].m_bounds, normal ) )
-			if ( Overlap_AABB_M( m_squares[ i ], m_squares[ j ], normal, penetration ) )
+			if ( AABBvAABB( m_squares[ i ], m_squares[ j ], normal, penetration ) )
 			{
 				ResolveCollision( m_squares[ i ], m_squares[ j ], normal );			
 				CorrectPosition( m_squares[ i ], m_squares[ j ] , normal, penetration);			
@@ -74,6 +76,12 @@ void Game::DoCollision()
 
 void Game::UpdateModel()
 {	
+	// TODO: 
+	// Get Discrete chunks of time
+	/*
+	https://gamedevelopment.tutsplus.com/tutorials/how-to-create-a-custom-2d-physics-engine-the-core-engine--gamedev-7493#integration
+	*/
+
 	// TIMER 
 	#ifdef NDEBUG
 	float dTime = m_timer.SecondsPassed();
@@ -229,6 +237,3 @@ void Game::ComposeFrame()
 		//}
 	}
 }
-
-
-
