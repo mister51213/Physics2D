@@ -27,6 +27,7 @@
 #include "Square.h"
 
 using namespace std;
+using namespace Collision;
 
 Game::Game( MainWindow& wnd )
 	:
