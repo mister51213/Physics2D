@@ -72,19 +72,15 @@ namespace Collision
 	//	if ( A.m_bounds.m_max.x < B.m_bounds.m_min.x || A.m_bounds.m_min.x > B.m_bounds.m_max.x ) return false;
 	//	if ( A.m_bounds.m_max.y < B.m_bounds.m_min.y || A.m_bounds.m_min.y > B.m_bounds.m_max.y ) return false;
 	//	// IF we get to this step, then boxes have collided, now create normals/penetration (MANIFOLD)
-
 	//	// Get Vector from A to B
 	//	Vec2 AtoB = B.m_position - A.m_position;
-
 	//	// Calculate overlap on x axis
 	//	float xOverlap = A.m_bounds.m_extentHalf.x + B.m_bounds.m_extentHalf.x - abs( AtoB.x );
-
 	//	// Separating axis theorem test for X AXIS
 	//	if ( xOverlap > 0.0f )
 	//	{
 	//		// Calculate overlap on y axis
 	//		float yOverlap = A.m_bounds.m_extentHalf.y + B.m_bounds.m_extentHalf.y - abs( AtoB.y );
-
 	//		// SAT test on y axis
 	//		if ( yOverlap > 0.0f )
 	//		{
@@ -94,7 +90,47 @@ namespace Collision
 	//					normal = Vec2( -1.0f, 0.0f );
 	//				else
 	//					normal = Vec2( 1.0f, 0.0f );
-
+	//				penetration = xOverlap;
+	//				return true;
+	//			}
+	//			else // Axis of least penetration = Y
+	//			{	 // If AtoB vector is (-), so is collision normal
+	//				if ( AtoB.y < 0 )
+	//					normal = Vec2( 0.0f, -1.0f );
+	//				else
+	//					normal = Vec2( 0.0f, 1.0f );
+	//				penetration = yOverlap;
+	//				return true;
+	//			}
+	//		}
+	//	}
+	//}
+	//bool AABBvAABB_temp( Body& A, Body& B, Vec2& normal, float& penetration )
+	//{
+	//	std::shared_ptr<AABB> boundsA = A.m_pShape->m_bounds;
+	//	std::shared_ptr<AABB> boundsB = B.m_pShape->m_bounds;
+	//	// A SEPARATING AXIS WAS FOUND, so exit with no intersection
+	//	if ( boundsA->m_max.x < boundsB->m_min.x || boundsA->m_min.x > boundsB->m_max.x ) return false;
+	//	if ( boundsA->m_max.y < boundsB->m_min.y || boundsA->m_min.y > boundsB->m_max.y ) return false;
+	//	// IF we get to this step, then boxes have collided, now create normals/penetration (MANIFOLD)
+	//	// Get Vector from A to B
+	//	Vec2 AtoB = B.m_position - A.m_position;
+	//	// Calculate overlap on x axis
+	//	float xOverlap = boundsA->m_extentHalf.x + boundsB->m_extentHalf.x - abs( AtoB.x );
+	//	// Separating axis theorem test for X AXIS
+	//	if ( xOverlap > 0.0f )
+	//	{
+	//		// Calculate overlap on y axis
+	//		float yOverlap = boundsA->m_extentHalf.y + boundsB->m_extentHalf.y - abs( AtoB.y );
+	//		// SAT test on y axis
+	//		if ( yOverlap > 0.0f )
+	//		{
+	//			if ( xOverlap < yOverlap ) // Axis of least penetration = X
+	//			{	// If AtoB vector is (-), so is collision normal
+	//				if ( AtoB.x < 0 )
+	//					normal = Vec2( -1.0f, 0.0f );
+	//				else
+	//					normal = Vec2( 1.0f, 0.0f );
 	//				penetration = xOverlap;
 	//				return true;
 	//			}
@@ -111,58 +147,49 @@ namespace Collision
 	//	}
 	//}
 
-	bool AABBvAABB_temp( Body& A, Body& B, Vec2& normal, float& penetration )
-	{
-		std::shared_ptr<AABB> boundsA = A.m_pShape->m_bounds;
-		std::shared_ptr<AABB> boundsB = B.m_pShape->m_bounds;
-
-		// A SEPARATING AXIS WAS FOUND, so exit with no intersection
-		if ( boundsA->m_max.x < boundsB->m_min.x || boundsA->m_min.x > boundsB->m_max.x ) return false;
-		if ( boundsA->m_max.y < boundsB->m_min.y || boundsA->m_min.y > boundsB->m_max.y ) return false;
-		// IF we get to this step, then boxes have collided, now create normals/penetration (MANIFOLD)
-
-		// Get Vector from A to B
-		Vec2 AtoB = B.m_position - A.m_position;
-
-		// Calculate overlap on x axis
-		float xOverlap = boundsA->m_extentHalf.x + boundsB->m_extentHalf.x - abs( AtoB.x );
-
-		// Separating axis theorem test for X AXIS
-		if ( xOverlap > 0.0f )
-		{
-			// Calculate overlap on y axis
-			float yOverlap = boundsA->m_extentHalf.y + boundsB->m_extentHalf.y - abs( AtoB.y );
-
-			// SAT test on y axis
-			if ( yOverlap > 0.0f )
-			{
-				if ( xOverlap < yOverlap ) // Axis of least penetration = X
-				{	// If AtoB vector is (-), so is collision normal
-					if ( AtoB.x < 0 )
-						normal = Vec2( -1.0f, 0.0f );
-					else
-						normal = Vec2( 1.0f, 0.0f );
-
-					penetration = xOverlap;
-					return true;
-				}
-				else // Axis of least penetration = Y
-				{	 // If AtoB vector is (-), so is collision normal
-					if ( AtoB.y < 0 )
-						normal = Vec2( 0.0f, -1.0f );
-					else
-						normal = Vec2( 0.0f, 1.0f );
-					penetration = yOverlap;
-					return true;
-				}
-			}
-		}
-	}
-
 	bool CirclevCircle(Body& A, Body& B, Vec2& normal, float& penetration)
 	{
+ // Get radii
+		float radA = A.m_pShape->m_radius;
+		float radB = B.m_pShape->m_radius;
+
+  // Vector from A to B
+		Vec2 AtoB = B.m_position - A.m_position;
+
+	// Sum of both radii
+		float sumRadii = radA + radB;
+	// Now square it for use in comparing with distance
+		float radSumSq = sumRadii*sumRadii;
+ 
+		float lenSqAB = AtoB.LenSq();
+	if ( lenSqAB > radSumSq )
 		return false;
-	}
+
+	// Circles have collided, now compute manifold
+		float distance = sqrt(lenSqAB); // perform actual sqrt
+ 
+  // If distance between circles is not zero
+  if(distance != 0)
+  {
+    // Distance is difference between radius and distance
+	  penetration = sumRadii - distance;
+
+	  // Utilize our d since we performed sqrt on it already within Length( )
+	  // Points from A to B, and is a unit vector
+	  // TODO: where the FUCK did t come from?
+		  normal = t / distance;
+		  return true;
+  }
+ 
+  // Circles are on same position
+  else
+  {
+    // Choose random (but consistent) values
+	  c->penetration = A->radius;
+		  c->normal = Vec( 1, 0 );
+		  return true;
+  }
+}
 
 	bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration )
 	{

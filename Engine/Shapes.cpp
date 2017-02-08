@@ -44,7 +44,10 @@
 		switch ( type )
 		{
 			case Shape::CIRCLE:
+			{
+				m_radius = size;
 				break;
+			}
 			case Shape::SQUARE:
 			{
 				const float side = size / 2.0f;

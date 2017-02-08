@@ -54,6 +54,7 @@ eShape GetType();
 // TODO: customize this based on shape
 IndexedLineList GetLines(Shape::eShape shape = Shape::SQUARE) const;
 
+float m_radius = 0.1f;
 std::shared_ptr<AABB> m_bounds;
 
 private:
