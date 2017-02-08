@@ -53,8 +53,9 @@ private:
 	static constexpr int nObjects = 6;	
 	//Square m_squares[ nObjects ];
 
-	std::vector<Square> m_squares;
-	std::vector<Body> m_bodies;
+	//std::vector<Square> m_squares;
+	//std::vector<Body> m_bodies;
+	std::vector<Body*> m_bodies;
 
 	static constexpr float dTheta = PI;
 

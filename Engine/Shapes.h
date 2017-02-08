@@ -40,10 +40,9 @@ enum eShape
 friend class Body;
 
 eShape thisShape;
-
-Shape() = default;
-
-Shape( eShape type );
+Shape();
+Shape( eShape type, float size );
+~Shape();
 
 // TODO: encapsulate GetLines into this
 void Draw();

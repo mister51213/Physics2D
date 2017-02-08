@@ -32,7 +32,8 @@ public:
 	float m_inverseMass;
 	float m_restitution;
 
-//	Shape* m_pShape;
-	std::unique_ptr<Shape> m_pShape;
+	Shape* m_pShape;
+
+//	std::shared_ptr<Shape> m_pShape;
 };
 

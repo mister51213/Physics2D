@@ -14,15 +14,15 @@ Body::Body( float size, Vec2 position, float mass, float bounciness, Shape::eSha
 		m_inverseMass = 1.0f / m_mass;
 
 	// INIT SHAPE
-	m_pShape.reset(new Shape( type ));
+	//m_pShape.reset(new Shape( type, size ));
+	m_pShape = new Shape( type, size);
 
 	// TODO: encapsulate for different shapes
-	const float side = size / 2.0f;
-	
-	m_pShape->vertices.emplace_back( -side, -side );
-	m_pShape->vertices.emplace_back( -side, side );
-	m_pShape->vertices.emplace_back( side, side );
-	m_pShape->vertices.emplace_back( side, -side );
+	//const float side = size / 2.0f;
+	//m_pShape->vertices.emplace_back( -side, -side );
+	//m_pShape->vertices.emplace_back( -side, side );
+	//m_pShape->vertices.emplace_back( side, side );
+	//m_pShape->vertices.emplace_back( side, -side );
 }
 
 Body::~Body()

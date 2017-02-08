@@ -1,5 +1,6 @@
 #include "Shapes.h"
 #include "IndexedLineList.h"
+#include <iostream>
 
 	Material::Material( eMaterial mat )
 	{
@@ -33,9 +34,24 @@
 		}
 	}
 
-	Shape::Shape( eShape type )
+	Shape::Shape() {}
+
+	Shape::Shape( eShape type, float size )
 	{
 		thisShape = type;
+
+		// TODO: customize for type
+		const float side = size / 2.0f;
+		vertices.emplace_back( -side, -side );
+		vertices.emplace_back( -side, side );
+		vertices.emplace_back( side, side );
+		vertices.emplace_back( side, -side );
+
+	}
+
+	Shape::~Shape()
+	{
+		std::cout << "SHAPE WAS DESTROYED"  << std::endl;
 	}
 
 	void Shape::Draw()
