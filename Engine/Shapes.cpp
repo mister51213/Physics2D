@@ -32,3 +32,17 @@
 		}
 	}
 
+	Shape::Shape( eShape type )
+	{
+		thisShape = type;
+	}
+
+	void Shape::Draw()
+	{
+	
+	}
+
+	Shape::eShape Shape::GetType()
+	{
+		return thisShape;
+	}

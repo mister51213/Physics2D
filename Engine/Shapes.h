@@ -32,7 +32,19 @@ enum eShape
 	SQUARE,
 	TRIANGLE,
 	NGON
-};	
+};
+
+eShape thisShape;
+
+Shape() = default;
+
+Shape( eShape type );
+
+void Draw();
+
+eShape GetType();
+
+
 };
 
 struct Body
