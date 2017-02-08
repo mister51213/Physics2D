@@ -39,7 +39,7 @@ void Square::Stop()
 	m_velocity = { 0.f, 0.f };
 }
 
-void Square::UpdatePositon( float deltaT )
+void Square::UpdatePosition( float deltaT )
 	{
 		m_position += m_velocity*deltaT;
 		m_bounds.ResetMinMax(m_position);

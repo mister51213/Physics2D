@@ -1,6 +1,9 @@
 #pragma once
 
+#include <vector>
 #include "Vec2.h"
+
+struct IndexedLineList;
 
 enum eMaterial
 {
@@ -34,20 +37,28 @@ enum eShape
 	NGON
 };
 
+friend class Body;
+
 eShape thisShape;
 
 Shape() = default;
 
 Shape( eShape type );
 
+// TODO: encapsulate GetLines into this
 void Draw();
 
 eShape GetType();
 
+// TODO: customize this based on shape
+IndexedLineList GetLines(Shape::eShape shape = Shape::SQUARE) const;
 
+
+private:
+	std::vector<Vec2> vertices;
 };
 
-struct Body
+struct Body_For_Reference
 {
 	Shape* pShape;
 	Material material;

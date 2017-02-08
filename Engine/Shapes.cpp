@@ -1,4 +1,5 @@
 #include "Shapes.h"
+#include "IndexedLineList.h"
 
 	Material::Material( eMaterial mat )
 	{
@@ -39,10 +40,33 @@
 
 	void Shape::Draw()
 	{
-	
 	}
 
 	Shape::eShape Shape::GetType()
 	{
 		return thisShape;
 	}
+
+	
+IndexedLineList Shape::GetLines(Shape::eShape thisShape) const
+{
+	// TODO: customize for different shape types
+	switch ( thisShape )
+	{
+		case Shape::CIRCLE:
+			return{	vertices, { 0, 1, 1, 2, 2, 3, 3, 0 }};
+			break;
+		case Shape::SQUARE:
+			return{	vertices, { 0, 1, 1, 2, 2, 3, 3, 0 }};
+			break;
+		case Shape::TRIANGLE:
+			return{	vertices, { 0, 1, 1, 2, 2, 3, 3, 0 }};
+			break;
+		case Shape::NGON:
+			return{	vertices, { 0, 1, 1, 2, 2, 3, 3, 0 }};
+			break;
+		default:
+			return{	vertices, { 0, 1, 1, 2, 2, 3, 3, 0 }};
+			break;
+	}
+}

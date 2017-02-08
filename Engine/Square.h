@@ -26,7 +26,7 @@ public:
 	/*
 	https://www.niksula.hut.fi/~hkankaan/Homepages/gravity.html
 	*/
-	void UpdatePositon( float deltaT );
+	void UpdatePosition( float deltaT );
 
 public:
 	float m_theta = 0.f;

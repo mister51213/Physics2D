@@ -35,19 +35,34 @@ Game::Game( MainWindow& wnd )
 	gfx( wnd )
 {
 	/*************SET MASS TO 0 FOR IMMOBILE OBJECT**************/
+	//// colliding squares
+	//m_squares.push_back( Square( .1f, { -.5f, 0.f }, 2.f, 0.5f ) );
+	//m_squares.push_back( Square( .1f, { .5f, 0.f }, 1.f, 0.5f ) );
+
+	//// walls
+	//m_squares.push_back( Square( 1.45f, { -1.5f, 0.f }, 0.f, 1.0f ) );
+	//m_squares.push_back( Square( 1.45f, { 1.5f, 0.f }, 0.f, 1.0f ) );
+
+	//// floor
+	//m_squares.push_back( Square( 1.45f, { 0.f, -1.5f }, 0.f, 1.0f ) );
+
+	//// ceiling
+	//m_squares.push_back( Square( 1.45f, { 0.f, 1.5f }, 0.f, 1.0f ) );
+
+	/*************SET MASS TO 0 FOR IMMOBILE OBJECT**************/
 	// colliding squares
-	m_squares.push_back( Square( .1f, { -.5f, 0.f }, 2.f, 0.5f ) );
-	m_squares.push_back( Square( .1f, { .5f, 0.f }, 1.f, 0.5f ) );
+	m_bodies.push_back( Square( .1f, { -.5f, 0.f }, 2.f, 0.5f ) );
+	m_bodies.push_back( Square( .1f, { .5f, 0.f }, 1.f, 0.5f ) );
 
 	// walls
-	m_squares.push_back( Square( 1.45f, { -1.5f, 0.f }, 0.f, 1.0f ) );
-	m_squares.push_back( Square( 1.45f, { 1.5f, 0.f }, 0.f, 1.0f ) );
+	m_bodies.push_back( Square( 1.45f, { -1.5f, 0.f }, 0.f, 1.0f ) );
+	m_bodies.push_back( Square( 1.45f, { 1.5f, 0.f }, 0.f, 1.0f ) );
 
 	// floor
-	m_squares.push_back( Square( 1.45f, { 0.f, -1.5f }, 0.f, 1.0f ) );
+	m_bodies.push_back( Square( 1.45f, { 0.f, -1.5f }, 0.f, 1.0f ) );
 
 	// ceiling
-	m_squares.push_back( Square( 1.45f, { 0.f, 1.5f }, 0.f, 1.0f ) );
+	m_bodies.push_back( Square( 1.45f, { 0.f, 1.5f }, 0.f, 1.0f ) );
 }
 
 void Game::Go()
@@ -60,16 +75,30 @@ void Game::Go()
 
 void Game::DoCollision()
 {
-	for ( int i = 0; i < m_squares.size() - 1; ++i )
+	//for ( int i = 0; i < m_squares.size() - 1; ++i )
+	//{
+	//	for ( int j = i + 1; j < m_squares.size(); ++j )
+	//	{
+	//		Vec2 normal;
+	//		float penetration;
+	//		if ( AABBvAABB( m_squares[ i ], m_squares[ j ], normal, penetration ) )
+	//		{
+	//			ResolveCollision( m_squares[ i ], m_squares[ j ], normal );			
+	//			CorrectPosition( m_squares[ i ], m_squares[ j ] , normal, penetration);			
+	//		}
+	//	}
+	//}
+	for ( int i = 0; i < m_bodies.size() - 1; ++i )
 	{
 		for ( int j = i + 1; j < m_squares.size(); ++j )
 		{
 			Vec2 normal;
 			float penetration;
-			if ( AABBvAABB( m_squares[ i ], m_squares[ j ], normal, penetration ) )
+
+			if ( AABBvAABB( m_bodies[ i ], m_bodies[ j ], normal, penetration ) )
 			{
-				ResolveCollision( m_squares[ i ], m_squares[ j ], normal );			
-				CorrectPosition( m_squares[ i ], m_squares[ j ] , normal, penetration);			
+				ResolveCollision( m_bodies[ i ], m_bodies[ j ], normal );			
+				CorrectPosition( m_bodies[ i ], m_bodies[ j ] , normal, penetration);			
 			}
 		}
 	}
@@ -94,7 +123,7 @@ void Game::UpdateModel()
 
 	for ( int i = 0; i < /*nObjects*/2; i++ )
 	{
-		m_squares[ i ].UpdatePositon(dTime);
+		m_squares[ i ].UpdatePosition(dTime);
 	}
 
 		// VECS TOWARD CENTER
