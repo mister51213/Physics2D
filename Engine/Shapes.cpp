@@ -40,16 +40,28 @@
 	{
 		thisShape = type;
 
-		// TODO: customize for type
-		if ( type == Shape::SQUARE )
+		// TODO: customize for all types
+		switch ( type )
 		{
-			const float side = size / 2.0f;
-			vertices.emplace_back( -side, -side );
-			vertices.emplace_back( -side, side );
-			vertices.emplace_back( side, side );
-			vertices.emplace_back( side, -side );
+			case Shape::CIRCLE:
+				break;
+			case Shape::SQUARE:
+			{
+				const float side = size / 2.0f;
+				vertices.emplace_back( -side, -side );
+				vertices.emplace_back( -side, side );
+				vertices.emplace_back( side, side );
+				vertices.emplace_back( side, -side );
 
-			m_bounds.reset( new AABB( position, { size, size } ) );
+				m_bounds.reset( new AABB( position, { size, size } ) );
+				break;
+			}
+			case Shape::TRIANGLE:
+				break;
+			case Shape::NGON:
+				break;
+			default:
+				break;
 		}
 	}
 
