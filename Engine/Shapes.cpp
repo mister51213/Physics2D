@@ -45,12 +45,12 @@
 		{
 			case Shape::CIRCLE:
 			{
-				m_radius = size;
+				m_radius = size*0.25;
 				break;
 			}
 			case Shape::SQUARE:
 			{
-				const float side = size / 2.0f;
+				const float side = size *0.5f;
 				vertices.emplace_back( -side, -side );
 				vertices.emplace_back( -side, side );
 				vertices.emplace_back( side, side );

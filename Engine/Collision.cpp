@@ -11,10 +11,10 @@ namespace Collision
 		//	CirclevCircle, CirclevNgon
 		//}
 		{
-		AABBvAABB, AABBvAABB
+		CirclevCircle, CirclevCircle
 		},
 		{
-			AABBvAABB, AABBvAABB
+			CirclevCircle, CirclevCircle
 		}
 	};
 
@@ -147,7 +147,7 @@ namespace Collision
 	//	}
 	//}
 
-	bool CirclevCircle(Body& A, Body& B, Vec2& normal, float& penetration)
+	bool CirclevCircle( Body& A, Body& B, Vec2& normal, float& penetration )
 	{
  // Get radii
 		float radA = A.m_pShape->m_radius;
@@ -160,36 +160,34 @@ namespace Collision
 		float sumRadii = radA + radB;
 	// Now square it for use in comparing with distance
 		float radSumSq = sumRadii*sumRadii;
- 
+
 		float lenSqAB = AtoB.LenSq();
-	if ( lenSqAB > radSumSq )
-		return false;
+		if ( lenSqAB > radSumSq )
+			return false;
 
-	// Circles have collided, now compute manifold
-		float distance = sqrt(lenSqAB); // perform actual sqrt
- 
+		// Circles have collided, now compute manifold
+		float distance = sqrt( lenSqAB ); // perform actual sqrt
+
   // If distance between circles is not zero
-  if(distance != 0)
-  {
-    // Distance is difference between radius and distance
-	  penetration = sumRadii - distance;
+		if ( distance != 0 )
+		{
+		  // Distance is difference between radius and distance
+			penetration = sumRadii - distance;
 
-	  // Utilize our d since we performed sqrt on it already within Length( )
-	  // Points from A to B, and is a unit vector
-	  // TODO: where the FUCK did t come from?
-		  normal = t / distance;
-		  return true;
-  }
- 
+			// Normalize AtoB vector w/ precomputed distance scalar
+			normal = AtoB / distance;
+			return true;
+		}
+
   // Circles are on same position
-  else
-  {
-    // Choose random (but consistent) values
-	  c->penetration = A->radius;
-		  c->normal = Vec( 1, 0 );
-		  return true;
-  }
-}
+		else
+		{
+		  // Choose random (but consistent) values
+			penetration = radA;
+			normal = Vec2( 1, 0 );
+			return true;
+		}
+	}
 
 	bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration )
 	{
