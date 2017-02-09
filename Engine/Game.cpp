@@ -53,8 +53,8 @@ Game::Game( MainWindow& wnd )
 	// TODO: specify shape enum in constructor of body
 	//m_bodies.emplace_back( new Body( .1f, { -.5f, 0.f }, 2.f, 0.5f, Shape::SQUARE ) );
 	//m_bodies.emplace_back( new Body( .1f, { .5f, 0.f }, 1.f, 0.5f, Shape::SQUARE ) );
-	m_bodies.emplace_back( new Body( .1f, { -.5f, 0.f }, 2.f, 0.5f, Shape::CIRCLE ) );
-	m_bodies.emplace_back( new Body( .1f, { .5f, 0.f }, 1.f, 0.5f, Shape::CIRCLE ) );
+	m_bodies.emplace_back( new Body( .1f, { -.5f, 0.f }, 2.f, 0.5f, Shape::SQUARE ) );
+	m_bodies.emplace_back( new Body( .1f, { .5f, 0.f }, 1.f, 0.5f, Shape::SQUARE ) );
 
 	// walls
 	m_bodies.emplace_back( new Body( 1.45f, { -1.5f, 0.f }, 0.f, 1.0f, Shape::SQUARE ) );
@@ -238,6 +238,8 @@ void Game::ComposeFrame()
 //			gfx.DrawLine( linesLocal.vertices[ *i ], linesLocal.vertices[ *std::next( i ) ], Colors::Blue );
 //		}
 //	}
+
+	gfx.DrawCircle( { 4., 4. },.5f, Colors::Red );
 
 	vector<IndexedLineList> lineLists( nObjects ); // TODO: m_bodies.Size()
 	for ( int i = 0; i < nObjects; i++)

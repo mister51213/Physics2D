@@ -381,3 +381,31 @@ void Graphics::DrawLine( float x1,float y1,float x2,float y2,Color c )
 		}
 	}
 }
+
+void Graphics::DrawCircle( Vec2 center, float radius, Color c )
+{
+	float radSquared = radius * radius;
+
+	// define bounds in which to draw
+	float leftBound = (center.x - radius)*100;
+	float rightBound = (center.x + radius)*100;
+	float bottomBound = (center.y - radius)*100;
+	float topBound = (center.y + radius)*100;
+
+	for ( int i = leftBound; i < rightBound; i++ )
+	{
+		for ( int j = bottomBound; j < topBound; j++ )
+		{
+			// Get vec from center to this point
+			Vec2 thisPoint = { (float)i, (float)j };
+			Vec2 dist = thisPoint - center;
+			float magDistSq = dist.LenSq(); // NOTE - compare L squd to avoid sqrt
+			float magDist = dist.Len();
+
+			// do the check based on radius
+//			if( magDistSq = radSquared)
+			if( magDist = radius)
+			PutPixel( i, j, c );
+		}
+	}
+}

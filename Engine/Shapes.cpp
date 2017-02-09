@@ -41,6 +41,8 @@
 		thisShape = type;
 
 		// TODO: customize for all types
+		m_radius = size*0.5;
+
 		switch ( type )
 		{
 			case Shape::CIRCLE:

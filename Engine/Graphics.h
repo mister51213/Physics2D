@@ -61,6 +61,7 @@ public:
 		DrawLine( p1.x,p1.y,p2.x,p2.y,c );
 	}
 	void DrawLine( float x1,float y1,float x2,float y2,Color c );
+	void DrawCircle( Vec2 pos, float radius, Color c );
 	void PutPixel( int x,int y,int r,int g,int b )
 	{
 		// CLAMP TO SCREEN
