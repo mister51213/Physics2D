@@ -384,13 +384,14 @@ void Graphics::DrawLine( float x1,float y1,float x2,float y2,Color c )
 
 void Graphics::DrawCircle( Vec2 center, float radius, Color c )
 {
-	float radSquared = radius * radius;
+	float realRad = radius * 100;
+	Vec2 realCenter = center*100;
 
 	// define bounds in which to draw
-	float leftBound = (center.x - radius)*100;
-	float rightBound = (center.x + radius)*100;
-	float bottomBound = (center.y - radius)*100; 
-	float topBound = (center.y + radius)*100;
+	float leftBound = (realCenter.x - realRad);
+	float rightBound = (realCenter.x + realRad);
+	float bottomBound = (realCenter.y - realRad); 
+	float topBound = (realCenter.y + realRad);
 
 	for ( int i = leftBound; i < rightBound; i++ )
 	{
@@ -398,15 +399,15 @@ void Graphics::DrawCircle( Vec2 center, float radius, Color c )
 		{
 			// Get vec from center to this point
 			Vec2 thisPoint = { (float)i, (float)j };
-			Vec2 dist = thisPoint - center;
-			//float magDistSq = dist.LenSq(); // NOTE - compare L squd to avoid sqrt
-			float magDistSq = (dist.x*dist.x) + (dist.y + dist.y);
-			float magDist = sqrt( magDistSq );
-
-			// do the check based on radius
-//			if( magDistSq >= radSquared)
-			if( magDist <= radius*100)
-			PutPixel( i, j, c );
+			Vec2 dist = thisPoint - realCenter;
+			float magDistSq = ( dist.x*dist.x ) + ( dist.y*dist.y );
+			
+			// compare squared values to avoid sqrt
+			float radSq = realRad*realRad;
+			if( magDistSq <= radSq)
+			{
+				PutPixel( i, j, c );
+			}
 		}
 	}
 }
