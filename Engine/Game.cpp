@@ -248,26 +248,8 @@ void Game::DrawVertices()
 
 	    i != end; std::advance( i, 2 ) )
 		{
-			// TODO: doesnt work and too slow
-			// get info for filling 
-			//if ( linesLocal.vertices[ *i ].x < left )
-			//	left = linesLocal.vertices[ *i ].x < left;
-			//if ( linesLocal.vertices[ *i ].x > right )
-			//	right = linesLocal.vertices[ *i ].x;
-			//if ( linesLocal.vertices[ *std::next( i ) ].x < left )
-			//	left = linesLocal.vertices[ *std::next( i ) ].x < left;
-			//if ( linesLocal.vertices[ *std::next( i ) ].x > right )
-			//	right = linesLocal.vertices[ *std::next( i ) ].x;
-
 			gfx.DrawLine( linesLocal.vertices[ *i ], linesLocal.vertices[ *std::next( i ) ], Colors::Blue );
 		}
-
-		// Fill in cube left to right
-		//for ( int x = left; x < right; x++ )
-		//{
-		//	for( int y = 0; y < 50; y++)
-		//	gfx.PutPixel( x, y, Colors::Red );
-		//}
 	}
 }
 
@@ -308,8 +290,13 @@ void Game::ComposeFrame()
 //	}
 
 //	DrawVertices();
+	sTransformer.Transform( m_bodies[ 0 ]->m_position );
+	sTransformer.Transform( m_bodies[ 1 ]->m_position );
+
 	gfx.DrawCircle( m_bodies[ 0 ]->m_position, 0.5f, Colors::Yellow );
-	gfx.DrawCircle( m_bodies[ 0 ]->m_position, m_bodies[ 0 ]->m_pShape->m_radius, Colors::Yellow );
-	gfx.DrawCircle( m_bodies[ 0 ]->m_position, m_bodies[ 1 ]->m_pShape->m_radius, Colors::Yellow );
+	gfx.DrawCircle( m_bodies[ 1 ]->m_position, 0.5f, Colors::Yellow );
+
+//	gfx.DrawCircle( m_bodies[ 0 ]->m_position, m_bodies[ 0 ]->m_pShape->m_radius, Colors::Yellow );
+//	gfx.DrawCircle( m_bodies[ 1 ]->m_position, m_bodies[ 1 ]->m_pShape->m_radius, Colors::Yellow );
 	//gfx.DrawCircle( { 4., 4. },.5f, Colors::Red );
 }
