@@ -38,6 +38,7 @@ public:
 	void Go();
 	void DoCollision();
 private:
+	void DrawVertices();
 	void ComposeFrame();
 	void UpdateModel();
 	/********************************/

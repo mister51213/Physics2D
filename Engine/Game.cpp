@@ -203,44 +203,8 @@ void Game::UpdateModel()
 		}
 }
 
-void Game::ComposeFrame()
+void Game::DrawVertices()
 {
-//	vector<IndexedLineList> lines( nObjects );
-//	for ( int i = 0; i < nObjects; i++)
-//	{
-//		lines[ i ] = gameObjects[ i ].GetLines();
-//	}
-//
-//	// Rotate each Vertex
-//	for ( int i = 0; i < nObjects; i++ )
-//	{
-//		const Mat3 rot =
-//			Mat3::RotationX( gameObjects[ i ].theta_x ) *
-//			Mat3::RotationY( gameObjects[ i ].theta_y ) *
-//			Mat3::RotationZ( gameObjects[ i ].theta_z );
-//		for ( Vec3& v : lines[ i ].vertices )
-//		{
-//			v *= rot;
-//			v += { 0.0f, 0.0f, 1.0f };
-//			sTransformer.Transform( v );
-//		}
-//	}
-//
-//	// Connect the vertices with lines here to form cube
-//	for ( int ind = 0; ind < nObjects; ind++ )
-//	{
-//		IndexedLineList linesLocal = lines[ ind ]; // TODO: shouldnt be copying them
-//		for ( auto i = linesLocal.indices.cbegin(),
-//			  end = linesLocal.indices.cend();
-//
-//			  i != end; std::advance( i, 2 ) )
-//		{
-//			gfx.DrawLine( linesLocal.vertices[ *i ], linesLocal.vertices[ *std::next( i ) ], Colors::Blue );
-//		}
-//	}
-
-	gfx.DrawCircle( { 4., 4. },.5f, Colors::Red );
-
 	vector<IndexedLineList> lineLists( nObjects ); // TODO: m_bodies.Size()
 	for ( int i = 0; i < nObjects; i++)
 	{
@@ -255,7 +219,6 @@ void Game::ComposeFrame()
 		//	Mat2::Rotation( m_squares[ i ].m_theta );
 		const Mat2 rot =
 			Mat2::Rotation( m_bodies[ i ]->m_theta );
-
 
 		for ( Vec2& v : lineLists[ i ].vertices )
 		{
@@ -306,4 +269,47 @@ void Game::ComposeFrame()
 		//	gfx.PutPixel( x, y, Colors::Red );
 		//}
 	}
+}
+
+void Game::ComposeFrame()
+{
+//	vector<IndexedLineList> lines( nObjects );
+//	for ( int i = 0; i < nObjects; i++)
+//	{
+//		lines[ i ] = gameObjects[ i ].GetLines();
+//	}
+//
+//	// Rotate each Vertex
+//	for ( int i = 0; i < nObjects; i++ )
+//	{
+//		const Mat3 rot =
+//			Mat3::RotationX( gameObjects[ i ].theta_x ) *
+//			Mat3::RotationY( gameObjects[ i ].theta_y ) *
+//			Mat3::RotationZ( gameObjects[ i ].theta_z );
+//		for ( Vec3& v : lines[ i ].vertices )
+//		{
+//			v *= rot;
+//			v += { 0.0f, 0.0f, 1.0f };
+//			sTransformer.Transform( v );
+//		}
+//	}
+//
+//	// Connect the vertices with lines here to form cube
+//	for ( int ind = 0; ind < nObjects; ind++ )
+//	{
+//		IndexedLineList linesLocal = lines[ ind ]; // TODO: shouldnt be copying them
+//		for ( auto i = linesLocal.indices.cbegin(),
+//			  end = linesLocal.indices.cend();
+//
+//			  i != end; std::advance( i, 2 ) )
+//		{
+//			gfx.DrawLine( linesLocal.vertices[ *i ], linesLocal.vertices[ *std::next( i ) ], Colors::Blue );
+//		}
+//	}
+
+//	DrawVertices();
+	gfx.DrawCircle( m_bodies[ 0 ]->m_position, 0.5f, Colors::Yellow );
+	gfx.DrawCircle( m_bodies[ 0 ]->m_position, m_bodies[ 0 ]->m_pShape->m_radius, Colors::Yellow );
+	gfx.DrawCircle( m_bodies[ 0 ]->m_position, m_bodies[ 1 ]->m_pShape->m_radius, Colors::Yellow );
+	//gfx.DrawCircle( { 4., 4. },.5f, Colors::Red );
 }
