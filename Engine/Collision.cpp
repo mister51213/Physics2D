@@ -2,7 +2,7 @@
 
 namespace Collision
 {
-	CollisionAddress CollisionArray[ Shape::NGON ][ Shape::NGON ] =
+	CollisionAddress CollisionArray[ Shape::SHAPECOUNT ][ Shape::SHAPECOUNT ] =
 	{
 		//{
 		//	AABBvAABB, AABBvCircle
@@ -11,10 +11,10 @@ namespace Collision
 		//	CirclevCircle, CirclevNgon
 		//}
 		{
-		CirclevCircle, CirclevCircle
+		CirclevCircle, AABBvCircle
 		},
 		{
-			CirclevCircle, CirclevCircle
+		AABBvCircle, AABBvAABB
 		}
 	};
 
@@ -194,7 +194,17 @@ namespace Collision
 		return false;
 	}
 
-	bool CirclevNgon( Body& A, Body& B, Vec2& normal, float& penetration )
+	bool CirclevNGON( Body& A, Body& B, Vec2& normal, float& penetration )
+	{
+		return false;
+	}
+
+	bool NGONvNGON( Body& A, Body& B, Vec2& normal, float& penetration )
+	{
+		return false;
+	}
+
+	bool AABBvNGON( Body& A, Body& B, Vec2& normal, float& penetration )
 	{
 		return false;
 	}

@@ -61,10 +61,6 @@
 				m_bounds.reset( new AABB( position, { size, size } ) );
 				break;
 			}
-			case Shape::TRIANGLE:
-				break;
-			case Shape::NGON:
-				break;
 			default:
 				break;
 		}
@@ -97,14 +93,23 @@ IndexedLineList Shape::GetLines(Shape::eShape thisShape) const
 		case Shape::SQUARE:
 			return{	vertices, { 0, 1, 1, 2, 2, 3, 3, 0 }};
 			break;
-		case Shape::TRIANGLE:
-			return{	vertices, { 0, 1, 1, 2, 2, 3, 3, 0 }};
-			break;
-		case Shape::NGON:
-			return{	vertices, { 0, 1, 1, 2, 2, 3, 3, 0 }};
-			break;
 		default:
 			return{	vertices, { 0, 1, 1, 2, 2, 3, 3, 0 }};
+			break;
+	}
+}
+
+void Shape::UpdatePosition( const Vec2& position )
+{
+	// TODO: act differently depending on its shape
+	switch ( thisShape )
+	{
+		case Shape::CIRCLE:
+			break;
+		case Shape::SQUARE:
+			m_bounds->ResetMinMax(position);
+			break;
+		default:
 			break;
 	}
 }

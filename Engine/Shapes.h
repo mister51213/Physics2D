@@ -35,8 +35,7 @@ enum eShape
 {
 	CIRCLE, 
 	SQUARE,
-	TRIANGLE,
-	NGON
+	SHAPECOUNT // put this at the end so it always = number of shapes
 };
 
 friend class Body;
@@ -53,6 +52,8 @@ eShape GetType();
 
 // TODO: customize this based on shape
 IndexedLineList GetLines(Shape::eShape shape = Shape::SQUARE) const;
+
+void UpdatePosition( const Vec2 & position );
 
 float m_radius = 0.1f;
 std::shared_ptr<AABB> m_bounds;

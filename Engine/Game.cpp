@@ -53,8 +53,8 @@ Game::Game( MainWindow& wnd )
 	// TODO: specify shape enum in constructor of body
 	//m_bodies.emplace_back( new Body( .1f, { -.5f, 0.f }, 2.f, 0.5f, Shape::SQUARE ) );
 	//m_bodies.emplace_back( new Body( .1f, { .5f, 0.f }, 1.f, 0.5f, Shape::SQUARE ) );
-	m_bodies.emplace_back( new Body( .1f, { -.5f, 0.f }, 2.f, 0.5f, Shape::SQUARE ) );
-	m_bodies.emplace_back( new Body( .1f, { .5f, 0.f }, 1.f, 0.5f, Shape::SQUARE ) );
+	m_bodies.emplace_back( new Body( .5f, { -.5f, 0.f }, 2.f, 0.5f, Shape::CIRCLE ) );
+	m_bodies.emplace_back( new Body( .5f, { .5f, 0.f }, 1.f, 0.5f, Shape::CIRCLE ) );
 
 	// walls
 	m_bodies.emplace_back( new Body( 1.45f, { -1.5f, 0.f }, 0.f, 1.0f, Shape::SQUARE ) );
@@ -255,39 +255,41 @@ void Game::DrawVertices()
 
 void Game::ComposeFrame()
 {
-//	vector<IndexedLineList> lines( nObjects );
-//	for ( int i = 0; i < nObjects; i++)
-//	{
-//		lines[ i ] = gameObjects[ i ].GetLines();
-//	}
-//
-//	// Rotate each Vertex
-//	for ( int i = 0; i < nObjects; i++ )
-//	{
-//		const Mat3 rot =
-//			Mat3::RotationX( gameObjects[ i ].theta_x ) *
-//			Mat3::RotationY( gameObjects[ i ].theta_y ) *
-//			Mat3::RotationZ( gameObjects[ i ].theta_z );
-//		for ( Vec3& v : lines[ i ].vertices )
-//		{
-//			v *= rot;
-//			v += { 0.0f, 0.0f, 1.0f };
-//			sTransformer.Transform( v );
-//		}
-//	}
-//
-//	// Connect the vertices with lines here to form cube
-//	for ( int ind = 0; ind < nObjects; ind++ )
-//	{
-//		IndexedLineList linesLocal = lines[ ind ]; // TODO: shouldnt be copying them
-//		for ( auto i = linesLocal.indices.cbegin(),
-//			  end = linesLocal.indices.cend();
-//
-//			  i != end; std::advance( i, 2 ) )
-//		{
-//			gfx.DrawLine( linesLocal.vertices[ *i ], linesLocal.vertices[ *std::next( i ) ], Colors::Blue );
-//		}
-//	}
+	vector<IndexedLineList> lines( nObjects );
+	for ( int i = 0; i < nObjects; i++)
+	{
+		lines[ i ] = gameObjects[ i ].GetLines();
+	}
+
+	// Rotate each Vertex
+	for ( int i = 0; i < nObjects; i++ )
+	{
+		const Mat3 rot =
+			Mat3::RotationX( gameObjects[ i ].theta_x ) *
+			Mat3::RotationY( gameObjects[ i ].theta_y ) *
+			Mat3::RotationZ( gameObjects[ i ].theta_z );
+		for ( Vec3& v : lines[ i ].vertices )
+		{
+			v *= rot;
+			v += { 0.0f, 0.0f, 1.0f };
+			sTransformer.Transform( v );
+		}
+	}
+
+	// Connect the vertices with lines here to form cube
+	for ( int ind = 0; ind < nObjects; ind++ )
+	{
+		IndexedLineList linesLocal = lines[ ind ]; // TODO: shouldnt be copying them
+		for ( auto i = linesLocal.indices.cbegin(),
+			  end = linesLocal.indices.cend();
+
+			  i != end; std::advance( i, 2 ) )
+		{
+			gfx.DrawLine( linesLocal.vertices[ *i ], linesLocal.vertices[ *std::next( i ) ], Colors::Blue );
+		}
+	}
+
+
 
 //	DrawVertices();
 	sTransformer.Transform( m_bodies[ 0 ]->m_position );

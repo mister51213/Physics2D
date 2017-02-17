@@ -19,14 +19,18 @@
 namespace Collision
 {
 	bool AABBvAABB( Body& A, Body& B, Vec2& normal, float& penetration );
-	bool AABBvAABB_temp( Body& A, Body& B, Vec2& normal, float& penetration );
+	//bool AABBvAABB_temp( Body& A, Body& B, Vec2& normal, float& penetration );
 
 	bool CirclevCircle( Body& A, Body& B, Vec2& normal, float& penetration );
 
 	bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration );
 
 	//static bool Overlap_CircleNgon(Vec2& normal, float& penetration){}
-	bool CirclevNgon( Body& A, Body& B, Vec2& normal, float& penetration );
+	bool CirclevNGON( Body& A, Body& B, Vec2& normal, float& penetration );
+
+	bool NGONvNGON( Body & A, Body & B, Vec2 & normal, float & penetration );
+
+	bool AABBvNGON( Body & A, Body & B, Vec2 & normal, float & penetration );
 
 	//void ResolveCollision( Square& A, Square& B, Vec2& normal );
 	void ResolveCollision_temp( Body& A, Body& B, Vec2& normal );
@@ -42,6 +46,6 @@ namespace Collision
 	// this should return the address of the proper collision function
 	// TODO: make implement Body class so it can be passed to the overlap functions
 	// NOTE - we implicitly cast NGON enum value to an int to tell size of the array
-	extern CollisionAddress CollisionArray[ Shape::NGON ][ Shape::NGON ];
+	extern CollisionAddress CollisionArray[ Shape::SHAPECOUNT ][ Shape::SHAPECOUNT ];
 
 }

@@ -33,5 +33,8 @@ void Body::Stop()
 void Body::UpdatePosition( float deltaT )
 {
 	m_position += m_velocity*deltaT;
-	m_pShape->m_bounds->ResetMinMax(m_position);
+	
+	// TODO: ENCAPSULATE bounds updating function inside shape
+	m_pShape->UpdatePosition(m_position);
+	//m_pShape->m_bounds->ResetMinMax(m_position);
 }
