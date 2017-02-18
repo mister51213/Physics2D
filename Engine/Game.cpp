@@ -38,15 +38,13 @@ Game::Game( MainWindow& wnd )
 	m_bodies.emplace_back( new Body( .1f, { -.5f, 0.f }, 2.f, 0.5f, Shape::CIRCLE ) );
 	m_bodies.emplace_back( new Body( .1f, { .5f, 0.f }, 1.f, 0.5f, Shape::CIRCLE ) );
 
-	// walls
-	m_bodies.emplace_back( new Body( 1.45f, { -1.5f, 0.f }, 0.f, 1.0f, Shape::SQUARE ) );
-	m_bodies.emplace_back( new Body( 1.45f, { 1.5f, 0.f }, 0.f, 1.0f, Shape::SQUARE ) );
-
-	// floor
-	m_bodies.emplace_back( new Body( 1.45f, { 0.f, -1.5f }, 0.f, 1.0f, Shape::SQUARE ) );
-
-	// ceiling
-	m_bodies.emplace_back( new Body( 1.45f, { 0.f, 1.5f }, 0.f, 1.0f, Shape::SQUARE ) );
+	//// walls
+	//m_bodies.emplace_back( new Body( 1.45f, { -1.5f, 0.f }, 0.f, 1.0f, Shape::SQUARE ) );
+	//m_bodies.emplace_back( new Body( 1.45f, { 1.5f, 0.f }, 0.f, 1.0f, Shape::SQUARE ) );
+	//// floor
+	//m_bodies.emplace_back( new Body( 1.45f, { 0.f, -1.5f }, 0.f, 1.0f, Shape::SQUARE ) );
+	//// ceiling
+	//m_bodies.emplace_back( new Body( 1.45f, { 0.f, 1.5f }, 0.f, 1.0f, Shape::SQUARE ) );
 }
 
 void Game::Go()
@@ -169,10 +167,6 @@ void Game::DrawVertices()
 	// Connect the vertices with lines here to form cube
 	for ( int ind = 0; ind < m_bodies.size(); ind++ )
 	{
-		// for filling
-		int left = gfx.ScreenWidth;
-		int right = 0;
-
 		// iterate all lines
 		IndexedLineList linesLocal = lineLists[ ind ]; // TODO: shouldnt be copying them
 		for ( auto i = linesLocal.indices.cbegin(),
@@ -192,7 +186,6 @@ void Game::ComposeFrame()
 	//{
 	//	lines[ i ] = gameObjects[ i ].GetLines();
 	//}
-
 	//// Rotate each Vertex
 	//for ( int i = 0; i < nObjects; i++ )
 	//{
@@ -207,14 +200,12 @@ void Game::ComposeFrame()
 	//		sTransformer.Transform( v );
 	//	}
 	//}
-
 	//// Connect the vertices with lines here to form cube
 	//for ( int ind = 0; ind < nObjects; ind++ )
 	//{
 	//	IndexedLineList linesLocal = lines[ ind ]; // TODO: shouldnt be copying them
 	//	for ( auto i = linesLocal.indices.cbegin(),
 	//		  end = linesLocal.indices.cend();
-
 	//		  i != end; std::advance( i, 2 ) )
 	//	{
 	//		gfx.DrawLine( linesLocal.vertices[ *i ], linesLocal.vertices[ *std::next( i ) ], Colors::Blue );
@@ -223,20 +214,10 @@ void Game::ComposeFrame()
 
 	//DrawVertices();
 	
-	//Vec2 circlePos1 = { .5, .5 };
-	//Vec2 circlePos2 = { .5, .6 };
-	//float rad1 = .1f;
-	//float rad2 = .1f;
-	//sTransformer.Transform(circlePos1 );
-	//sTransformer.Transform( circlePos2 );
-	//gfx.DrawCircle( circlePos1, rad1, Colors::Red );
-	//gfx.DrawCircle( circlePos2, rad2, Colors::Red );
-
-	Vec2 position1 = m_bodies[ 0 ]->m_position;
-	sTransformer.Transform( position1 );
-	Vec2 position2 = m_bodies[ 1 ]->m_position;
-	sTransformer.Transform( position2 );
-	gfx.DrawCircle( position1,m_bodies[ 0 ]->m_pShape->m_radius, Colors::Red );
-	gfx.DrawCircle( position2,m_bodies[ 1 ]->m_pShape->m_radius, Colors::Red );
-
+	for ( int ind = 0; ind < m_bodies.size(); ind++ )
+	{
+		Vec2 position = m_bodies[ ind ]->m_position;
+		sTransformer.Transform( position );
+		gfx.DrawCircle( position, m_bodies[ ind ]->m_pShape->m_radius, Colors::Red );
+	}
 }
