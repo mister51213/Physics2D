@@ -218,6 +218,8 @@ void Game::ComposeFrame()
 	{
 		Vec2 position = m_bodies[ ind ]->m_position;
 		sTransformer.Transform( position );
-		gfx.DrawCircle( position, m_bodies[ ind ]->m_pShape->m_radius, Colors::Red );
+
+		//gfx.DrawCircle( position, m_bodies[ ind ]->m_pShape->m_radius, Colors::Red );
+		m_bodies[ ind ]->m_pShape->Draw(&gfx, position, Colors::Cyan);	
 	}
 }

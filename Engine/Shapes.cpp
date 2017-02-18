@@ -71,9 +71,20 @@
 		std::cout << "SHAPE WAS DESTROYED"  << std::endl;
 	}
 
-	void Shape::Draw()
+	void Shape::Draw(Graphics* gfx, const Vec2& position, const Color& c)
 	{
-	// TODO: encapsulate draw here
+		switch ( thisShape )
+		{
+			case Shape::CIRCLE:
+				gfx->DrawCircle(position, m_radius, c);
+				break;
+			case Shape::SQUARE:
+				break;
+			case Shape::SHAPECOUNT:
+				break;
+			default:
+				break;
+		}
 	}
 
 	Shape::eShape Shape::GetType()

@@ -4,6 +4,7 @@
 #include "Vec2.h"
 #include "BoundingVolumes.h"
 #include <memory>
+#include "Graphics.h"
 
 struct IndexedLineList;
 
@@ -46,7 +47,7 @@ Shape( eShape type, float size, Vec2 position );
 ~Shape();
 
 // TODO: encapsulate GetLines into this
-void Draw();
+void Draw(Graphics* gfx, const Vec2& position, const Color& c);
 
 eShape GetType();
 
