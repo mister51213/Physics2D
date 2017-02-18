@@ -35,8 +35,8 @@ Game::Game( MainWindow& wnd )
 {
 	/*************SET MASS TO 0 FOR IMMOBILE OBJECT**************/
 	// colliding squares
-	m_bodies.emplace_back( new Body( .1f, { -.5f, 0.f }, 2.f, 0.5f, Shape::CIRCLE ) );
-	m_bodies.emplace_back( new Body( .1f, { .5f, 0.f }, 1.f, 0.5f, Shape::CIRCLE ) );
+	m_bodies.emplace_back( new Body( 1.f, { -.5f, 0.f }, 2.f, 0.5f, Shape::CIRCLE ) );
+	m_bodies.emplace_back( new Body( 1.f, { .5f, 0.f }, 1.f, 0.5f, Shape::CIRCLE ) );
 
 	// walls
 	m_bodies.emplace_back( new Body( 1.45f, { -1.5f, 0.f }, 0.f, 1.0f, Shape::SQUARE ) );
@@ -136,15 +136,16 @@ void Game::UpdateModel()
 
 void Game::DrawVertices()
 {
-	vector<IndexedLineList> lineLists( nObjects ); // TODO: m_bodies.Size()
-	for ( int i = 0; i < nObjects; i++)
+	// LOAD vertices into a list of indexed lines for drawing
+	vector<IndexedLineList> lineLists( m_bodies.size() );
+	for ( int i = 0; i < m_bodies.size(); i++)
 	{
 		//lineLists[ i ] = m_squares[ i ].GetLines();
 		lineLists[ i ] = m_bodies[ i ]->m_pShape->GetLines();
 	}
 
-	// Rotate each Vertex
-	for ( int i = 0; i < nObjects; i++ )
+	// ROTATE EACH VERTEX
+	for ( int i = 0; i < m_bodies.size(); i++ )
 	{
 		//const Mat2 rot =
 		//	Mat2::Rotation( m_squares[ i ].m_theta );
@@ -157,7 +158,7 @@ void Game::DrawVertices()
 			v *= rot;
 			// TODO: Translate to world space
 
-			//v += m_squares[ i ].m_position;
+			// TRANSLATE EACH VERTEX by position in WORLD SPACE
 			v += m_bodies[ i ]->m_position;
 
 			// Translate to Screen space
@@ -166,7 +167,7 @@ void Game::DrawVertices()
 	}
 
 	// Connect the vertices with lines here to form cube
-	for ( int ind = 0; ind < nObjects; ind++ )
+	for ( int ind = 0; ind < m_bodies.size(); ind++ )
 	{
 		// for filling
 		int left = gfx.ScreenWidth;
@@ -220,15 +221,13 @@ void Game::ComposeFrame()
 	//	}
 	//}
 
-
 	//DrawVertices();
 	sTransformer.Transform( m_bodies[ 0 ]->m_position );
 	sTransformer.Transform( m_bodies[ 1 ]->m_position );
 
-	gfx.DrawCircle( m_bodies[ 0 ]->m_position, 0.5f, Colors::Yellow );
-	gfx.DrawCircle( m_bodies[ 1 ]->m_position, 0.5f, Colors::Yellow );
+	//gfx.DrawCircle( m_bodies[ 0 ]->m_position,m_bodies[ 0 ]->m_pShape->m_radius, Colors::Red );
+	//gfx.DrawCircle( m_bodies[ 1 ]->m_position,m_bodies[ 1 ]->m_pShape->m_radius, Colors::Red );
+	gfx.DrawCircle( {200, 200}, 50, Colors::Red );
+	gfx.DrawCircle( { 400, 200 }, 50, Colors::Red );
 
-//	gfx.DrawCircle( m_bodies[ 0 ]->m_position, m_bodies[ 0 ]->m_pShape->m_radius, Colors::Yellow );
-//	gfx.DrawCircle( m_bodies[ 1 ]->m_position, m_bodies[ 1 ]->m_pShape->m_radius, Colors::Yellow );
-	//gfx.DrawCircle( { 4., 4. },.5f, Colors::Red );
 }

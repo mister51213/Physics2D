@@ -384,8 +384,8 @@ void Graphics::DrawLine( float x1,float y1,float x2,float y2,Color c )
 
 void Graphics::DrawCircle( Vec2 center, float radius, Color c )
 {
-	float realRad = radius * 100;
-	Vec2 realCenter = center*100;
+	float realRad = radius;
+	Vec2 realCenter = center;
 
 	// define bounds in which to draw
 	float leftBound = (realCenter.x - realRad);
