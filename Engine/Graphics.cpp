@@ -384,7 +384,7 @@ void Graphics::DrawLine( float x1,float y1,float x2,float y2,Color c )
 
 void Graphics::DrawCircle( Vec2 center, float radius, Color c )
 {
-	float realRad = radius;
+	float realRad = radius*800; // SCALE the radius to screen dimensions
 	Vec2 realCenter = center;
 
 	// define bounds in which to draw

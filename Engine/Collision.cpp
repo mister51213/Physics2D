@@ -150,8 +150,8 @@ namespace Collision
 	bool CirclevCircle( Body& A, Body& B, Vec2& normal, float& penetration )
 	{
  // Get radii
-		float radA = A.m_pShape->m_radius;
-		float radB = B.m_pShape->m_radius;
+		float radA = A.m_pShape->m_radius*2.f;
+		float radB = B.m_pShape->m_radius*2.f;
 
   // Vector from A to B
 		Vec2 AtoB = B.m_position - A.m_position;

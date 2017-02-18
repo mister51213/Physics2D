@@ -35,8 +35,8 @@ Game::Game( MainWindow& wnd )
 {
 	/*************SET MASS TO 0 FOR IMMOBILE OBJECT**************/
 	// colliding squares
-	m_bodies.emplace_back( new Body( 1.f, { -.5f, 0.f }, 2.f, 0.5f, Shape::CIRCLE ) );
-	m_bodies.emplace_back( new Body( 1.f, { .5f, 0.f }, 1.f, 0.5f, Shape::CIRCLE ) );
+	m_bodies.emplace_back( new Body( .1f, { -.5f, 0.f }, 2.f, 0.5f, Shape::CIRCLE ) );
+	m_bodies.emplace_back( new Body( .1f, { .5f, 0.f }, 1.f, 0.5f, Shape::CIRCLE ) );
 
 	// walls
 	m_bodies.emplace_back( new Body( 1.45f, { -1.5f, 0.f }, 0.f, 1.0f, Shape::SQUARE ) );
@@ -223,18 +223,20 @@ void Game::ComposeFrame()
 
 	//DrawVertices();
 	
-	Vec2 circlePos1 = { .5, .5 };
-	Vec2 circlePos2 = { .5, .6 };
-	
-	sTransformer.Transform(circlePos1 );
-	sTransformer.Transform( circlePos2 );
+	//Vec2 circlePos1 = { .5, .5 };
+	//Vec2 circlePos2 = { .5, .6 };
+	//float rad1 = .1f;
+	//float rad2 = .1f;
+	//sTransformer.Transform(circlePos1 );
+	//sTransformer.Transform( circlePos2 );
+	//gfx.DrawCircle( circlePos1, rad1, Colors::Red );
+	//gfx.DrawCircle( circlePos2, rad2, Colors::Red );
 
-	sTransformer.Transform( m_bodies[ 0 ]->m_position );
-	sTransformer.Transform( m_bodies[ 1 ]->m_position );
-
-	//gfx.DrawCircle( m_bodies[ 0 ]->m_position,m_bodies[ 0 ]->m_pShape->m_radius, Colors::Red );
-	//gfx.DrawCircle( m_bodies[ 1 ]->m_position,m_bodies[ 1 ]->m_pShape->m_radius, Colors::Red );
-	gfx.DrawCircle( circlePos1, 50, Colors::Red );
-	gfx.DrawCircle( circlePos2, 50, Colors::Red );
+	Vec2 position1 = m_bodies[ 0 ]->m_position;
+	sTransformer.Transform( position1 );
+	Vec2 position2 = m_bodies[ 1 ]->m_position;
+	sTransformer.Transform( position2 );
+	gfx.DrawCircle( position1,m_bodies[ 0 ]->m_pShape->m_radius, Colors::Red );
+	gfx.DrawCircle( position2,m_bodies[ 1 ]->m_pShape->m_radius, Colors::Red );
 
 }
