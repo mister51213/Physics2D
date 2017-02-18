@@ -26,8 +26,13 @@
 #include "Surface.h"
 #include "Colors.h"
 #include "Vec2.h"
+#include "ScreenTransformer.h"
+#include "IndexedLineList.h"
+#include "Mat2.h"
 
 #define CHILI_GFX_EXCEPTION( hr,note ) Graphics::Exception( hr,note,_CRT_WIDE(__FILE__),__LINE__ )
+
+class Shape;
 
 class Graphics
 {
@@ -61,7 +66,8 @@ public:
 		DrawLine( p1.x,p1.y,p2.x,p2.y,c );
 	}
 	void DrawLine( float x1,float y1,float x2,float y2,Color c );
-	void DrawCircle( Vec2 pos, float radius, Color c );
+	void DrawCircle( const Vec2& pos, float radius, const Color & c );
+	void DrawPoly( IndexedLineList lines, const Vec2& pos, const float theta, float scale, const Color & c );
 	void PutPixel( int x,int y,int r,int g,int b )
 	{
 		// CLAMP TO SCREEN
@@ -97,4 +103,6 @@ private:
 public:
 	static constexpr unsigned int ScreenWidth = 800u;
 	static constexpr unsigned int ScreenHeight = 800u;
+
+	ScreenTransformer scrnTranner;
 };

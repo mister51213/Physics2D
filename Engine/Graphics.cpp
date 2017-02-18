@@ -26,6 +26,8 @@
 #include <string>
 #include <array>
 #include <functional>
+#include <vector>
+#include "Shapes.h"
 
 // Ignore the intellisense error "cannot open source file" for .shh files.
 // They will be created during the build sequence before the preprocessor runs.
@@ -382,7 +384,7 @@ void Graphics::DrawLine( float x1,float y1,float x2,float y2,Color c )
 	}
 }
 
-void Graphics::DrawCircle( Vec2 center, float radius, Color c )
+void Graphics::DrawCircle( const Vec2& center, float radius, const Color & c )
 {
 	float realRad = radius*800; // SCALE the radius to screen dimensions
 	Vec2 realCenter = center;
@@ -409,5 +411,30 @@ void Graphics::DrawCircle( Vec2 center, float radius, Color c )
 				PutPixel( i, j, c );
 			}
 		}
+	}
+}
+
+// TODO: call this for EACH shape
+void Graphics::DrawPoly( IndexedLineList lines, const Vec2 & pos, const float theta, float scale, const Color & c )
+{
+	// ROTATE EACH VERTEX
+	const Mat2 rot = Mat2::Rotation( theta );
+
+	for ( Vec2& v : lines.vertices )
+	{
+		// Rotate
+		v *= rot;
+
+		// TRANSLATE EACH VERTEX by position in WORLD SPACE
+		v += pos;
+
+		// Translate to Screen space
+		scrnTranner.Transform( v );
+	}
+
+	// Connect the vertices with lines here to form cube
+	for ( auto i = lines.indices.cbegin(), end = lines.indices.cend(); i != end; std::advance( i, 2 ) )
+	{
+		DrawLine( lines.vertices[ *i ], lines.vertices[ *std::next( i ) ], Colors::Blue );
 	}
 }

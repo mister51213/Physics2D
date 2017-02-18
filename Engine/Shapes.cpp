@@ -71,6 +71,7 @@
 		std::cout << "SHAPE WAS DESTROYED"  << std::endl;
 	}
 
+	// TODO: properly linkup theta from Body for rotated drawing
 	void Shape::Draw(Graphics* gfx, const Vec2& position, const Color& c)
 	{
 		switch ( thisShape )
@@ -79,6 +80,7 @@
 				gfx->DrawCircle(position, m_radius, c);
 				break;
 			case Shape::SQUARE:
+				gfx->DrawPoly(GetLines(), position, 0.f, m_radius, c);
 				break;
 			case Shape::SHAPECOUNT:
 				break;

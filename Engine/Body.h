@@ -6,13 +6,15 @@
 
 class Body
 {
+friend class Shape;
+
 public:
 	Body() = default;
 	Body(Body &&){}
 	Body( float size, Vec2 position, float mass, float bounciness, Shape::eShape type = Shape::SQUARE);
 
 	~Body();
-	
+
 	// NOTE - GetLines and drawing / vertex related functions now in SHAPE
 	void Thrust( Vec2 force, float deltaT );
 

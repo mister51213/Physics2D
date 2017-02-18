@@ -21,7 +21,7 @@
 #include "MainWindow.h"
 #include "Game.h"
 #include "Mat3.h"
-#include "Mat2.h"
+//#include "Mat2.h"
 #include "Collision.h"
 #include "Shapes.h"
 
@@ -33,18 +33,17 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd )
 {
-	/*************SET MASS TO 0 FOR IMMOBILE OBJECT**************/
+	/*************SET MASS TO 0 FOR IMMOBILE OBJECT***********/
 	// colliding squares
 	m_bodies.emplace_back( new Body( .1f, { -.5f, 0.f }, 2.f, 0.5f, Shape::CIRCLE ) );
 	m_bodies.emplace_back( new Body( .1f, { .5f, 0.f }, 1.f, 0.5f, Shape::CIRCLE ) );
-
-	//// walls
-	//m_bodies.emplace_back( new Body( 1.45f, { -1.5f, 0.f }, 0.f, 1.0f, Shape::SQUARE ) );
-	//m_bodies.emplace_back( new Body( 1.45f, { 1.5f, 0.f }, 0.f, 1.0f, Shape::SQUARE ) );
-	//// floor
-	//m_bodies.emplace_back( new Body( 1.45f, { 0.f, -1.5f }, 0.f, 1.0f, Shape::SQUARE ) );
-	//// ceiling
-	//m_bodies.emplace_back( new Body( 1.45f, { 0.f, 1.5f }, 0.f, 1.0f, Shape::SQUARE ) );
+	// walls
+	m_bodies.emplace_back( new Body( 1.45f, { -1.5f, 0.f }, 0.f, 1.0f, Shape::SQUARE ) );
+	m_bodies.emplace_back( new Body( 1.45f, { 1.5f, 0.f }, 0.f, 1.0f, Shape::SQUARE ) );
+	// floor
+	m_bodies.emplace_back( new Body( 1.45f, { 0.f, -1.5f }, 0.f, 1.0f, Shape::SQUARE ) );
+	// ceiling
+	m_bodies.emplace_back( new Body( 1.45f, { 0.f, 1.5f }, 0.f, 1.0f, Shape::SQUARE ) );
 }
 
 void Game::Go()
@@ -74,8 +73,7 @@ void Game::DoCollision()
 
 void Game::UpdateModel()
 {	
-	// TODO: 
-	// Get Discrete chunks of time
+	// TODO: Get Discrete chunks of time
 	/*
 	https://gamedevelopment.tutsplus.com/tutorials/how-to-create-a-custom-2d-physics-engine-the-core-engine--gamedev-7493#integration
 	*/
@@ -91,7 +89,6 @@ void Game::UpdateModel()
 
 	for ( int i = 0; i < /*nObjects*/2; i++ )
 	{
-	//	m_squares[ i ].UpdatePosition(dTime);
 		m_bodies[ i ]->UpdatePosition(dTime);
 	}
 	
@@ -154,7 +151,6 @@ void Game::DrawVertices()
 		{
 			// Rotate
 			v *= rot;
-			// TODO: Translate to world space
 
 			// TRANSLATE EACH VERTEX by position in WORLD SPACE
 			v += m_bodies[ i ]->m_position;
@@ -181,45 +177,18 @@ void Game::DrawVertices()
 
 void Game::ComposeFrame()
 {
-	//vector<IndexedLineList> lines( nObjects );
-	//for ( int i = 0; i < nObjects; i++)
-	//{
-	//	lines[ i ] = gameObjects[ i ].GetLines();
-	//}
-	//// Rotate each Vertex
-	//for ( int i = 0; i < nObjects; i++ )
-	//{
-	//	const Mat3 rot =
-	//		Mat3::RotationX( gameObjects[ i ].theta_x ) *
-	//		Mat3::RotationY( gameObjects[ i ].theta_y ) *
-	//		Mat3::RotationZ( gameObjects[ i ].theta_z );
-	//	for ( Vec3& v : lines[ i ].vertices )
-	//	{
-	//		v *= rot;
-	//		v += { 0.0f, 0.0f, 1.0f };
-	//		sTransformer.Transform( v );
-	//	}
-	//}
-	//// Connect the vertices with lines here to form cube
-	//for ( int ind = 0; ind < nObjects; ind++ )
-	//{
-	//	IndexedLineList linesLocal = lines[ ind ]; // TODO: shouldnt be copying them
-	//	for ( auto i = linesLocal.indices.cbegin(),
-	//		  end = linesLocal.indices.cend();
-	//		  i != end; std::advance( i, 2 ) )
-	//	{
-	//		gfx.DrawLine( linesLocal.vertices[ *i ], linesLocal.vertices[ *std::next( i ) ], Colors::Blue );
-	//	}
-	//}
-
 	//DrawVertices();
+
 	
 	for ( int ind = 0; ind < m_bodies.size(); ind++ )
 	{
+		// GET POSITION (copy it so actual actor stays unaffected)
 		Vec2 position = m_bodies[ ind ]->m_position;
+
+		// TRANSFORM INTO WORLD SPACE
 		sTransformer.Transform( position );
 
-		//gfx.DrawCircle( position, m_bodies[ ind ]->m_pShape->m_radius, Colors::Red );
+		// Polymorphic draw call
 		m_bodies[ ind ]->m_pShape->Draw(&gfx, position, Colors::Cyan);	
 	}
 }

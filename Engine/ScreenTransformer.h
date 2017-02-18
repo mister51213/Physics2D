@@ -1,14 +1,16 @@
 #pragma once
-#include "Vec3.h"
-#include "Graphics.h"
+#include "Vec2.h"
+
+static constexpr unsigned int ScreenWidth = 800u;
+static constexpr unsigned int ScreenHeight = 800u;
 
 class ScreenTransformer
 {
 public:
 	ScreenTransformer()
 		:
-		xFactor( float( Graphics::ScreenWidth ) / 2.0f ),
-		yFactor( float( Graphics::ScreenHeight ) / 2.0f )
+		xFactor( float( ScreenWidth ) / 2.0f ),
+		yFactor( float( ScreenHeight ) / 2.0f )
 	{}
 
 	Vec2& Transform( Vec2& v ) const
