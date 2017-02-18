@@ -222,12 +222,19 @@ void Game::ComposeFrame()
 	//}
 
 	//DrawVertices();
+	
+	Vec2 circlePos1 = { .5, .5 };
+	Vec2 circlePos2 = { .5, .6 };
+	
+	sTransformer.Transform(circlePos1 );
+	sTransformer.Transform( circlePos2 );
+
 	sTransformer.Transform( m_bodies[ 0 ]->m_position );
 	sTransformer.Transform( m_bodies[ 1 ]->m_position );
 
 	//gfx.DrawCircle( m_bodies[ 0 ]->m_position,m_bodies[ 0 ]->m_pShape->m_radius, Colors::Red );
 	//gfx.DrawCircle( m_bodies[ 1 ]->m_position,m_bodies[ 1 ]->m_pShape->m_radius, Colors::Red );
-	gfx.DrawCircle( {200, 200}, 50, Colors::Red );
-	gfx.DrawCircle( { 400, 200 }, 50, Colors::Red );
+	gfx.DrawCircle( circlePos1, 50, Colors::Red );
+	gfx.DrawCircle( circlePos2, 50, Colors::Red );
 
 }
