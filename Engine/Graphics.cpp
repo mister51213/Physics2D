@@ -386,9 +386,12 @@ void Graphics::DrawLine( float x1,float y1,float x2,float y2,Color c )
 
 void Graphics::DrawCircle( const Vec2& center, float radius, const Color & c )
 {
-	float realRad = radius*800; // SCALE the radius to screen dimensions
+	//TRANSFORM INTO SCREEN SPACE
 	Vec2 realCenter = center;
-
+	scrnTranner.Transform( realCenter );
+	// SCALE the radius to screen dimensions
+	float realRad = radius*800; 
+	
 	// define bounds in which to draw
 	float leftBound = (realCenter.x - realRad);
 	float rightBound = (realCenter.x + realRad);
@@ -419,10 +422,10 @@ void Graphics::DrawPoly( IndexedLineList lines, const Vec2 & pos, const float th
 {
 	// ROTATE EACH VERTEX
 	const Mat2 rot = Mat2::Rotation( theta );
-
-	for ( Vec2& v : lines.vertices )
+	IndexedLineList linesRotated = lines;
+	for ( Vec2& v : linesRotated.vertices )
 	{
-		// Rotate
+		//// Rotate
 		v *= rot;
 
 		// TRANSLATE EACH VERTEX by position in WORLD SPACE
@@ -433,8 +436,8 @@ void Graphics::DrawPoly( IndexedLineList lines, const Vec2 & pos, const float th
 	}
 
 	// Connect the vertices with lines here to form cube
-	for ( auto i = lines.indices.cbegin(), end = lines.indices.cend(); i != end; std::advance( i, 2 ) )
+	for ( auto i = linesRotated.indices.cbegin(), end = linesRotated.indices.cend(); i != end; std::advance( i, 2 ) )
 	{
-		DrawLine( lines.vertices[ *i ], lines.vertices[ *std::next( i ) ], Colors::Blue );
+		DrawLine( linesRotated.vertices[ *i ], linesRotated.vertices[ *std::next( i ) ], Colors::Blue );
 	}
 }
