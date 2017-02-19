@@ -16,6 +16,7 @@
 #include "Vec2.h"
 #include <memory>
 #include <algorithm>
+#include <cstdint>
 
 namespace Collision
 {

@@ -20,6 +20,11 @@ namespace Collision
 		}
 	};
 
+	float Clamp(const float value, const float lo, const float hi) 
+	{
+	return min(hi, max(value, lo));
+	}
+
 	bool AABBvAABB( Body& A, Body& B, Vec2& normal, float& penetration )
 	{
 		std::shared_ptr<AABB> boundsA = A.m_pShape->m_bounds;
@@ -211,8 +216,8 @@ namespace Collision
 
 		// TODO: make sure this works right
   // Clamp point to edges of the AABB
-		float xClamped = std::clamp( closest.x, -x_extent, x_extent );
-		float yClamped = std::clamp( closest.y, -y_extent, y_extent );
+		float xClamped = Clamp( closest.x, -x_extent, x_extent );
+		float yClamped = Clamp( closest.y, -y_extent, y_extent );
 		closest = { xClamped, yClamped };
 
 		bool inside = false;
