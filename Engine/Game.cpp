@@ -182,9 +182,6 @@ void Game::ComposeFrame()
 		// GET POSITION (copy it so actual actor stays unaffected)
 		Vec2 position = m_bodies[ ind ]->m_position;
 
-		// TRANSFORM INTO SCREEN SPACE
-		//sTransformer.Transform( position );
-
 		// Polymorphic draw call
 		m_bodies[ ind ]->m_pShape->Draw(&gfx, position, Colors::Cyan);	
 	}

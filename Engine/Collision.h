@@ -15,6 +15,7 @@
 #include "BoundingVolumes.h"
 #include "Vec2.h"
 #include <memory>
+#include <algorithm>
 
 namespace Collision
 {

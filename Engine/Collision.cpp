@@ -1,5 +1,7 @@
 #include "Collision.h"
 
+using namespace std;
+
 namespace Collision
 {
 	CollisionAddress CollisionArray[ Shape::SHAPECOUNT ][ Shape::SHAPECOUNT ] =
@@ -191,7 +193,83 @@ namespace Collision
 
 	bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration )
 	{
-		return false;
+  // Setup a couple pointers to each object
+		Body *pA = &A;
+		Body *pB = &B;
+
+		AABB box = *( pA->m_pShape->m_bounds );
+
+  // Vector from A to B
+		Vec2 AtoB = pB->m_position - pA->m_position;
+
+  // Closest point on A to center of B
+		Vec2 closest = AtoB;
+
+  // Calculate half extents along each axis
+		float x_extent = ( box.m_max.x - box.m_min.x ) * 0.5f;
+		float y_extent = ( box.m_max.y - box.m_min.y ) * 0.5f;
+
+		// TODO: make sure this works right
+  // Clamp point to edges of the AABB
+		float xClamped = std::clamp( closest.x, -x_extent, x_extent );
+		float yClamped = std::clamp( closest.y, -y_extent, y_extent );
+		closest = { xClamped, yClamped };
+
+		bool inside = false;
+
+  // Circle is inside the AABB, so we need to clamp the circle's center
+  // to the closest edge
+		if ( AtoB == closest )
+		{
+			inside = true;
+
+		  // Find closest axis
+			if ( abs( AtoB.x ) > abs( AtoB.y ) )
+			{
+			  // Clamp to closest extent
+				if ( closest.x > 0 )
+					closest.x = x_extent;
+				else
+					closest.x = -x_extent;
+			}
+
+			// y axis is shorter
+			else
+			{
+			  // Clamp to closest extent
+				if ( closest.y > 0 )
+					closest.y = y_extent;
+				else
+					closest.y = -y_extent;
+			}
+		}
+
+		normal = AtoB - closest;
+		float d = normal.LenSq();
+		float r = pB->m_pShape->m_radius;
+
+		// Early out of the radius is shorter than distance to closest point and
+		// Circle not inside the AABB
+		if ( d > r * r && !inside )
+			return false;
+
+		// Avoided sqrt until we needed
+		d = sqrt( d );
+
+		// Collision normal needs to be flipped to point outside if circle was
+		// inside the AABB
+		if ( inside )
+		{
+			normal = -AtoB;
+			penetration = r - d;
+		}
+		else
+		{
+			normal = AtoB;
+			penetration = r - d;
+		}
+
+		return true;
 	}
 
 	bool CirclevNGON( Body& A, Body& B, Vec2& normal, float& penetration )
