@@ -34,16 +34,18 @@ Game::Game( MainWindow& wnd )
 	gfx( wnd )
 {
 	/*************SET MASS TO 0 FOR IMMOBILE OBJECT***********/
-	// colliding squares
+	// colliding objects
 	m_bodies.emplace_back( new Body( .1f, { -.5f, 0.f }, 2.f, 0.5f, Shape::CIRCLE ) );
 	m_bodies.emplace_back( new Body( .1f, { .5f, 0.f }, 1.f, 0.5f, Shape::CIRCLE ) );
-	// walls
-	m_bodies.emplace_back( new Body( 1.48f, { -1.5f, 0.f }, 0.f, 1.0f, Shape::SQUARE ) );
-	m_bodies.emplace_back( new Body( 1.44f, { 1.5f, 0.f }, 0.f, 1.0f, Shape::SQUARE ) );
-	// floor
-	m_bodies.emplace_back( new Body( 1.41f, { 0.f, -1.5f }, 0.f, 1.0f, Shape::SQUARE ) );
-	// ceiling
-	m_bodies.emplace_back( new Body( 1.38f, { 0.f, 1.5f }, 0.f, 1.0f, Shape::SQUARE ) );
+	m_bodies.emplace_back( new Body( .1f, { .3f, 0.f }, 1.f, 0.5f, Shape::SQUARE ) );
+
+
+
+	//// walls, ceiling, floor
+	//m_bodies.emplace_back( new Body( 1.48f, { -1.5f, 0.f }, 0.f, 1.0f, Shape::SQUARE ) );
+	//m_bodies.emplace_back( new Body( 1.44f, { 1.5f, 0.f }, 0.f, 1.0f, Shape::SQUARE ) );
+	//m_bodies.emplace_back( new Body( 1.41f, { 0.f, -1.5f }, 0.f, 1.0f, Shape::SQUARE ) );
+	//m_bodies.emplace_back( new Body( 1.38f, { 0.f, 1.5f }, 0.f, 1.0f, Shape::SQUARE ) );
 }
 
 void Game::Go()

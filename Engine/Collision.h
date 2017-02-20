@@ -26,13 +26,17 @@ namespace Collision
 	bool CirclevCircle( Body& A, Body& B, Vec2& normal, float& penetration );
 
 	bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration );
+	bool CirclevAABB( Body& A, Body& B, Vec2& normal, float& penetration );
 
 	//static bool Overlap_CircleNgon(Vec2& normal, float& penetration){}
 	bool CirclevNGON( Body& A, Body& B, Vec2& normal, float& penetration );
 
-	bool NGONvNGON( Body & A, Body & B, Vec2 & normal, float & penetration );
+	bool NGONvCircle( Body& A, Body& B, Vec2& normal, float& penetration );
 
 	bool AABBvNGON( Body & A, Body & B, Vec2 & normal, float & penetration );
+	bool NGONvAABB( Body& A, Body& B, Vec2& normal, float& penetration );
+
+	bool NGONvNGON( Body & A, Body & B, Vec2 & normal, float & penetration );
 
 	//void ResolveCollision( Square& A, Square& B, Vec2& normal );
 	void ResolveCollision_temp( Body& A, Body& B, Vec2& normal );

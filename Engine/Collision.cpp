@@ -13,7 +13,7 @@ namespace Collision
 		//	CirclevCircle, CirclevNgon
 		//}
 		{
-		CirclevCircle, AABBvCircle
+		CirclevCircle, CirclevAABB
 		},
 		{
 		AABBvCircle, AABBvAABB
@@ -196,6 +196,87 @@ namespace Collision
 		}
 	}
 
+	bool CirclevAABB( Body& A, Body& B, Vec2& normal, float& penetration )
+	{
+  // Setup a couple pointers to each object
+		Body *pA = &A;
+		Body *pB = &B;
+
+		AABB box = *( pB->m_pShape->m_bounds );
+
+  // Vector from A to B
+		Vec2 AtoB = pB->m_position - pA->m_position;
+
+  // Closest point on A to center of B
+		Vec2 closest = AtoB;
+
+  // Calculate half extents along each axis
+		float x_extent = ( box.m_max.x - box.m_min.x ) * 0.5f;
+		float y_extent = ( box.m_max.y - box.m_min.y ) * 0.5f;
+
+		// TODO: make sure this works right
+  // Clamp point to edges of the AABB
+		float xClamped = Clamp( closest.x, -x_extent, x_extent );
+		float yClamped = Clamp( closest.y, -y_extent, y_extent );
+		closest = { xClamped, yClamped };
+
+		bool inside = false;
+
+  // Circle is inside the AABB, so we need to clamp the circle's center
+  // to the closest edge
+		if ( AtoB == closest )
+		{
+			inside = true;
+
+		  // Find closest axis
+			if ( abs( AtoB.x ) > abs( AtoB.y ) )
+			{
+			  // Clamp to closest extent
+				if ( closest.x > 0 )
+					closest.x = x_extent;
+				else
+					closest.x = -x_extent;
+			}
+
+			// y axis is shorter
+			else
+			{
+			  // Clamp to closest extent
+				if ( closest.y > 0 )
+					closest.y = y_extent;
+				else
+					closest.y = -y_extent;
+			}
+		}
+
+		normal = AtoB - closest;
+		float d = normal.LenSq();
+		float r = pB->m_pShape->m_radius;
+
+		// Early out of the radius is shorter than distance to closest point and
+		// Circle not inside the AABB
+		if ( d > r * r && !inside )
+			return false;
+
+		// Avoided sqrt until we needed
+		d = sqrt( d );
+
+		// Collision normal needs to be flipped to point outside if circle was
+		// inside the AABB
+		if ( inside )
+		{
+			normal = -AtoB;
+			penetration = r - d;
+		}
+		else
+		{
+			normal = AtoB;
+			penetration = r - d;
+		}
+
+		return true;
+	}
+
 	bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration )
 	{
   // Setup a couple pointers to each object
@@ -282,12 +363,22 @@ namespace Collision
 		return false;
 	}
 
-	bool NGONvNGON( Body& A, Body& B, Vec2& normal, float& penetration )
+	bool NGONvCircle( Body& A, Body& B, Vec2& normal, float& penetration )
 	{
 		return false;
 	}
 
 	bool AABBvNGON( Body& A, Body& B, Vec2& normal, float& penetration )
+	{
+		return false;
+	}
+
+	bool NGONvAABB( Body& A, Body& B, Vec2& normal, float& penetration )
+	{
+		return false;
+	}
+
+	bool NGONvNGON( Body& A, Body& B, Vec2& normal, float& penetration )
 	{
 		return false;
 	}
@@ -325,30 +416,23 @@ namespace Collision
 	//{
 	//	// Velocity vector between the centers of the colliding objects
 	//	Vec2 relativeVelo = B.m_velocity - A.m_velocity;
-
 	//	// Project this velocity onto the normal
 	//	// float velAlongNorm = relativeVelo*A.m_normal;
 	//	float velAlongNorm = relativeVelo*normal;
-
 	//	// Do not resolve if velocities are separating
 	//	bool separating = velAlongNorm > 0;
 	//	if ( separating )
 	//		return;
-
 	//	// Coefficient of resitution (min of two)
 	//	float coefRest = min( A.m_restitution, B.m_restitution );
-
 	//	// Calculate impulse scalar
 	//	float j = -( 1.0f + coefRest ) * velAlongNorm; // NOTE: 2 INFINITE MASSES will cause a crash!
 	//	j /= ( A.m_inverseMass + B.m_inverseMass );
-
 	//	//Vec2 impulse = A.m_normal * j;
 	//	Vec2 impulse = normal * j;
-
 	//	// DISTRIBUTE THE IMPULSE AMONG BOTH OBJECTS ACCORDING TO THEIR RELATIVE MASSES
 	//	A.m_velocity -= impulse * A.m_inverseMass;
 	//	B.m_velocity += impulse * B.m_inverseMass;
-
 	//	// NOTE: could also do it this (slower) way
 	//	//float mass_sum = A.m_mass + B.m_mass;
 	//	//float ratioA = A.m_mass / mass_sum;
@@ -356,18 +440,14 @@ namespace Collision
 	//	//A.m_velocity -= impulse * ratioA;
 	//	//B.m_velocity += impulse * ratioB;
 	//}
-
 	// prevent objects from sinking
 	//void CorrectPosition( Square& A, Square& B, const Vec2& normal, float penetration )
 	//{
 	//	const float percent = 0.2; // usually 20% to 80%
 	//	const float threshold = 0.01; // usually 0.01 to 0.1
 	//	float correctionAmt = max( penetration - threshold, 0.0f );
-
 	//	correctionAmt /= A.m_inverseMass + B.m_inverseMass;
-
 	//	float totalCorrection = percent * correctionAmt;
-
 	//	Vec2 correctionVec = normal * totalCorrection;
 	//	A.m_position -= correctionVec * A.m_inverseMass;
 	//	B.m_position += correctionVec * B.m_inverseMass;
