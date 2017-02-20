@@ -277,9 +277,16 @@ namespace Collision
 		return true;
 	}
 
-	bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration )
-	{
-  // Setup a couple pointers to each object
+	// TODO: compare with these
+	/*
+	https://yal.cc/rectangle-circle-intersection-test/
+	https://gist.github.com/vonWolfehaus/5023015
+	http://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection
+	*/
+
+bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration )
+{
+  // Setup pointers to each object
 		Body *pA = &A;
 		Body *pB = &B;
 
@@ -294,8 +301,10 @@ namespace Collision
   // Calculate half extents along each axis
 		float x_extent = ( box.m_max.x - box.m_min.x ) * 0.5f;
 		float y_extent = ( box.m_max.y - box.m_min.y ) * 0.5f;
+		//float x_extent = box.m_extentHalf.x;
+		//float y_extent = box.m_extentHalf.y;
 
-		// TODO: make sure this works right
+	// TODO: make sure this works right
   // Clamp point to edges of the AABB
 		float xClamped = Clamp( closest.x, -x_extent, x_extent );
 		float yClamped = Clamp( closest.y, -y_extent, y_extent );
@@ -303,8 +312,7 @@ namespace Collision
 
 		bool inside = false;
 
-  // Circle is inside the AABB, so we need to clamp the circle's center
-  // to the closest edge
+  // Circle is inside the AABB, so we need to clamp the circle's center to the closest edge
 		if ( AtoB == closest )
 		{
 			inside = true;
@@ -334,7 +342,7 @@ namespace Collision
 		float d = normal.LenSq();
 		float r = pB->m_pShape->m_radius;
 
-		// Early out of the radius is shorter than distance to closest point and
+		// Early out if the radius is shorter than distance to closest point and
 		// Circle not inside the AABB
 		if ( d > r * r && !inside )
 			return false;
@@ -383,7 +391,7 @@ namespace Collision
 		return false;
 	}
 
-	void ResolveCollision_temp( Body& A, Body& B, Vec2& normal )
+	void ResolveCollision( Body& A, Body& B, Vec2& normal )
 	{
 		// Velocity vector between the centers of the colliding objects
 		Vec2 relativeVelo = B.m_velocity - A.m_velocity;
@@ -412,6 +420,23 @@ namespace Collision
 		B.m_velocity += impulse * B.m_inverseMass;
 	}
 
+	void CorrectPosition( Body& A, Body& B, const Vec2& normal, float penetration )
+	{
+		const float percent = 0.2; // usually 20% to 80%
+		const float threshold = 0.01; // usually 0.01 to 0.1
+		float correctionAmt = max( penetration - threshold, 0.0f );
+
+		correctionAmt /= A.m_inverseMass + B.m_inverseMass;
+
+		float totalCorrection = percent * correctionAmt;
+
+		Vec2 correctionVec = normal * totalCorrection;
+		A.m_position -= correctionVec * A.m_inverseMass;
+		B.m_position += correctionVec * B.m_inverseMass;
+	}
+}
+
+/// OLD IMPLEMENTATION ///
 	//void ResolveCollision( Square& A, Square& B, Vec2& normal )
 	//{
 	//	// Velocity vector between the centers of the colliding objects
@@ -453,23 +478,6 @@ namespace Collision
 	//	B.m_position += correctionVec * B.m_inverseMass;
 	//}
 
-	void CorrectPosition_temp( Body& A, Body& B, const Vec2& normal, float penetration )
-	{
-		const float percent = 0.2; // usually 20% to 80%
-		const float threshold = 0.01; // usually 0.01 to 0.1
-		float correctionAmt = max( penetration - threshold, 0.0f );
-
-		correctionAmt /= A.m_inverseMass + B.m_inverseMass;
-
-		float totalCorrection = percent * correctionAmt;
-
-		Vec2 correctionVec = normal * totalCorrection;
-		A.m_position -= correctionVec * A.m_inverseMass;
-		B.m_position += correctionVec * B.m_inverseMass;
-	}
-}
-
-/// OLD IMPLEMENTATION ///
 //static bool Overlap_AABB_OLD( const AABB& boxA, const AABB& boxB, Vec2& normal )
 //{
 //	// A SEPARATING AXIS WAS FOUND, so exit with no intersection

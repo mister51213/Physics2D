@@ -21,36 +21,22 @@
 namespace Collision
 {
 	bool AABBvAABB( Body& A, Body& B, Vec2& normal, float& penetration );
-	//bool AABBvAABB_temp( Body& A, Body& B, Vec2& normal, float& penetration );
-
 	bool CirclevCircle( Body& A, Body& B, Vec2& normal, float& penetration );
-
 	bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration );
 	bool CirclevAABB( Body& A, Body& B, Vec2& normal, float& penetration );
 
-	//static bool Overlap_CircleNgon(Vec2& normal, float& penetration){}
 	bool CirclevNGON( Body& A, Body& B, Vec2& normal, float& penetration );
-
 	bool NGONvCircle( Body& A, Body& B, Vec2& normal, float& penetration );
-
 	bool AABBvNGON( Body & A, Body & B, Vec2 & normal, float & penetration );
 	bool NGONvAABB( Body& A, Body& B, Vec2& normal, float& penetration );
-
 	bool NGONvNGON( Body & A, Body & B, Vec2 & normal, float & penetration );
 
-	//void ResolveCollision( Square& A, Square& B, Vec2& normal );
-	void ResolveCollision_temp( Body& A, Body& B, Vec2& normal );
-
-	//void CorrectPosition( Square& A, Square& B, const Vec2& normal, float penetration );
-	void CorrectPosition_temp( Body& A, Body& B, const Vec2& normal, float penetration );
+	void ResolveCollision( Body& A, Body& B, Vec2& normal );
+	void CorrectPosition( Body& A, Body& B, const Vec2& normal, float penetration );
 
 	//////////////////// 2D JUMP TABLE ///////////////////////////
-	// pointer to a function
-	//typedef bool( *CollisionAddress )( Square& A, Square& B, Vec2& normal, float& penetration );
 	typedef bool( *CollisionAddress )( Body& A, Body& B, Vec2& normal, float& penetration );
 
-	// this should return the address of the proper collision function
-	// TODO: make implement Body class so it can be passed to the overlap functions
 	// NOTE - we implicitly cast NGON enum value to an int to tell size of the array
 	extern CollisionAddress CollisionArray[ Shape::SHAPECOUNT ][ Shape::SHAPECOUNT ];
 

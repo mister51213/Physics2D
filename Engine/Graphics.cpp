@@ -331,6 +331,29 @@ std::wstring Graphics::Exception::GetExceptionType() const
 	return L"Chili Graphics Exception";
 }
 
+void Graphics::PutPixel( int x, int y, int r, int g, int b )
+{
+// CLAMP TO SCREEN
+	if ( x > 1 && x < ScreenWidth && y > 1 && y < ScreenHeight )
+	{
+		PutPixel( x, y, { unsigned char( r ), unsigned char( g ), unsigned char( b ) } );
+	}
+}
+
+void Graphics::PutPixel( int x,int y,Color c )
+{
+	// CLAMP TO SCREEN
+	if ( x > 1 && x < ScreenWidth && y > 1 && y < ScreenHeight )
+	{
+		sysBuffer.PutPixel( x, y, c );
+	}
+}
+
+void Graphics::DrawLine( const Vec2& p1,const Vec2& p2,Color c )
+{
+	DrawLine( p1.x,p1.y,p2.x,p2.y,c );
+}
+
 void Graphics::DrawLine( float x1,float y1,float x2,float y2,Color c )
 {
 	const float dx = x2 - x1;

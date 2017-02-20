@@ -35,11 +35,9 @@ Game::Game( MainWindow& wnd )
 {
 	/*************SET MASS TO 0 FOR IMMOBILE OBJECT***********/
 	// colliding objects
-	m_bodies.emplace_back( new Body( .1f, { -.5f, 0.f }, 2.f, 0.5f, Shape::CIRCLE ) );
+	m_bodies.emplace_back( new Body( .1f, { -.5f, 0.f }, 2.f, 0.5f, Shape::SQUARE ) );
 	m_bodies.emplace_back( new Body( .1f, { .5f, 0.f }, 1.f, 0.5f, Shape::CIRCLE ) );
-	m_bodies.emplace_back( new Body( .1f, { .3f, 0.f }, 1.f, 0.5f, Shape::SQUARE ) );
-
-
+	//m_bodies.emplace_back( new Body( .1f, { .3f, 0.f }, 1.f, 0.5f, Shape::SQUARE ) );
 
 	//// walls, ceiling, floor
 	//m_bodies.emplace_back( new Body( 1.48f, { -1.5f, 0.f }, 0.f, 1.0f, Shape::SQUARE ) );
@@ -66,8 +64,8 @@ void Game::DoCollision()
 			float penetration;
 			if ( CollisionArray[ m_bodies[ i ]->m_pShape->GetType() ][ m_bodies[ j ]->m_pShape->GetType() ]( *m_bodies[ i ], *m_bodies[ j ], normal, penetration ) )
 			{
-				ResolveCollision_temp( *m_bodies[ i ], *m_bodies[ j ], normal );			
-				CorrectPosition_temp( *m_bodies[ i ], *m_bodies[ j ] , normal, penetration);			
+				ResolveCollision( *m_bodies[ i ], *m_bodies[ j ], normal );			
+				CorrectPosition( *m_bodies[ i ], *m_bodies[ j ] , normal, penetration);			
 			}
 		}
 	}
@@ -130,52 +128,6 @@ void Game::UpdateModel()
 			m_bodies[ 1 ]->Thrust( {0.4, 0.f}, dTime );
 		}
 }
-
-//void Game::DrawVertices()
-//{
-//	// LOAD vertices into a list of indexed lines for drawing
-//	vector<IndexedLineList> lineLists( m_bodies.size() );
-//	for ( int i = 0; i < m_bodies.size(); i++)
-//	{
-//		//lineLists[ i ] = m_squares[ i ].GetLines();
-//		lineLists[ i ] = m_bodies[ i ]->m_pShape->GetLines();
-//	}
-//
-//	// ROTATE EACH VERTEX
-//	for ( int i = 0; i < m_bodies.size(); i++ )
-//	{
-//		//const Mat2 rot =
-//		//	Mat2::Rotation( m_squares[ i ].m_theta );
-//		const Mat2 rot =
-//			Mat2::Rotation( m_bodies[ i ]->m_theta );
-//
-//		for ( Vec2& v : lineLists[ i ].vertices )
-//		{
-//			// Rotate
-//			v *= rot;
-//
-//			// TRANSLATE EACH VERTEX by position in WORLD SPACE
-//			v += m_bodies[ i ]->m_position;
-//
-//			// Translate to Screen space
-//			sTransformer.Transform( v );
-//		}
-//	}
-//
-//	// Connect the vertices with lines here to form cube
-//	for ( int ind = 0; ind < m_bodies.size(); ind++ )
-//	{
-//		// iterate all lines
-//		IndexedLineList linesLocal = lineLists[ ind ]; // TODO: shouldnt be copying them
-//		for ( auto i = linesLocal.indices.cbegin(),
-//			  end = linesLocal.indices.cend();
-//
-//	    i != end; std::advance( i, 2 ) )
-//		{
-//			gfx.DrawLine( linesLocal.vertices[ *i ], linesLocal.vertices[ *std::next( i ) ], Colors::Blue );
-//		}
-//	}
-//}
 
 void Game::ComposeFrame()
 {

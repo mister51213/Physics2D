@@ -40,9 +40,6 @@
 	{
 		thisShape = type;
 
-		// TODO: customize for all types
-		m_radius = size;
-
 		switch ( type )
 		{
 			case Shape::CIRCLE:
@@ -52,7 +49,9 @@
 			}
 			case Shape::SQUARE:
 			{
-				const float side = size *0.5f;
+				const float side = size * 0.5f;
+				m_radius = size * 0.5;
+
 				vertices.emplace_back( -side, -side );
 				vertices.emplace_back( -side, side );
 				vertices.emplace_back( side, side );
