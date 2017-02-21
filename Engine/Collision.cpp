@@ -264,17 +264,17 @@ namespace Collision
 		if ( inside )
 		{
 			// TODO: 1) use normTemp here, not AtoB. 2) NORMALIZE it first
-			//normal = -AtoB;
-			normal = -normTemp;
-			//normal.Normalize();
+			normal = -AtoB;
+			//normal = -normTemp;
+			normal.Normalize();
 			penetration = r - d;
 		}
 		else
 		{
 			// TODO: 1) use normTemp here, not AtoB. 2) NORMALIZE it first
-			//normal = AtoB;
-			normal = normTemp;
-			//normal.Normalize();
+			normal = AtoB;
+			//normal = normTemp;
+			normal.Normalize();
 			penetration = r - d;
 		}
 
@@ -363,16 +363,16 @@ bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration )
 		if ( inside )
 		{
 			// TODO: 1) use normTemp here, not AtoB. 2) NORMALIZE it first
-			//normal = -AtoB;
-			normal = -normTemp;
+			normal = -AtoB;
+			//normal = -normTemp;
 			normal.Normalize();
 			penetration = r - d;
 		}
 		else
 		{
 			// TODO: 1) use normTemp here, not AtoB. 2) NORMALIZE it first
-			//normal = AtoB;
-			normal = normTemp;
+			normal = AtoB;
+			//normal = normTemp;
 			normal.Normalize();
 			penetration = r - d;
 		}

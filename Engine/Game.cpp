@@ -67,7 +67,7 @@ void Game::DoCollision()
 				//m_bodies[ i ]->Stop();
 				//m_bodies[ j ]->Stop();
 				ResolveCollision( *m_bodies[ i ], *m_bodies[ j ], normal );			
-				//CorrectPosition( *m_bodies[ i ], *m_bodies[ j ] , normal, penetration);			
+				CorrectPosition( *m_bodies[ i ], *m_bodies[ j ] , normal, penetration);			
 			}
 		}
 	}
