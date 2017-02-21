@@ -44,13 +44,13 @@
 		{
 			case Shape::CIRCLE:
 			{
-				m_radius = size * 0.5;
+				m_scale = size * 0.5;
 				break;
 			}
 			case Shape::SQUARE:
 			{
-				const float side = size * 0.5f;
-				m_radius = size * 0.5;
+				m_scale = size * 0.5;
+				const float side = size * 0.5f;		
 
 				vertices.emplace_back( -side, -side );
 				vertices.emplace_back( -side, side );
@@ -76,10 +76,10 @@
 		switch ( thisShape )
 		{
 			case Shape::CIRCLE:
-				gfx->DrawCircle(position, m_radius, c);
+				gfx->DrawCircle(position, m_scale, c);
 				break;
 			case Shape::SQUARE:
-				gfx->DrawPoly(GetLines(), position, 0.f, m_radius, c);
+				gfx->DrawPoly(GetLines(), position, 0.f, m_scale, c);
 				break;
 			case Shape::SHAPECOUNT:
 				break;

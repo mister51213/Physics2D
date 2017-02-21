@@ -35,8 +35,8 @@ Game::Game( MainWindow& wnd )
 {
 	/*************SET MASS TO 0 FOR IMMOBILE OBJECT***********/
 	// colliding objects
-	m_bodies.emplace_back( new Body( .1f, { .5f, 0.f }, 1.f, 0.5f, Shape::CIRCLE ) );
 	m_bodies.emplace_back( new Body( .2f, { -.5f, 0.f }, 2.f, 0.5f, Shape::SQUARE ) );
+	m_bodies.emplace_back( new Body( .1f, { .5f, 0.f }, 1.f, 0.5f, Shape::CIRCLE ) );
 	//m_bodies.emplace_back( new Body( .1f, { .3f, 0.f }, 1.f, 0.5f, Shape::SQUARE ) );
 
 	//// walls, ceiling, floor
@@ -67,7 +67,7 @@ void Game::DoCollision()
 				//m_bodies[ i ]->Stop();
 				//m_bodies[ j ]->Stop();
 				ResolveCollision( *m_bodies[ i ], *m_bodies[ j ], normal );			
-				CorrectPosition( *m_bodies[ i ], *m_bodies[ j ] , normal, penetration);			
+				//CorrectPosition( *m_bodies[ i ], *m_bodies[ j ] , normal, penetration);			
 			}
 		}
 	}

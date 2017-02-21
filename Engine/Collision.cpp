@@ -157,8 +157,8 @@ namespace Collision
 	bool CirclevCircle( Body& A, Body& B, Vec2& normal, float& penetration )
 	{
  // Get radii
-		float radA = A.m_pShape->m_radius*2.f;
-		float radB = B.m_pShape->m_radius*2.f;
+		float radA = A.m_pShape->m_scale*2.f;
+		float radB = B.m_pShape->m_scale*2.f;
 
   // Vector from A to B
 		Vec2 AtoB = B.m_position - A.m_position;
@@ -199,13 +199,13 @@ namespace Collision
 	bool CirclevAABB( Body& A, Body& B, Vec2& normal, float& penetration )
 	{
   // Setup a couple pointers to each object
-		Body *pA = &A;
-		Body *pB = &B;
+		Body *pCirc = &A;
+		Body *pBox = &B;
 
-		AABB box = *( pB->m_pShape->m_bounds );
+		AABB box = *( pBox->m_pShape->m_bounds );
 
   // Vector from A to B
-		Vec2 AtoB = pB->m_position - pA->m_position;
+		Vec2 AtoB = pBox->m_position - pCirc->m_position;
 
   // Closest point on A to center of B
 		Vec2 closest = AtoB;
@@ -237,9 +237,7 @@ namespace Collision
 				else
 					closest.x = -x_extent;
 			}
-
-			// y axis is shorter
-			else
+			else // y axis is shorter
 			{
 			  // Clamp to closest extent
 				if ( closest.y > 0 )
@@ -249,11 +247,11 @@ namespace Collision
 			}
 		}
 
-		normal = AtoB - closest;
-		float d = normal.LenSq();
-		float r = pA->m_pShape->m_radius;
+		Vec2 normTemp = AtoB - closest;
+		float d = normTemp.LenSq();
+		float r = pCirc->m_pShape->m_scale;
 
-		// Early out of the radius is shorter than distance to closest point and
+		// Early out if the radius is shorter than distance to closest point and
 		// Circle not inside the AABB
 		if ( d > r * r && !inside )
 			return false;
@@ -265,12 +263,18 @@ namespace Collision
 		// inside the AABB
 		if ( inside )
 		{
-			normal = -AtoB;
+			// TODO: 1) use normTemp here, not AtoB. 2) NORMALIZE it first
+			//normal = -AtoB;
+			normal = -normTemp;
+			//normal.Normalize();
 			penetration = r - d;
 		}
 		else
 		{
-			normal = AtoB;
+			// TODO: 1) use normTemp here, not AtoB. 2) NORMALIZE it first
+			//normal = AtoB;
+			normal = normTemp;
+			//normal.Normalize();
 			penetration = r - d;
 		}
 
@@ -287,13 +291,13 @@ namespace Collision
 bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration )
 {
   // Setup pointers to each object
-		Body *pA = &A;
-		Body *pB = &B;
+		Body *pBox = &A;
+		Body *pCirc = &B;
 
-		AABB box = *( pA->m_pShape->m_bounds );
+		AABB box = *( pBox->m_pShape->m_bounds );
 
   // Vector from A to B
-		Vec2 AtoB = pB->m_position - pA->m_position;
+		Vec2 AtoB = pCirc->m_position - pBox->m_position;
 
   // Closest point on A to center of B
 		Vec2 closestPoint = AtoB;
@@ -342,9 +346,9 @@ bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration )
 			}
 		}
 
-		normal = AtoB - closestPoint;
-		float d = normal.LenSq();
-		float r = pB->m_pShape->m_radius;
+		Vec2 normTemp = AtoB - closestPoint;
+		float d = normTemp.LenSq();
+		float r = pCirc->m_pShape->m_scale;
 
 		// Early out if the radius is shorter than distance to closest point and
 		// Circle not inside the AABB
@@ -358,12 +362,18 @@ bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration )
 		// inside the AABB
 		if ( inside )
 		{
-			normal = -AtoB;
+			// TODO: 1) use normTemp here, not AtoB. 2) NORMALIZE it first
+			//normal = -AtoB;
+			normal = -normTemp;
+			normal.Normalize();
 			penetration = r - d;
 		}
 		else
 		{
-			normal = AtoB;
+			// TODO: 1) use normTemp here, not AtoB. 2) NORMALIZE it first
+			//normal = AtoB;
+			normal = normTemp;
+			normal.Normalize();
 			penetration = r - d;
 		}
 

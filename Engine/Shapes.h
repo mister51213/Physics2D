@@ -56,7 +56,7 @@ IndexedLineList GetLines(Shape::eShape shape = Shape::SQUARE) const;
 
 void UpdatePosition( const Vec2 & position );
 
-float m_radius = 0.1f;
+float m_scale = 0.1f;
 std::shared_ptr<AABB> m_bounds;
 
 private:
