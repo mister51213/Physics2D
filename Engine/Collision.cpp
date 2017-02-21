@@ -251,7 +251,7 @@ namespace Collision
 
 		normal = AtoB - closest;
 		float d = normal.LenSq();
-		float r = pB->m_pShape->m_radius;
+		float r = pA->m_pShape->m_radius;
 
 		// Early out of the radius is shorter than distance to closest point and
 		// Circle not inside the AABB
@@ -296,7 +296,7 @@ bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration )
 		Vec2 AtoB = pB->m_position - pA->m_position;
 
   // Closest point on A to center of B
-		Vec2 closest = AtoB;
+		Vec2 closestPoint = AtoB;
 
   // Calculate half extents along each axis
 		float x_extent = ( box.m_max.x - box.m_min.x ) * 0.5f;
@@ -304,16 +304,20 @@ bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration )
 		//float x_extent = box.m_extentHalf.x;
 		//float y_extent = box.m_extentHalf.y;
 
-	// TODO: make sure this works right
   // Clamp point to edges of the AABB
-		float xClamped = Clamp( closest.x, -x_extent, x_extent );
-		float yClamped = Clamp( closest.y, -y_extent, y_extent );
-		closest = { xClamped, yClamped };
+	// TODO: try this next
+		//float NearestX = max(A.m_position.x, min(B.m_position.x, A.m_position.x + A.m_pShape->m_radius));
+		//float NearestY = max(A.m_position.y, min(B.m_position.y, A.m_position.y + A.m_pShape->m_radius));
+		//Vec2 dist = { B.m_position.x - NearestX, A.m_position.y - NearestY };
+
+		float xClamped = Clamp( closestPoint.x, -x_extent, x_extent );
+		float yClamped = Clamp( closestPoint.y, -y_extent, y_extent );
+		closestPoint = { xClamped, yClamped };
 
 		bool inside = false;
 
   // Circle is inside the AABB, so we need to clamp the circle's center to the closest edge
-		if ( AtoB == closest )
+		if ( AtoB == closestPoint )
 		{
 			inside = true;
 
@@ -321,24 +325,24 @@ bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration )
 			if ( abs( AtoB.x ) > abs( AtoB.y ) )
 			{
 			  // Clamp to closest extent
-				if ( closest.x > 0 )
-					closest.x = x_extent;
+				if ( closestPoint.x > 0 )
+					closestPoint.x = x_extent;
 				else
-					closest.x = -x_extent;
+					closestPoint.x = -x_extent;
 			}
 
 			// y axis is shorter
 			else
 			{
 			  // Clamp to closest extent
-				if ( closest.y > 0 )
-					closest.y = y_extent;
+				if ( closestPoint.y > 0 )
+					closestPoint.y = y_extent;
 				else
-					closest.y = -y_extent;
+					closestPoint.y = -y_extent;
 			}
 		}
 
-		normal = AtoB - closest;
+		normal = AtoB - closestPoint;
 		float d = normal.LenSq();
 		float r = pB->m_pShape->m_radius;
 
