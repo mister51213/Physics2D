@@ -211,8 +211,8 @@ namespace Collision
 		Vec2 closest = AtoB;
 
   // Calculate half extents along each axis
-		float x_extent = ( box.m_max.x - box.m_min.x ) * 0.5f;
-		float y_extent = ( box.m_max.y - box.m_min.y ) * 0.5f;
+		float x_extent = ( box.m_max.x - box.m_min.x ) * 0.75f;
+		float y_extent = ( box.m_max.y - box.m_min.y ) * 0.75f;
 
 		// TODO: make sure this works right
   // Clamp point to edges of the AABB
@@ -303,8 +303,8 @@ bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration )
 		Vec2 closestPoint = AtoB;
 
   // Calculate half extents along each axis
-		float x_extent = ( box.m_max.x - box.m_min.x ) * 0.5f;
-		float y_extent = ( box.m_max.y - box.m_min.y ) * 0.5f;
+		float x_extent = ( box.m_max.x - box.m_min.x ) * 0.75f;
+		float y_extent = ( box.m_max.y - box.m_min.y ) * 0.75f;
 		//float x_extent = box.m_extentHalf.x;
 		//float y_extent = box.m_extentHalf.y;
 
