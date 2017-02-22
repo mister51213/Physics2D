@@ -196,6 +196,15 @@ namespace Collision
 		}
 	}
 
+	/*
+	Here's where I think the problem is, the extents after subtracting max - min, 
+	you get 1.4 because your cube is 1.4 units in size.
+
+	You are clamping the value of AtoB to those extents to get your closes point, 
+	but your closest point on the box, would be .3 because that's the top of the box.
+	*/
+
+
 	bool CirclevAABB( Body& A, Body& B, Vec2& normal, float& penetration )
 	{
   // Setup a couple pointers to each object
@@ -214,7 +223,7 @@ namespace Collision
 		float x_extent = ( box.m_max.x - box.m_min.x )/* * 0.75f*/;
 		float y_extent = ( box.m_max.y - box.m_min.y )/* * 0.75f*/;
 
-		// TODO: make sure this works right
+	// TODO: make sure this works right
   // Clamp point to edges of the AABB
 		float xClamped = Clamp( closest.x, -x_extent, x_extent );
 		float yClamped = Clamp( closest.y, -y_extent, y_extent );

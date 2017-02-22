@@ -49,13 +49,11 @@
 			}
 			case Shape::SQUARE:
 			{
-				m_scale = size * 0.5;
-				const float side = size * 0.5f;		
-
-				vertices.emplace_back( -side, -side );
-				vertices.emplace_back( -side, side );
-				vertices.emplace_back( side, side );
-				vertices.emplace_back( side, -side );
+				m_scale = size*0.5f;
+				vertices.emplace_back( -m_scale, -m_scale );
+				vertices.emplace_back( -m_scale, m_scale );
+				vertices.emplace_back( m_scale, m_scale );
+				vertices.emplace_back( m_scale, -m_scale );
 
 				m_bounds.reset( new AABB( position, { size, size } ) );
 				break;
