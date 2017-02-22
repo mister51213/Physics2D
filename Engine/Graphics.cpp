@@ -413,7 +413,7 @@ void Graphics::DrawCircle( const Vec2& center, float radius, const Color & c )
 	Vec2 realCenter = center;
 	scrnTranner.Transform( realCenter );
 	// SCALE the radius to screen dimensions
-	float realRad = radius*800; 
+	float realRad = radius*400; 
 	
 	// define bounds in which to draw
 	float leftBound = (realCenter.x - realRad);
@@ -448,6 +448,8 @@ void Graphics::DrawPoly( IndexedLineList lines, const Vec2 & pos, const float th
 	IndexedLineList linesRotated = lines;
 	for ( Vec2& v : linesRotated.vertices )
 	{
+		//v *= scale;
+
 		//// Rotate
 		v *= rot;
 

@@ -200,8 +200,12 @@ namespace Collision
 	Here's where I think the problem is, the extents after subtracting max - min, 
 	you get 1.4 because your cube is 1.4 units in size.
 
-	You are clamping the value of AtoB to those extents to get your closes point, 
+	You are clamping the value of AtoB to those extents to get your closest point, 
 	but your closest point on the box, would be .3 because that's the top of the box.
+
+	The AtoB vector measures from Ball center to box center, then you subtract the full 
+	extent from this vector, so it ends up bouncing earlier than it should at least that's 
+	what I see happening when I debug
 	*/
 
 
@@ -220,8 +224,10 @@ namespace Collision
 		Vec2 closest = AtoB;
 
   // Calculate half extents along each axis
-		float x_extent = ( box.m_max.x - box.m_min.x )/* * 0.75f*/;
-		float y_extent = ( box.m_max.y - box.m_min.y )/* * 0.75f*/;
+		float x_extent = ( box.m_max.x - box.m_min.x );
+		float y_extent = ( box.m_max.y - box.m_min.y );
+		//float x_extent = box.m_extentHalf.x;
+		//float y_extent = box.m_extentHalf.y;
 
 	// TODO: make sure this works right
   // Clamp point to edges of the AABB
@@ -235,9 +241,27 @@ namespace Collision
   // to the closest edge
 		if ( AtoB == closest )
 		{
-			inside = true;
+		//	inside = true;
 
-		  // Find closest axis
+		//	// Find closest axis
+		//	if ( abs( AtoB.x ) > abs( AtoB.y ) )
+		//	{
+		//	  // Clamp to closest extent
+		//		if ( closest.x > 0 )
+		//			closest.x = pBox->m_position.x + x_extent;
+		//		else
+		//			closest.x = pBox->m_position.x -x_extent;
+		//	}
+		//	// y axis is shorter
+		//	else
+		//	{
+		//	  // Clamp to closest extent
+		//		if ( closest.y > 0 )
+		//			closest.y = pBox->m_position.y + y_extent;
+		//		else
+		//			closest.y = pBox->m_position.y -y_extent;
+		//	}
+
 			if ( abs( AtoB.x ) > abs( AtoB.y ) )
 			{
 			  // Clamp to closest extent
@@ -257,6 +281,7 @@ namespace Collision
 		}
 
 		Vec2 normTemp = AtoB - closest;
+		//Vec2 normTemp = AtoB - closest*0.5f;
 		//Vec2 normTemp = closest - pCirc->m_position;
 		float d = normTemp.LenSq();
 		float r = pCirc->m_pShape->m_scale;
@@ -313,8 +338,8 @@ bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration )
 		Vec2 closestPoint = AtoB;
 
   // Calculate half extents along each axis
-		float x_extent = ( box.m_max.x - box.m_min.x )/* * 0.75f*/;
-		float y_extent = ( box.m_max.y - box.m_min.y )/* * 0.75f*/;
+		float x_extent = ( box.m_max.x - box.m_min.x );
+		float y_extent = ( box.m_max.y - box.m_min.y );
 		//float x_extent = box.m_extentHalf.x;
 		//float y_extent = box.m_extentHalf.y;
 
@@ -335,7 +360,25 @@ bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration )
 		{
 			inside = true;
 
-		  // Find closest axis
+			// // Find closest axis
+			//if ( abs( AtoB.x ) > abs( AtoB.y ) )
+			//{
+			//  // Clamp to closest extent
+			//	if ( closestPoint.x > 0 )
+			//		closestPoint.x = pBox->m_position.x + x_extent;
+			//	else
+			//		closestPoint.x = pBox->m_position.x -x_extent;
+			//}
+			//// y axis is shorter
+			//else
+			//{
+			//  // Clamp to closest extent
+			//	if ( closestPoint.y > 0 )
+			//		closestPoint.y = pBox->m_position.y + y_extent;
+			//	else
+			//		closestPoint.y = pBox->m_position.y -y_extent;
+			//}
+
 			if ( abs( AtoB.x ) > abs( AtoB.y ) )
 			{
 			  // Clamp to closest extent
@@ -344,7 +387,6 @@ bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration )
 				else
 					closestPoint.x = -x_extent;
 			}
-
 			// y axis is shorter
 			else
 			{
@@ -357,6 +399,7 @@ bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration )
 		}
 
 		Vec2 normTemp = AtoB - closestPoint;
+		//Vec2 normTemp = AtoB - closestPoint *0.5f;
 		//Vec2 normTemp = pCirc->m_position - closestPoint;
 		float d = normTemp.LenSq();
 		float r = pCirc->m_pShape->m_scale;
