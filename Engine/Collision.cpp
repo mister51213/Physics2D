@@ -413,7 +413,6 @@ bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration )
 		Vec2 relativeVelo = B.m_velocity - A.m_velocity;
 
 		// Project this velocity onto the normal
-		// float velAlongNorm = relativeVelo*A.m_normal;
 		float velAlongNorm = relativeVelo*normal;
 
 		// Do not resolve if velocities are separating
@@ -452,7 +451,7 @@ bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration )
 	}
 }
 
-/// OLD IMPLEMENTATION ///
+/// OLD IMPLEMENTATIONS ///
 	//void ResolveCollision( Square& A, Square& B, Vec2& normal )
 	//{
 	//	// Velocity vector between the centers of the colliding objects

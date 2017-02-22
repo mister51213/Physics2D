@@ -22,7 +22,13 @@ Body::~Body()
 
 void Body::Thrust( Vec2 force, float deltaT )
 {
-	m_velocity += force *m_inverseMass* deltaT;
+	//m_velocity += force *m_inverseMass* deltaT;
+	AddForce( force );
+}
+
+void Body::AddForce(const Vec2& force)
+{
+	m_netForce += force;
 }
 
 void Body::Stop()
@@ -30,11 +36,14 @@ void Body::Stop()
 	m_velocity = { 0.f, 0.f };
 }
 
+void Body::UpdateForces( float deltaT )
+{
+	m_velocity += m_netForce *m_inverseMass* deltaT;
+	m_netForce = {0.f, 0.f};
+}
+
 void Body::UpdatePosition( float deltaT )
 {
 	m_position += m_velocity*deltaT;
-	
-	// TODO: ENCAPSULATE bounds updating function inside shape
 	m_pShape->UpdatePosition(m_position);
-	//m_pShape->m_bounds->ResetMinMax(m_position);
 }

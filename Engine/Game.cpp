@@ -35,8 +35,10 @@ Game::Game( MainWindow& wnd )
 {
 	/*************SET MASS TO 0 FOR IMMOBILE OBJECT***********/
 	// colliding objects
-	m_bodies.emplace_back( new Body( .2f, { -.5f, 0.f }, 0.f, 0.5f, Shape::SQUARE ) );
-	m_bodies.emplace_back( new Body( .1f, { .5f, 0.f }, 1.f, 0.5f, Shape::CIRCLE ) );
+	m_bodies.emplace_back( new Body( .15f, { -1.f, .8f }, .5f, 1.f, Shape::SQUARE ) );
+	m_bodies.emplace_back( new Body( .15f, { -.5f, .8f }, .5f, 1.f, Shape::CIRCLE ) );
+	m_bodies.emplace_back( new Body( .15f, { 0.f, .8f }, .5f, 1.f, Shape::SQUARE ) );
+	m_bodies.emplace_back( new Body( 1.4f, { 0.f, -1.f }, 0.f, 1.f, Shape::SQUARE ) );
 
 	m_normVisual = m_bodies[0]->m_position;
 	//m_bodies.emplace_back( new Body( .1f, { .3f, 0.f }, 1.f, 0.5f, Shape::SQUARE ) );
@@ -97,6 +99,8 @@ void Game::UpdateModel()
 
 	for ( int i = 0; i < m_bodies.size()/*nObjects*/; i++ )
 	{
+		m_bodies[ i ]->AddForce( {0.0f,-.1f} );
+		m_bodies[ i ]->UpdateForces(dTime);
 		m_bodies[ i ]->UpdatePosition(dTime);
 	}
 	
@@ -147,10 +151,10 @@ void Game::ComposeFrame()
 		// Polymorphic draw call
 		m_bodies[ ind ]->m_pShape->Draw(&gfx, position, Colors::Cyan);
 
-
+		// DISPLAY COLLISION NORMAL
 		if ( m_collided )
 		{
-			Vec2 norm = m_normVisual;
+			Vec2 norm = m_normVisual - m_bodies[ 0 ]->m_position;
 			Vec2 pos = m_bodies[ 0 ]->m_position;
 
 			sTransformer.Transform( norm );

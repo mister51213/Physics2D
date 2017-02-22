@@ -18,7 +18,11 @@ public:
 	// NOTE - GetLines and drawing / vertex related functions now in SHAPE
 	void Thrust( Vec2 force, float deltaT );
 
+	void AddForce( const Vec2& force );
+
 	void Stop();
+
+	void UpdateForces( float deltaT );
 
 	void UpdatePosition( float deltaT );
 
@@ -34,7 +38,8 @@ public:
 	float m_inverseMass;
 	float m_restitution;
 
-	//std::shared_ptr<AABB> m_bounds;
 	std::shared_ptr<Shape> m_pShape;
+
+	Vec2 m_netForce = { 0.f, 0.f };
 };
 
