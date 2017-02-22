@@ -211,8 +211,8 @@ namespace Collision
 		Vec2 closest = AtoB;
 
   // Calculate half extents along each axis
-		float x_extent = ( box.m_max.x - box.m_min.x ) * 0.75f;
-		float y_extent = ( box.m_max.y - box.m_min.y ) * 0.75f;
+		float x_extent = ( box.m_max.x - box.m_min.x )/* * 0.75f*/;
+		float y_extent = ( box.m_max.y - box.m_min.y )/* * 0.75f*/;
 
 		// TODO: make sure this works right
   // Clamp point to edges of the AABB
@@ -304,8 +304,8 @@ bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration )
 		Vec2 closestPoint = AtoB;
 
   // Calculate half extents along each axis
-		float x_extent = ( box.m_max.x - box.m_min.x ) * 0.75f;
-		float y_extent = ( box.m_max.y - box.m_min.y ) * 0.75f;
+		float x_extent = ( box.m_max.x - box.m_min.x )/* * 0.75f*/;
+		float y_extent = ( box.m_max.y - box.m_min.y )/* * 0.75f*/;
 		//float x_extent = box.m_extentHalf.x;
 		//float y_extent = box.m_extentHalf.y;
 
@@ -433,6 +433,26 @@ bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration )
 		// DISTRIBUTE THE IMPULSE AMONG BOTH OBJECTS ACCORDING TO THEIR RELATIVE MASSES
 		A.m_velocity -= impulse * A.m_inverseMass;
 		B.m_velocity += impulse * B.m_inverseMass;
+
+		/********************* FRICTION SECTION *********************/
+		// Re-calculate relative velocity after normal impulse
+		// is applied (impulse from first article, this code comes
+		// directly thereafter in the same resolve function)
+		Vec2 relativeV = B.m_velocity - A.m_velocity;
+ 
+		// Solve for the tangent vector
+		Vec2 veloProjected = normal * ( relativeV * normal ); // scalar cross product
+		Vec2 tangent = relativeV - veloProjected;
+		tangent.Normalize();
+ 
+		// Solve for magnitude to apply along the friction vector
+		float jTangent = -( relativeV * tangent );
+		jTangent = jTangent / ( A.m_inverseMass + B.m_inverseMass );
+
+		// TODO: APPLY the friction tangent vector
+		Vec2 friction = tangent * jTangent;
+		//A.m_velocity -= friction * A.m_inverseMass;
+		//B.m_velocity += friction * B.m_inverseMass;
 	}
 
 	void CorrectPosition( Body& A, Body& B, const Vec2& normal, float penetration )

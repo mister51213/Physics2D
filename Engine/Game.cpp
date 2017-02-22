@@ -35,10 +35,9 @@ Game::Game( MainWindow& wnd )
 {
 	/*************SET MASS TO 0 FOR IMMOBILE OBJECT***********/
 	// colliding objects
-	m_bodies.emplace_back( new Body( .15f, { -1.f, .8f }, .5f, 1.f, Shape::SQUARE ) );
-	m_bodies.emplace_back( new Body( .15f, { -.5f, .8f }, .5f, 1.f, Shape::CIRCLE ) );
-	m_bodies.emplace_back( new Body( .15f, { 0.f, .8f }, .5f, 1.f, Shape::SQUARE ) );
-	m_bodies.emplace_back( new Body( 1.4f, { 0.f, -1.f }, 0.f, 1.f, Shape::SQUARE ) );
+	m_bodies.emplace_back( new Body( .1f, { -.5f, 0.f }, .5f, .3f, Shape::CIRCLE ) );
+	m_bodies.emplace_back( new Body( .1f, { 0.f, .8f }, .5f, .3f, Shape::SQUARE ) );
+	m_bodies.emplace_back( new Body( .1f, { -.5f, -.5f }, 0.f, .3f, Shape::SQUARE ) );
 
 	m_normVisual = m_bodies[0]->m_position;
 	//m_bodies.emplace_back( new Body( .1f, { .3f, 0.f }, 1.f, 0.5f, Shape::SQUARE ) );
