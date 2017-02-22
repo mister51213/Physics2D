@@ -37,6 +37,8 @@ Game::Game( MainWindow& wnd )
 	// colliding objects
 	m_bodies.emplace_back( new Body( .2f, { -.5f, 0.f }, 0.f, 0.5f, Shape::SQUARE ) );
 	m_bodies.emplace_back( new Body( .1f, { .5f, 0.f }, 1.f, 0.5f, Shape::CIRCLE ) );
+
+	m_normVisual = m_bodies[0]->m_position;
 	//m_bodies.emplace_back( new Body( .1f, { .3f, 0.f }, 1.f, 0.5f, Shape::SQUARE ) );
 
 	//// walls, ceiling, floor
@@ -66,6 +68,9 @@ void Game::DoCollision()
 			{
 				//m_bodies[ i ]->Stop();
 				//m_bodies[ j ]->Stop();
+
+				m_normVisual = normal;
+
 				ResolveCollision( *m_bodies[ i ], *m_bodies[ j ], normal );			
 				CorrectPosition( *m_bodies[ i ], *m_bodies[ j ] , normal, penetration);			
 			}
@@ -139,6 +144,14 @@ void Game::ComposeFrame()
 		Vec2 position = m_bodies[ ind ]->m_position;
 
 		// Polymorphic draw call
-		m_bodies[ ind ]->m_pShape->Draw(&gfx, position, Colors::Cyan);	
+		m_bodies[ ind ]->m_pShape->Draw(&gfx, position, Colors::Cyan);
+
+		Vec2 norm = m_normVisual;
+		Vec2 pos = m_bodies[ ind ]->m_position;
+
+		sTransformer.Transform( norm );
+		sTransformer.Transform( pos );
+
+		gfx.DrawLine( norm, pos, Colors::Green );
 	}
 }

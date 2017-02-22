@@ -57,5 +57,7 @@ private:
 	static constexpr float dTheta = PI;
 
 	Timer m_timer;
+
+	Vec2 m_normVisual;
 	/********************************/
 };
