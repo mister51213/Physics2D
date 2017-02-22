@@ -413,7 +413,7 @@ void Graphics::DrawCircle( const Vec2& center, float radius, const Color & c )
 	Vec2 realCenter = center;
 	scrnTranner.Transform( realCenter );
 	// SCALE the radius to screen dimensions
-	float realRad = radius*400; 
+	float realRad = radius * ( ScreenWidth >> 1 );
 	
 	// define bounds in which to draw
 	float leftBound = (realCenter.x - realRad);

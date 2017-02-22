@@ -157,8 +157,8 @@ namespace Collision
 	bool CirclevCircle( Body& A, Body& B, Vec2& normal, float& penetration )
 	{
  // Get radii
-		float radA = A.m_pShape->m_scale*2.f;
-		float radB = B.m_pShape->m_scale*2.f;
+		float radA = A.m_pShape->m_scale;
+		float radB = B.m_pShape->m_scale;
 
   // Vector from A to B
 		Vec2 AtoB = B.m_position - A.m_position;
@@ -224,10 +224,10 @@ namespace Collision
 		Vec2 closest = AtoB;
 
   // Calculate half extents along each axis
-		float x_extent = ( box.m_max.x - box.m_min.x );
-		float y_extent = ( box.m_max.y - box.m_min.y );
-		//float x_extent = box.m_extentHalf.x;
-		//float y_extent = box.m_extentHalf.y;
+		//float x_extent = ( box.m_max.x - box.m_min.x );
+		//float y_extent = ( box.m_max.y - box.m_min.y );
+		float x_extent = box.m_extentHalf.x;
+		float y_extent = box.m_extentHalf.y;
 
 	// TODO: make sure this works right
   // Clamp point to edges of the AABB
@@ -338,10 +338,10 @@ bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration )
 		Vec2 closestPoint = AtoB;
 
   // Calculate half extents along each axis
-		float x_extent = ( box.m_max.x - box.m_min.x );
-		float y_extent = ( box.m_max.y - box.m_min.y );
-		//float x_extent = box.m_extentHalf.x;
-		//float y_extent = box.m_extentHalf.y;
+		//float x_extent = ( box.m_max.x - box.m_min.x );
+		//float y_extent = ( box.m_max.y - box.m_min.y );
+		float x_extent = box.m_extentHalf.x;
+		float y_extent = box.m_extentHalf.y;
 
   // Clamp point to edges of the AABB
 	// TODO: try this next
