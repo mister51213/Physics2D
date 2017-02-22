@@ -58,6 +58,8 @@ private:
 
 	Timer m_timer;
 
+	/// FOR VISUAL NORMAL TESTING ///
+	bool m_collided = false;
 	Vec2 m_normVisual;
 	/********************************/
 };

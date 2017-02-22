@@ -69,6 +69,7 @@ void Game::DoCollision()
 				//m_bodies[ i ]->Stop();
 				//m_bodies[ j ]->Stop();
 
+				m_collided = true;
 				m_normVisual = normal;
 
 				ResolveCollision( *m_bodies[ i ], *m_bodies[ j ], normal );			
@@ -146,12 +147,16 @@ void Game::ComposeFrame()
 		// Polymorphic draw call
 		m_bodies[ ind ]->m_pShape->Draw(&gfx, position, Colors::Cyan);
 
-		Vec2 norm = m_normVisual;
-		Vec2 pos = m_bodies[ ind ]->m_position;
 
-		sTransformer.Transform( norm );
-		sTransformer.Transform( pos );
+		if ( m_collided )
+		{
+			Vec2 norm = m_normVisual;
+			Vec2 pos = m_bodies[ 0 ]->m_position;
 
-		gfx.DrawLine( norm, pos, Colors::Green );
+			sTransformer.Transform( norm );
+			sTransformer.Transform( pos );
+
+			gfx.DrawLine( norm, pos, Colors::Green );
+		}
 	}
 }
