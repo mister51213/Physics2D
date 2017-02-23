@@ -35,9 +35,14 @@ Game::Game( MainWindow& wnd )
 {
 	/*************SET MASS TO 0 FOR IMMOBILE OBJECT***********/
 	// colliding objects
-	m_bodies.emplace_back( new Body( .1f, { -.5f, 0.f }, .5f, .3f, Shape::CIRCLE ) );
-	m_bodies.emplace_back( new Body( .2f, { 0.f, .8f }, .5f, .3f, Shape::SQUARE ) );
-	m_bodies.emplace_back( new Body( .2f, { -.5f, -.5f }, 0.f, .3f, Shape::SQUARE ) );
+	m_bodies.emplace_back( new Body( .1f, { -.7f, .5f }, .5f, .3f, Shape::CIRCLE ) );
+	m_bodies.emplace_back( new Body( .1f, { 0.f, .8f }, .5f, .3f, Shape::SQUARE ) );
+	m_bodies.emplace_back( new Body( .1f, { 0.3f, .7f }, .2f, .3f, Shape::SQUARE ) );
+	m_bodies.emplace_back( new Body( .1f, { 0.f, .5f }, .2f, .3f, Shape::SQUARE ) );
+	m_bodies.emplace_back( new Body( .1f, { -0.2f, .8f }, .2f, .3f, Shape::SQUARE ) );
+	m_bodies.emplace_back( new Body( .1f, { -0.4f, .8f }, .0f, .3f, Shape::SQUARE ) );
+
+	m_bodies.emplace_back( new Body( 1.3f, { 0.f, -.7f }, 0.f, .3f, Shape::SQUARE ) );
 
 	m_normVisual = m_bodies[0]->m_position;
 	//m_bodies.emplace_back( new Body( .1f, { .3f, 0.f }, 1.f, 0.5f, Shape::SQUARE ) );
@@ -98,7 +103,7 @@ void Game::UpdateModel()
 
 	for ( int i = 0; i < m_bodies.size()/*nObjects*/; i++ )
 	{
-		m_bodies[ i ]->AddForce( {0.0f,-.1f} );
+		//m_bodies[ i ]->AddForce( {0.0f,-.1f} ); // gravity
 		m_bodies[ i ]->UpdateForces(dTime);
 		m_bodies[ i ]->UpdatePosition(dTime);
 	}

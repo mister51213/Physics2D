@@ -502,9 +502,22 @@ bool AABBvCircle( Body& A, Body& B, Vec2& normal, float& penetration )
 		jTangent = jTangent / ( A.m_inverseMass + B.m_inverseMass );
 
 		// TODO: APPLY the friction tangent vector
-		Vec2 friction = tangent * jTangent;
-		//A.m_velocity -= friction * A.m_inverseMass;
-		//B.m_velocity += friction * B.m_inverseMass;
+		// Pythagorean solve for combination of friction coefficients of two bodies
+		float totalFric = sqrt( A.m_staticFriction*A.m_staticFriction + B.m_staticFriction*B.m_staticFriction );
+
+		// Clamp friction magnitude and use it to make friction impulse vector
+		Vec2 frictionImpulse;
+		if ( abs( jTangent ) < j * totalFric )
+			frictionImpulse = tangent * jTangent;
+		else
+		{
+			float dynamicFriction = sqrt( A.m_dynamicFriction*A.m_dynamicFriction + B.m_dynamicFriction*B.m_dynamicFriction );
+			frictionImpulse = tangent * -j * dynamicFriction;
+		}
+
+		// Apply friction impulse to both
+		A.m_velocity -= frictionImpulse * A.m_inverseMass;
+		B.m_velocity += frictionImpulse * B.m_inverseMass;
 	}
 
 	void CorrectPosition( Body& A, Body& B, const Vec2& normal, float penetration )

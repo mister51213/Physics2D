@@ -37,6 +37,8 @@ public:
 	float m_mass;
 	float m_inverseMass;
 	float m_restitution;
+	float m_staticFriction = 2.0f;
+	float m_dynamicFriction = 0.5f;
 
 	std::shared_ptr<Shape> m_pShape;
 
